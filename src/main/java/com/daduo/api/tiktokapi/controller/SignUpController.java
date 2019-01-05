@@ -1,8 +1,8 @@
 package com.daduo.api.tiktokapi.controller;
 
-import com.daduo.api.tiktokapi.model.AuthenticationCodeResult;
+import com.daduo.api.tiktokapi.model.AuthenticationCodeResponse;
 import com.daduo.api.tiktokapi.model.SignUpRequest;
-import com.daduo.api.tiktokapi.model.SignUpResult;
+import com.daduo.api.tiktokapi.model.SignUpResponse;
 import com.daduo.api.tiktokapi.model.WechatLoginRequest;
 import com.daduo.api.tiktokapi.service.SignUpService;
 import io.swagger.annotations.ApiOperation;
@@ -18,20 +18,20 @@ public class SignUpController {
 
     @PostMapping("/code/{number}")
     @ApiOperation(value = "Send Authentication Code", notes = "Send message authentication code")
-    public AuthenticationCodeResult sendMessageAuthenticationCode(@PathVariable Double number) {
+    public AuthenticationCodeResponse sendMessageAuthenticationCode(@PathVariable Double number) {
         return service.sendMessageAuthenticationCode(number);
     }
 
     @PostMapping("/wechat")
     @ApiOperation(value = "Wechat Login")
-    public SignUpResult wechatLogin(@RequestBody WechatLoginRequest wechatLoginRequest) {
+    public SignUpResponse wechatLogin(@RequestBody WechatLoginRequest wechatLoginRequest) {
         return service.wechatLogin(wechatLoginRequest);
 
     }
 
     @PostMapping
     @ApiOperation(value = "Sign Up")
-    public SignUpResult signUp(@RequestBody SignUpRequest signUpRequest) {
+    public SignUpResponse signUp(@RequestBody SignUpRequest signUpRequest) {
         return service.signUp(signUpRequest);
     }
 }

@@ -1,15 +1,15 @@
 package com.daduo.api.tiktokapi.service;
 
-import com.daduo.api.tiktokapi.model.AuthenticationCodeResult;
+import com.daduo.api.tiktokapi.model.AuthenticationCodeResponse;
 import com.daduo.api.tiktokapi.model.SignUpRequest;
-import com.daduo.api.tiktokapi.model.SignUpResult;
+import com.daduo.api.tiktokapi.model.SignUpResponse;
 import com.daduo.api.tiktokapi.model.WechatLoginRequest;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SignUpService {
-    public AuthenticationCodeResult sendMessageAuthenticationCode(Double number) {
-        AuthenticationCodeResult result = new AuthenticationCodeResult();
+    public AuthenticationCodeResponse sendMessageAuthenticationCode(Double number) {
+        AuthenticationCodeResponse result = new AuthenticationCodeResponse();
         try {
             send(number);
             result.setSuccess(true);
@@ -26,11 +26,11 @@ public class SignUpService {
 
     }
 
-    public SignUpResult signUp(SignUpRequest signUpRequest) {
+    public SignUpResponse signUp(SignUpRequest signUpRequest) {
         return null;
     }
 
-    public SignUpResult wechatLogin(WechatLoginRequest wechatLoginRequest) {
+    public SignUpResponse wechatLogin(WechatLoginRequest wechatLoginRequest) {
         return null;
     }
 }

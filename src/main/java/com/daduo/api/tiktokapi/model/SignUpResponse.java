@@ -3,8 +3,6 @@ package com.daduo.api.tiktokapi.model;
 import lombok.Data;
 
 @Data
-public class  AuthenticationCodeResult {
+public class SignUpResponse {
     private boolean isSuccess;
-    private String title;
-    private String message;
 }
