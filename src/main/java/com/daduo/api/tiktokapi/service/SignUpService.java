@@ -40,9 +40,8 @@ public class SignUpService {
     }
 
     private SignUpResponse signUp(Long phoneNumber, String password, String wechatId) {
-        Integer id = (int) (System.currentTimeMillis() / 1000);
         Account account = new Account();
-        account.setId(id);
+        account.setId(System.currentTimeMillis());
         account.setPassword(password);
         account.setPhoneNumber(phoneNumber);
         account.setUsername(null);
