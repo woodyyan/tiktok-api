@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.service;
 
+import com.daduo.api.tiktokapi.entity.Account;
 import com.daduo.api.tiktokapi.model.AuthenticationCodeResponse;
 import com.daduo.api.tiktokapi.model.SignUpRequest;
 import com.daduo.api.tiktokapi.model.SignUpResponse;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SignUpService {
-    public AuthenticationCodeResponse sendMessageAuthenticationCode(Double number) {
+    public AuthenticationCodeResponse sendMessageAuthenticationCode(Long number) {
         AuthenticationCodeResponse result = new AuthenticationCodeResponse();
         try {
             send(number);
@@ -22,15 +23,43 @@ public class SignUpService {
         return result;
     }
 
-    private void send(Double number) {
-
-    }
-
     public SignUpResponse signUp(SignUpRequest signUpRequest) {
-        return null;
+        //TODO 判断验证码正确
+        if (signUpRequest.getCode().equals("")) {
+            return signUp(signUpRequest.getNumber(), signUpRequest.getPassword(), null);
+        } else {
+            SignUpResponse response = new SignUpResponse();
+            response.setSuccess(false);
+            response.setMessage("验证码不正确。");
+            return response;
+        }
     }
 
     public SignUpResponse wechatLogin(WechatLoginRequest wechatLoginRequest) {
-        return null;
+        return signUp(null, null, wechatLoginRequest.getWechatId());
+    }
+
+    private SignUpResponse signUp(Long phoneNumber, String password, String wechatId) {
+        Integer id = (int) (System.currentTimeMillis() / 1000);
+        Account account = new Account();
+        account.setId(id);
+        account.setPassword(password);
+        account.setPhoneNumber(phoneNumber);
+        account.setUsername(null);
+        account.setWechatId(wechatId);
+
+        SignUpResponse response = new SignUpResponse();
+        try {
+//        respository.save(account);
+            response.setSuccess(true);
+        } catch (Exception ex) {
+            response.setSuccess(false);
+            response.setMessage(ex.getMessage());
+        }
+        return response;
+    }
+
+    private void send(Long number) {
+        //TODO 发送短信验证码
     }
 }

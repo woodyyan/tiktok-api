@@ -18,7 +18,7 @@ public class SignUpController {
 
     @PostMapping("/code/{number}")
     @ApiOperation(value = "Send Authentication Code", notes = "Send message authentication code")
-    public AuthenticationCodeResponse sendMessageAuthenticationCode(@PathVariable Double number) {
+    public AuthenticationCodeResponse sendMessageAuthenticationCode(@PathVariable Long number) {
         return service.sendMessageAuthenticationCode(number);
     }
 

@@ -43,4 +43,5 @@ dependencies {
 //    runtime('org.hsqldb:hsqldb')
 //    testImplementation('org.springframework.boot:spring-boot-starter-test')
 //    testImplementation('org.springframework.security:spring-security-test')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
