@@ -22,13 +22,6 @@ public class SignUpController {
         return service.sendMessageAuthenticationCode(number);
     }
 
-    @PostMapping("/wechat")
-    @ApiOperation(value = "Wechat Login")
-    public SignUpResponse wechatLogin(@RequestBody WechatLoginRequest wechatLoginRequest) {
-        return service.wechatLogin(wechatLoginRequest);
-
-    }
-
     @PostMapping
     @ApiOperation(value = "Sign Up")
     public SignUpResponse signUp(@RequestBody SignUpRequest signUpRequest) {

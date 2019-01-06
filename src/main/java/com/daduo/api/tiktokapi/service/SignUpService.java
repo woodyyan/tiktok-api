@@ -4,7 +4,6 @@ import com.daduo.api.tiktokapi.entity.Account;
 import com.daduo.api.tiktokapi.model.AuthenticationCodeResponse;
 import com.daduo.api.tiktokapi.model.SignUpRequest;
 import com.daduo.api.tiktokapi.model.SignUpResponse;
-import com.daduo.api.tiktokapi.model.WechatLoginRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,7 +25,7 @@ public class SignUpService {
     public SignUpResponse signUp(SignUpRequest signUpRequest) {
         //TODO 判断验证码正确
         if (signUpRequest.getCode().equals("")) {
-            return signUp(signUpRequest.getNumber(), signUpRequest.getPassword(), null);
+            return signUp(signUpRequest.getNumber(), signUpRequest.getPassword());
         } else {
             SignUpResponse response = new SignUpResponse();
             response.setSuccess(false);
@@ -35,17 +34,13 @@ public class SignUpService {
         }
     }
 
-    public SignUpResponse wechatLogin(WechatLoginRequest wechatLoginRequest) {
-        return signUp(null, null, wechatLoginRequest.getWechatId());
-    }
-
-    private SignUpResponse signUp(Long phoneNumber, String password, String wechatId) {
+    private SignUpResponse signUp(Long phoneNumber, String password) {
         Account account = new Account();
         account.setId(System.currentTimeMillis());
         account.setPassword(password);
         account.setPhoneNumber(phoneNumber);
         account.setUsername(null);
-        account.setWechatId(wechatId);
+        account.setWechatId(null);
 
         SignUpResponse response = new SignUpResponse();
         try {
