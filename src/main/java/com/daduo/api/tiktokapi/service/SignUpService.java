@@ -1,13 +1,23 @@
 package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.Account;
+import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.AuthenticationCodeResponse;
 import com.daduo.api.tiktokapi.model.SignUpRequest;
-import com.daduo.api.tiktokapi.model.SignUpResponse;
+import com.daduo.api.tiktokapi.model.error.Error;
+import com.daduo.api.tiktokapi.repository.AccountRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class SignUpService {
+
+    @Autowired
+    private AccountRepository repository;
+
     public AuthenticationCodeResponse sendMessageAuthenticationCode(Long number) {
         AuthenticationCodeResponse result = new AuthenticationCodeResponse();
         try {
@@ -15,6 +25,7 @@ public class SignUpService {
             result.setSuccess(true);
             result.setTitle("发送成功");
         } catch (Exception ex) {
+            log.error("验证码发送失败", ex);
             result.setSuccess(false);
             result.setTitle("发送失败");
             result.setMessage(ex.getMessage());
@@ -22,19 +33,20 @@ public class SignUpService {
         return result;
     }
 
-    public SignUpResponse signUp(SignUpRequest signUpRequest) {
+    public boolean signUp(SignUpRequest signUpRequest) {
         //TODO 判断验证码正确
         if (signUpRequest.getCode().equals("")) {
             return signUp(signUpRequest.getNumber(), signUpRequest.getPassword());
         } else {
-            SignUpResponse response = new SignUpResponse();
-            response.setSuccess(false);
-            response.setMessage("验证码不正确。");
-            return response;
+            Error error = new Error();
+            error.setStatus("400");
+            error.setTitle("验证码不正确");
+            error.setDetails("验证码不正确，请输入正确验证码。");
+            throw new ErrorException(HttpStatus.BAD_REQUEST, error);
         }
     }
 
-    private SignUpResponse signUp(Long phoneNumber, String password) {
+    private boolean signUp(Long phoneNumber, String password) {
         Account account = new Account();
         account.setId(System.currentTimeMillis());
         account.setPassword(password);
@@ -42,15 +54,13 @@ public class SignUpService {
         account.setUsername(null);
         account.setWechatId(null);
 
-        SignUpResponse response = new SignUpResponse();
         try {
-//        respository.save(account);
-            response.setSuccess(true);
+            repository.save(account);
+            return true;
         } catch (Exception ex) {
-            response.setSuccess(false);
-            response.setMessage(ex.getMessage());
+            log.error("Account保存失败.", ex);
+            return false;
         }
-        return response;
     }
 
     private void send(Long number) {

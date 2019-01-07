@@ -7,6 +7,7 @@ import com.daduo.api.tiktokapi.model.WechatLoginRequest;
 import com.daduo.api.tiktokapi.service.SignUpService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +25,12 @@ public class SignUpController {
 
     @PostMapping
     @ApiOperation(value = "Sign Up")
+    @ResponseStatus(HttpStatus.CREATED)
     public SignUpResponse signUp(@RequestBody SignUpRequest signUpRequest) {
-        return service.signUp(signUpRequest);
+        boolean success = service.signUp(signUpRequest);
+        SignUpResponse response = new SignUpResponse();
+        response.setSuccess(success);
+        response.setMessage("注册成功");
+        return response;
     }
 }

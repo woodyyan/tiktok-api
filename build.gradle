@@ -32,7 +32,7 @@ repositories {
 }
 
 dependencies {
-//    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
 //    compile("org.springframework.boot:spring-boot-starter")
     implementation('org.springframework.boot:spring-boot-starter-web')
 //    implementation('org.springframework.boot:spring-boot-starter-security')
@@ -40,7 +40,7 @@ dependencies {
     implementation('io.springfox:springfox-swagger-ui:2.7.0')
     compileOnly 'org.projectlombok:lombok:1.18.2'
 //    implementation('mysql,mysql-connector-java,6.0.6')
-//    runtime('org.hsqldb:hsqldb')
+    runtime('org.hsqldb:hsqldb')
 //    testImplementation('org.springframework.boot:spring-boot-starter-test')
 //    testImplementation('org.springframework.security:spring-security-test')
     testCompile group: 'junit', name: 'junit', version: '4.12'
