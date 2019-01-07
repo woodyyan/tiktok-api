@@ -3,7 +3,6 @@ package com.daduo.api.tiktokapi.controller;
 import com.daduo.api.tiktokapi.model.AuthenticationCodeResponse;
 import com.daduo.api.tiktokapi.model.SignUpRequest;
 import com.daduo.api.tiktokapi.model.SignUpResponse;
-import com.daduo.api.tiktokapi.model.WechatLoginRequest;
 import com.daduo.api.tiktokapi.service.SignUpService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

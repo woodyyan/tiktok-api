@@ -47,6 +47,8 @@ public class SignUpService {
     }
 
     private boolean signUp(Long phoneNumber, String password) {
+        checkPhoneNumberExists(phoneNumber);
+
         Account account = new Account();
         account.setId(System.currentTimeMillis());
         account.setPassword(password);
@@ -60,6 +62,17 @@ public class SignUpService {
         } catch (Exception ex) {
             log.error("Account保存失败.", ex);
             return false;
+        }
+    }
+
+    private void checkPhoneNumberExists(Long phoneNumber) {
+        Account account = repository.findOneByPhoneNumber(phoneNumber);
+        if (account != null) {
+            Error error = new Error();
+            error.setStatus("400");
+            error.setTitle("手机号已注册");
+            error.setDetails("手机号已注册，请直接登陆。");
+            throw new ErrorException(HttpStatus.BAD_REQUEST, error);
         }
     }
 
