@@ -22,6 +22,7 @@ public class TaskController {
     @ResponseStatus(HttpStatus.CREATED)
     public TaskResponse publishTask(@RequestBody TaskRequest taskRequest) {
         log.info("[START] Publish task with request: {}", taskRequest);
+        //TODO 验证数据结构
         TaskResponse taskResponse = service.publishTask(taskRequest);
         log.info("[END] Publish task with response: {}", taskResponse);
         return taskResponse;

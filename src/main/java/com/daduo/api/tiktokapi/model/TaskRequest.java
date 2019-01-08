@@ -10,6 +10,6 @@ public class TaskRequest {
     private String description;
     private String url;
     private List<TaskItem> items;
-    private Integer price;
+    private Double price;
     private TaskStatus status;
 }

@@ -12,7 +12,8 @@ public class TaskResponse {
     private String description;
     private String url;
     private List<TaskItem> items;
-    private Integer price;
+    private Double price;
     private TaskStatus status;
     private DateTime createdTime;
+    private DateTime lastModifiedTime;
 }
