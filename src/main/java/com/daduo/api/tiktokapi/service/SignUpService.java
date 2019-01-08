@@ -4,8 +4,10 @@ import com.daduo.api.tiktokapi.entity.Account;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.AuthenticationCodeResponse;
 import com.daduo.api.tiktokapi.model.SignUpRequest;
+import com.daduo.api.tiktokapi.model.SignUpResponse;
 import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.repository.AccountRepository;
+import com.daduo.api.tiktokapi.translator.AccountTranslator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,9 @@ public class SignUpService {
 
     @Autowired
     private AccountRepository repository;
+
+    @Autowired
+    private AccountTranslator translator;
 
     public AuthenticationCodeResponse sendMessageAuthenticationCode(Long number) {
         AuthenticationCodeResponse result = new AuthenticationCodeResponse();
@@ -33,10 +38,11 @@ public class SignUpService {
         return result;
     }
 
-    public boolean signUp(SignUpRequest signUpRequest) {
+    public SignUpResponse signUp(SignUpRequest signUpRequest) {
         //TODO 判断验证码正确
         if (signUpRequest.getCode().equals("")) {
-            return signUp(signUpRequest.getNumber(), signUpRequest.getPassword());
+            Account account = signUp(signUpRequest.getNumber(), signUpRequest.getPassword());
+            return translator.translateToSignUpResponse(account);
         } else {
             Error error = new Error();
             error.setStatus("400");
@@ -46,22 +52,23 @@ public class SignUpService {
         }
     }
 
-    private boolean signUp(Long phoneNumber, String password) {
+    private Account signUp(Long phoneNumber, String password) {
         checkPhoneNumberExists(phoneNumber);
 
         Account account = new Account();
         account.setId(System.currentTimeMillis());
         account.setPassword(password);
         account.setPhoneNumber(phoneNumber);
-        account.setUsername(null);
-        account.setWechatId(null);
 
         try {
-            repository.save(account);
-            return true;
+            return repository.save(account);
         } catch (Exception ex) {
-            log.error("Account保存失败.", ex);
-            return false;
+            log.error("注册失败，Account保存失败.", ex);
+            Error error = new Error();
+            error.setStatus("502");
+            error.setDetails("注册失败，请重试");
+            error.setTitle("注册失败");
+            throw new ErrorException(HttpStatus.BAD_GATEWAY, error);
         }
     }
 

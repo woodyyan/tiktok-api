@@ -1,12 +1,12 @@
 package com.daduo.api.tiktokapi.entity;
 
 import lombok.Data;
+import org.joda.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -25,8 +25,14 @@ public class Account {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "wechat_id")
-    private String wechatId;
+    @Column(name = "open_id")
+    private String openId;
+
+    @Column(name = "access_token")
+    private String accessToken;
+
+    @Column(name = "expires_in")
+    private Long expiresIn;
 
     @Column(name = "created_time")
     private LocalDateTime createdTime;

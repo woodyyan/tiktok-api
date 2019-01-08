@@ -26,10 +26,6 @@ public class SignUpController {
     @ApiOperation(value = "Sign Up")
     @ResponseStatus(HttpStatus.CREATED)
     public SignUpResponse signUp(@RequestBody SignUpRequest signUpRequest) {
-        boolean success = service.signUp(signUpRequest);
-        SignUpResponse response = new SignUpResponse();
-        response.setSuccess(success);
-        response.setMessage("注册成功");
-        return response;
+        return service.signUp(signUpRequest);
     }
 }

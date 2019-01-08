@@ -1,9 +1,14 @@
 package com.daduo.api.tiktokapi.model;
 
 import lombok.Data;
+import org.joda.time.DateTime;
 
 @Data
 public class LoginResponse {
-    private boolean success;
-    private String message;
+    private String username;
+    private Long id;
+    private DateTime createdTime;
+    private DateTime lastModifiedTime;
+    private Long phoneNumber;
+    private AuthData authData;
 }
