@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import static java.util.Collections.singletonList;
-
 @ControllerAdvice(basePackages = "com.daduo.api.tiktokapi")
 @Slf4j
 public class BasicControllerAdvice {
@@ -18,6 +16,6 @@ public class BasicControllerAdvice {
     @ExceptionHandler(ErrorException.class)
     public ResponseEntity<Errors> handleException(ErrorException e) {
         log.error("Error exception: ", e);
-        return new ResponseEntity<>(new Errors(singletonList(e.getError())), e.getStatus());
+        return new ResponseEntity<>(e.getErrors(), e.getStatus());
     }
 }
