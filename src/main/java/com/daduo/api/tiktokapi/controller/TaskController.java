@@ -36,6 +36,7 @@ public class TaskController {
     @ApiOperation("Delete Task")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTask(@PathVariable Long taskId) {
-
+        log.info("[START] Delete task with taskId: {}", taskId);
+        service.deleteTask(taskId);
     }
 }
