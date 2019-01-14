@@ -3,11 +3,14 @@ package com.daduo.api.tiktokapi.service;
 import com.daduo.api.tiktokapi.entity.TaskEntity;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.TaskRequest;
-import com.daduo.api.tiktokapi.model.TaskResponse;
+import com.daduo.api.tiktokapi.model.TaskData;
+import com.daduo.api.tiktokapi.model.Tasks;
 import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.repository.TaskRepository;
 import com.daduo.api.tiktokapi.translator.TaskTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +24,7 @@ public class TaskService {
     @Autowired
     private TaskTranslator translator;
 
-    public TaskResponse publishTask(TaskRequest taskRequest) {
+    public TaskData publishTask(TaskRequest taskRequest) {
         TaskEntity task = translator.translateToTask(taskRequest);
         TaskEntity savedTask = repository.save(task);
         return translator.translateToTaskResponse(savedTask);
@@ -38,5 +41,10 @@ public class TaskService {
             error.setTitle("Task找不到");
             throw new ErrorException(HttpStatus.NOT_FOUND, error);
         }
+    }
+
+    public Tasks searchTasks(Pageable page) {
+        Page<TaskEntity> entities = repository.findAll(page);
+        return translator.translateToTasks(entities);
     }
 }
