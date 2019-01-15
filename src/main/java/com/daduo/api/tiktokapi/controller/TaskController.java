@@ -1,7 +1,7 @@
 package com.daduo.api.tiktokapi.controller;
 
-import com.daduo.api.tiktokapi.model.TaskRequest;
 import com.daduo.api.tiktokapi.model.TaskData;
+import com.daduo.api.tiktokapi.model.TaskRequest;
 import com.daduo.api.tiktokapi.model.TaskResponse;
 import com.daduo.api.tiktokapi.model.Tasks;
 import com.daduo.api.tiktokapi.service.TaskService;
@@ -41,6 +41,17 @@ public class TaskController {
         return response;
     }
 
+    @GetMapping("/{taskId}")
+    @ApiOperation("Get Task")
+    public TaskResponse getTask(@PathVariable Long taskId) {
+        log.info("[START] Get task with taskId: {}", taskId);
+        TaskData task = service.getTask(taskId);
+        log.info("[END] Get task with response: {}", task);
+        TaskResponse response = new TaskResponse();
+        response.setData(task);
+        return response;
+    }
+
     @DeleteMapping("/{taskId}")
     @ApiOperation("Delete Task")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -58,7 +69,7 @@ public class TaskController {
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
     public Tasks searchTasks(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
-                                        Pageable page) {
+                                     Pageable page) {
         log.info("[START] search tasks with page: {}", page);
         Tasks tasks = service.searchTasks(page);
         log.info("[END] search tasks with response: {}", tasks);

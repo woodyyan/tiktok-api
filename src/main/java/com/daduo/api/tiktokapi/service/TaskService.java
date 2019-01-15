@@ -2,8 +2,8 @@ package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.TaskEntity;
 import com.daduo.api.tiktokapi.exception.ErrorException;
-import com.daduo.api.tiktokapi.model.TaskRequest;
 import com.daduo.api.tiktokapi.model.TaskData;
+import com.daduo.api.tiktokapi.model.TaskRequest;
 import com.daduo.api.tiktokapi.model.Tasks;
 import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.repository.TaskRepository;
@@ -35,16 +35,29 @@ public class TaskService {
         if (task.isPresent()) {
             repository.delete(task.get());
         } else {
-            Error error = new Error();
-            error.setStatus("404");
-            error.setDetails("Task找不到，请确认ID是否正确。");
-            error.setTitle("Task找不到");
-            throw new ErrorException(HttpStatus.NOT_FOUND, error);
+            throwNotFoundException();
         }
     }
 
     public Tasks searchTasks(Pageable page) {
         Page<TaskEntity> entities = repository.findAll(page);
         return translator.translateToTasks(entities);
+    }
+
+    public TaskData getTask(Long taskId) {
+        Optional<TaskEntity> entity = repository.findById(taskId);
+        if (entity.isPresent()) {
+            return translator.translateToTaskResponse(entity.get());
+        } else {
+            return throwNotFoundException();
+        }
+    }
+
+    private TaskData throwNotFoundException() {
+        Error error = new Error();
+        error.setStatus("404");
+        error.setDetails("Task找不到，请确认ID是否正确。");
+        error.setTitle("Task找不到");
+        throw new ErrorException(HttpStatus.NOT_FOUND, error);
     }
 }
