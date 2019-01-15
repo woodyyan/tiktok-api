@@ -2,9 +2,7 @@ package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.TaskEntity;
 import com.daduo.api.tiktokapi.exception.ErrorException;
-import com.daduo.api.tiktokapi.model.TaskData;
-import com.daduo.api.tiktokapi.model.TaskRequest;
-import com.daduo.api.tiktokapi.model.Tasks;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.repository.TaskRepository;
 import com.daduo.api.tiktokapi.translator.TaskTranslator;
@@ -59,5 +57,9 @@ public class TaskService {
         error.setDetails("Task找不到，请确认ID是否正确。");
         error.setTitle("Task找不到");
         throw new ErrorException(HttpStatus.NOT_FOUND, error);
+    }
+
+    public VerifyTaskResponse verifyTask(VerifyTaskRequest verifyTaskRequest) {
+        return null;
     }
 }

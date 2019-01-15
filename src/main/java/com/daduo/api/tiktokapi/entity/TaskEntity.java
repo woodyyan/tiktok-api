@@ -17,10 +17,12 @@ public class TaskEntity {
     @GeneratedValue
     private Long id;
 
+    @Column(name = "owner_id")
+    private Long ownerId;
+
     @ElementCollection
     @Column(name = "items")
     private List<TaskItem> items;
-
 
     @Column(name = "description")
     private String description;

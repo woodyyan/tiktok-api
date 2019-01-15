@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class TaskData {
     private Long id;
+    private Long ownerId;
     private String name;
     private String description;
     private String url;

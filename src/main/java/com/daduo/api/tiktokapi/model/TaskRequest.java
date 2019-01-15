@@ -7,6 +7,7 @@ import java.util.List;
 @Data
 public class TaskRequest {
     private String name;
+    private Long ownerId;
     private String description;
     private String url;
     private List<TaskItem> items;

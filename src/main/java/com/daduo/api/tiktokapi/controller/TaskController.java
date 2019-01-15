@@ -1,9 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
-import com.daduo.api.tiktokapi.model.TaskData;
-import com.daduo.api.tiktokapi.model.TaskRequest;
-import com.daduo.api.tiktokapi.model.TaskResponse;
-import com.daduo.api.tiktokapi.model.Tasks;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.service.TaskService;
 import com.daduo.api.tiktokapi.validator.TaskValidator;
 import io.swagger.annotations.ApiImplicitParam;
@@ -74,5 +71,11 @@ public class TaskController {
         Tasks tasks = service.searchTasks(page);
         log.info("[END] search tasks with response: {}", tasks);
         return tasks;
+    }
+
+    @PostMapping("/verify")
+    @ApiOperation("Verify Task")
+    public VerifyTaskResponse verifyTask(@RequestBody VerifyTaskRequest verifyTaskRequest) {
+        return service.verifyTask(verifyTaskRequest);
     }
 }

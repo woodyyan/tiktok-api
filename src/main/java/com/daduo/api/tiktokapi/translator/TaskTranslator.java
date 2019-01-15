@@ -15,17 +15,7 @@ import java.util.List;
 @Component
 public class TaskTranslator {
     public TaskData translateToTaskResponse(TaskEntity savedTask) {
-        TaskData response = new TaskData();
-        response.setCreatedTime(savedTask.getCreatedTime().toDateTime());
-        response.setDescription(savedTask.getDescription());
-        response.setId(savedTask.getId());
-        response.setItems(savedTask.getItems());
-        response.setName(savedTask.getName());
-        response.setPrice(savedTask.getPrice());
-        response.setStatus(savedTask.getStatus());
-        response.setUrl(savedTask.getUrl());
-        response.setLastModifiedTime(savedTask.getLastModifiedTime().toDateTime());
-        return response;
+        return translateTaskData(savedTask);
     }
 
     public TaskEntity translateToTask(TaskRequest taskRequest) {
@@ -36,6 +26,7 @@ public class TaskTranslator {
         task.setDescription(taskRequest.getDescription());
         task.setItems(taskRequest.getItems());
         task.setName(taskRequest.getName());
+        task.setOwnerId(taskRequest.getOwnerId());
         task.setPrice(taskRequest.getPrice());
         task.setStatus(taskRequest.getStatus());
         task.setUrl(taskRequest.getUrl());
@@ -46,17 +37,7 @@ public class TaskTranslator {
         Tasks tasks = new Tasks();
         List<TaskData> data = new ArrayList<>();
         for (TaskEntity entity : entities.getContent()) {
-            TaskData task = new TaskData();
-            task.setCreatedTime(entity.getCreatedTime().toDateTime());
-            task.setDescription(entity.getDescription());
-            task.setId(entity.getId());
-            task.setItems(entity.getItems());
-            task.setLastModifiedTime(entity.getLastModifiedTime().toDateTime());
-            task.setName(entity.getName());
-            task.setPrice(entity.getPrice());
-            task.setStatus(entity.getStatus());
-            task.setUrl(entity.getUrl());
-            data.add(task);
+            data.add(translateTaskData(entity));
         }
         tasks.setData(data);
         PagingMeta meta = new PagingMeta();
@@ -66,5 +47,20 @@ public class TaskTranslator {
         meta.setTotalPages(entities.getTotalPages());
         tasks.setMeta(meta);
         return tasks;
+    }
+
+    private TaskData translateTaskData(TaskEntity taskEntity) {
+        TaskData data = new TaskData();
+        data.setCreatedTime(taskEntity.getCreatedTime().toDateTime());
+        data.setDescription(taskEntity.getDescription());
+        data.setId(taskEntity.getId());
+        data.setItems(taskEntity.getItems());
+        data.setName(taskEntity.getName());
+        data.setPrice(taskEntity.getPrice());
+        data.setOwnerId(taskEntity.getOwnerId());
+        data.setStatus(taskEntity.getStatus());
+        data.setUrl(taskEntity.getUrl());
+        data.setLastModifiedTime(taskEntity.getLastModifiedTime().toDateTime());
+        return data;
     }
 }
