@@ -22,9 +22,6 @@ public class Account {
     @Column(name = "phone_number")
     private Long phoneNumber;
 
-    @Column(name = "password")
-    private String password;
-
     @Column(name = "open_id")
     private String openId;
 

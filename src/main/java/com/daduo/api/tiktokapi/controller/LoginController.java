@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.model.AuthenticationCodeResponse;
 import com.daduo.api.tiktokapi.model.LoginRequest;
 import com.daduo.api.tiktokapi.model.LoginResponse;
 import com.daduo.api.tiktokapi.model.PlatformLoginRequest;
@@ -7,10 +8,7 @@ import com.daduo.api.tiktokapi.service.LoginService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/login")
 @RestController
@@ -36,6 +34,15 @@ public class LoginController {
         log.info("[START] Platform login with request: {}", platformLoginRequest);
         LoginResponse response = service.platformLogin(platformLoginRequest);
         log.info("[END] Platform login with response: {}", response);
+        return response;
+    }
+
+    @PostMapping("/code/{number}")
+    @ApiOperation(value = "发送手机验证码")
+    public AuthenticationCodeResponse sendMessageAuthenticationCode(@PathVariable @ApiParam(value = "手机号码") Long number) {
+        log.info("[START] Send message authentication code with number: {}", number);
+        AuthenticationCodeResponse response = service.sendMessageAuthenticationCode(number);
+        log.info("[END] Send message authentication code with response: {}", response);
         return response;
     }
 }

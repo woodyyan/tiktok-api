@@ -9,6 +9,6 @@ import lombok.Data;
 public class LoginRequest {
     @ApiModelProperty(value = "手机号码", required = true, example = "13888888888")
     private Long phoneNumber;
-    @ApiModelProperty(value = "密码", required = true)
-    private String password;
+    @ApiModelProperty(value = "验证码", required = true)
+    private Integer code;
 }
