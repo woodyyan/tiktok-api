@@ -1,6 +1,7 @@
 package com.daduo.api.tiktokapi.translator;
 
 import com.daduo.api.tiktokapi.entity.Account;
+import com.daduo.api.tiktokapi.model.AccountData;
 import com.daduo.api.tiktokapi.model.AuthData;
 import com.daduo.api.tiktokapi.model.LoginResponse;
 import com.daduo.api.tiktokapi.model.SignUpResponse;
@@ -35,5 +36,19 @@ public class AccountTranslator {
         account.setLastModifiedTime(now);
         account.setId(System.currentTimeMillis());
         return account;
+    }
+
+    public AccountData translateToAccountData(Account savedAccount) {
+        AccountData data = new AccountData();
+        data.setAddress(savedAccount.getAddress());
+        data.setAvatar(savedAccount.getAvatar());
+        data.setCreatedTime(savedAccount.getCreatedTime());
+        data.setId(savedAccount.getId());
+        data.setLastModifiedTime(savedAccount.getLastModifiedTime());
+        data.setPhoneNumber(savedAccount.getPhoneNumber());
+        data.setQq(savedAccount.getQq());
+        data.setUsername(savedAccount.getUsername());
+        data.setWechat(savedAccount.getWechat());
+        return data;
     }
 }

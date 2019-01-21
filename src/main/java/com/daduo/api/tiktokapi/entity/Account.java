@@ -36,4 +36,16 @@ public class Account {
 
     @Column(name = "last_modified_time")
     private LocalDateTime lastModifiedTime;
+
+    @Column(name = "qq")
+    private Long qq;
+
+    @Column(name = "wechat")
+    private String wechat;
+
+    @Column(name = "avatar")
+    private String avatar;
+
+    @Column(name = "address")
+    private String address;
 }
