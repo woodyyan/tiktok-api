@@ -9,25 +9,20 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AccountTranslator {
-    public LoginResponse translateToLoginResponse(Account account) {
+    public LoginResponse translateToLoginResponse(Account account, String token) {
         LoginResponse response = new LoginResponse();
         response.setCreatedTime(account.getCreatedTime().toDateTime());
         response.setId(account.getId());
         response.setLastModifiedTime(account.getLastModifiedTime().toDateTime());
         response.setPhoneNumber(account.getPhoneNumber());
+        response.setSessionToken(token);
         response.setUsername(account.getUsername());
         AuthData authData = new AuthData();
         authData.setAccessToken(account.getAccessToken());
         authData.setExpiresIn(account.getExpiresIn());
         authData.setOpenId(account.getOpenId());
         response.setAuthData(authData);
-        return response;
-    }
 
-    public SignUpResponse translateToSignUpResponse(Account account) {
-        SignUpResponse response = new SignUpResponse();
-        response.setCreatedTime(account.getCreatedTime().toDateTime());
-        response.setId(account.getId());
         return response;
     }
 

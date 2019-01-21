@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
+
 @Service
 @Slf4j
 public class LoginService {
@@ -27,12 +29,17 @@ public class LoginService {
         verifyCode(loginRequest);
         Account account = repository.findOneByPhoneNumber(loginRequest.getPhoneNumber());
         if (account != null) {
-            return translator.translateToLoginResponse(account);
+            return translator.translateToLoginResponse(account, generateToken(account));
         } else {
             Account newAccount = translator.translateToAccount(loginRequest.getPhoneNumber());
             Account savedAccount = repository.save(newAccount);
-            return translator.translateToLoginResponse(savedAccount);
+            return translator.translateToLoginResponse(savedAccount, generateToken(savedAccount));
         }
+    }
+
+    private String generateToken(Account account) {
+        String original = String.format("%s:%s", account.getId().toString(), account.getPhoneNumber());
+        return Base64.getEncoder().encodeToString(original.getBytes());
     }
 
     private void verifyCode(LoginRequest loginRequest) {

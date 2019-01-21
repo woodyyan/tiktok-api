@@ -18,6 +18,8 @@ public class LoginResponse {
     private DateTime lastModifiedTime;
     @ApiModelProperty(value = "手机号码", example = "13888888888")
     private Long phoneNumber;
+    @ApiModelProperty(value = "登陆凭证")
+    private String sessionToken;
     @ApiModelProperty(value = "微信登陆信息")
     private AuthData authData;
 }
