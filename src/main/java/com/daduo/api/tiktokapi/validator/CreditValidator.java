@@ -16,8 +16,8 @@ public class CreditValidator {
     public void validate(CreditRequest creditRequest) {
         if (creditRequest.getUserId() == null || creditRequest.getUserId() < 0) {
             Error error = new Error();
-            error.setTitle("User ID 不能为空");
-            error.setDetails("User ID不能为空");
+            error.setTitle("Admin ID 不能为空");
+            error.setDetails("Admin ID不能为空");
             error.setStatus("400");
             Errors errors = new Errors(Collections.singletonList(error));
             log.error("TaskRequest is invalid, errors: {}", errors);

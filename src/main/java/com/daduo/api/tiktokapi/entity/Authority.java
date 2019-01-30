@@ -1,6 +1,6 @@
 package com.daduo.api.tiktokapi.entity;
 
-import com.daduo.api.tiktokapi.enums.AuthorityName;
+import com.daduo.api.tiktokapi.enums.RoleType;
 import lombok.Data;
 
 import java.util.List;
@@ -10,7 +10,7 @@ public class Authority {
 
     private Long id;
 
-    private AuthorityName name;
+    private RoleType name;
 
-    private List<User> users;
+    private List<Admin> admins;
 }
