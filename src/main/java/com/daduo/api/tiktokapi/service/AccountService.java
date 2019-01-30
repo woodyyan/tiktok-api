@@ -1,6 +1,7 @@
 package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.Account;
+import com.daduo.api.tiktokapi.entity.AccountStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.AccountData;
 import com.daduo.api.tiktokapi.model.AccountRequest;
@@ -22,7 +23,7 @@ public class AccountService {
     @Autowired
     private AccountRepository repository;
 
-    public AccountData updateAccount(AccountRequest accountRequest) {
+    public AccountData updateAccount(AccountRequest accountRequest) throws ErrorException {
         Optional<Account> account = repository.findById(accountRequest.getData().getId());
         if (account.isPresent()) {
             Account existingAccount = account.get();
@@ -35,11 +36,28 @@ public class AccountService {
             Account savedAccount = repository.saveAndFlush(existingAccount);
             return translator.translateToAccountData(savedAccount);
         } else {
-            Error error = new Error();
-            error.setStatus("404");
-            error.setDetails("账号找不到，请确认ID是否正确。");
-            error.setTitle("账号找不到");
-            throw new ErrorException(HttpStatus.NOT_FOUND, error);
+            throwNotFound();
         }
+        return null;
+    }
+
+    private void throwNotFound() throws ErrorException {
+        Error error = new Error();
+        error.setStatus("404");
+        error.setDetails("账号找不到，请确认ID是否正确。");
+        error.setTitle("账号找不到");
+        throw new ErrorException(HttpStatus.NOT_FOUND, error);
+    }
+
+    public boolean activateAccount(Long userId) {
+        Optional<Account> account = repository.findById(userId);
+        if (account.isPresent()) {
+            Account existingAccount = account.get();
+            existingAccount.setStatus(AccountStatus.ACTIVE);
+            return true;
+        } else {
+            throwNotFound();
+        }
+        return false;
     }
 }

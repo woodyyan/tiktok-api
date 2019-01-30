@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.model;
 
+import com.daduo.api.tiktokapi.entity.AccountStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -34,4 +35,7 @@ public class AccountData {
 
     @ApiModelProperty(value = "上次更新时间")
     private LocalDateTime lastModifiedTime;
+
+    @ApiModelProperty(value = "状态")
+    private AccountStatus status;
 }

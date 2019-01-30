@@ -48,4 +48,7 @@ public class Account {
 
     @Column(name = "address")
     private String address;
+
+    @Column(name = "status")
+    private AccountStatus status;
 }

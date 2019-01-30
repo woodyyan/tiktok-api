@@ -3,6 +3,7 @@ package com.daduo.api.tiktokapi.controller;
 import com.daduo.api.tiktokapi.model.AccountData;
 import com.daduo.api.tiktokapi.model.AccountRequest;
 import com.daduo.api.tiktokapi.model.AccountResponse;
+import com.daduo.api.tiktokapi.model.ActivationResult;
 import com.daduo.api.tiktokapi.service.AccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,5 +30,16 @@ public class AccountController {
         AccountResponse response = new AccountResponse();
         response.setData(data);
         return response;
+    }
+
+    @PatchMapping("/{userId}")
+    @ApiOperation(value = "激活账号")
+    public ActivationResult activateAccount(@RequestParam @ApiParam(value = "账号ID") Long userId) {
+        log.info("[START] Activate account with userId: {}", userId);
+        boolean isSuccess = accountService.activateAccount(userId);
+        ActivationResult result = new ActivationResult();
+        result.setSuccess(isSuccess);
+        log.info("[END] Activated account with END: {}", result);
+        return result;
     }
 }
