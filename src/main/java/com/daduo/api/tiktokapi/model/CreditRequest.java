@@ -3,21 +3,14 @@ package com.daduo.api.tiktokapi.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.joda.time.DateTime;
 
 @Data
-@ApiModel(value = "充值币积分数据")
-public class CreditData {
-    @ApiModelProperty(value = "ID")
-    private Long id;
+@ApiModel(value = "充值币积分请求Json")
+public class CreditRequest {
     @ApiModelProperty(value = "充值币")
     private Long credit;
     @ApiModelProperty(value = "用户ID")
     private Long userId;
     @ApiModelProperty(value = "积分数")
     private Long points;
-    @ApiModelProperty(value = "创建时间")
-    private DateTime createdTime;
-    @ApiModelProperty(value = "修改时间")
-    private DateTime lastModifiedTime;
 }

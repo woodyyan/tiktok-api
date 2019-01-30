@@ -3,10 +3,7 @@ package com.daduo.api.tiktokapi.entity;
 import lombok.Data;
 import org.joda.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -14,6 +11,7 @@ import javax.persistence.Table;
 public class Credit {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     private Long id;
 
     @Column(name = "user_id", nullable = false)
@@ -21,6 +19,9 @@ public class Credit {
 
     @Column(name = "credit", nullable = false)
     private Long credit;
+
+    @Column(name = "points", nullable = false)
+    private Long points;
 
     @Column(name = "created_time")
     private LocalDateTime createdTime;

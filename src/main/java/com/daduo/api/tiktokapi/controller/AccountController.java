@@ -32,7 +32,7 @@ public class AccountController {
         return response;
     }
 
-    @PatchMapping("/{userId}")
+    @PostMapping("/{userId}")
     @ApiOperation(value = "激活账号")
     public ActivationResult activateAccount(@RequestParam @ApiParam(value = "账号ID") Long userId) {
         log.info("[START] Activate account with userId: {}", userId);
