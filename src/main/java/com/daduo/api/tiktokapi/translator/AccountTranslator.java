@@ -1,11 +1,10 @@
 package com.daduo.api.tiktokapi.translator;
 
 import com.daduo.api.tiktokapi.entity.Account;
-import com.daduo.api.tiktokapi.entity.AccountStatus;
+import com.daduo.api.tiktokapi.enums.AccountStatus;
 import com.daduo.api.tiktokapi.model.AccountData;
 import com.daduo.api.tiktokapi.model.AuthData;
 import com.daduo.api.tiktokapi.model.LoginResponse;
-import com.daduo.api.tiktokapi.model.SignUpResponse;
 import org.joda.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 

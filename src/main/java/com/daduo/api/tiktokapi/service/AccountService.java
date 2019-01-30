@@ -1,7 +1,7 @@
 package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.Account;
-import com.daduo.api.tiktokapi.entity.AccountStatus;
+import com.daduo.api.tiktokapi.enums.AccountStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.AccountData;
 import com.daduo.api.tiktokapi.model.AccountRequest;

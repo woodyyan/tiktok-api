@@ -1,6 +1,6 @@
 package com.daduo.api.tiktokapi.model;
 
-import com.daduo.api.tiktokapi.entity.AccountStatus;
+import com.daduo.api.tiktokapi.enums.AccountStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

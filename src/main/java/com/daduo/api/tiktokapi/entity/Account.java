@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.entity;
 
+import com.daduo.api.tiktokapi.enums.AccountStatus;
 import lombok.Data;
 import org.joda.time.LocalDateTime;
 

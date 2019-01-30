@@ -1,7 +1,8 @@
 package com.daduo.api.tiktokapi.entity;
 
-import com.daduo.api.tiktokapi.model.TaskItem;
-import com.daduo.api.tiktokapi.model.TaskStatus;
+import com.daduo.api.tiktokapi.enums.PlatformType;
+import com.daduo.api.tiktokapi.enums.TaskItem;
+import com.daduo.api.tiktokapi.enums.TaskStatus;
 import lombok.Data;
 import org.joda.time.LocalDateTime;
 
@@ -44,4 +45,7 @@ public class TaskEntity {
 
     @Column(name = "last_modified_time")
     private LocalDateTime lastModifiedTime;
+
+    @Column(name = "platform")
+    private PlatformType platform;
 }

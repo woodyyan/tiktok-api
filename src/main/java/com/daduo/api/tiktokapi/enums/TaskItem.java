@@ -1,4 +1,4 @@
-package com.daduo.api.tiktokapi.model;
+package com.daduo.api.tiktokapi.enums;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

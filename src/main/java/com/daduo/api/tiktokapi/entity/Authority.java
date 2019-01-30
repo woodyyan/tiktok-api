@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.entity;
 
+import com.daduo.api.tiktokapi.enums.AuthorityName;
 import lombok.Data;
 
 import java.util.List;

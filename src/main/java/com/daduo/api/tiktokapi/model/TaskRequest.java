@@ -1,5 +1,8 @@
 package com.daduo.api.tiktokapi.model;
 
+import com.daduo.api.tiktokapi.enums.PlatformType;
+import com.daduo.api.tiktokapi.enums.TaskItem;
+import com.daduo.api.tiktokapi.enums.TaskStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,4 +26,6 @@ public class TaskRequest {
     private Double price;
     @ApiModelProperty(value = "任务状态")
     private TaskStatus status;
+    @ApiModelProperty(value = "平台")
+    private PlatformType platform;
 }

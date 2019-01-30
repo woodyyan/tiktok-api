@@ -1,4 +1,4 @@
-package com.daduo.api.tiktokapi.entity;
+package com.daduo.api.tiktokapi.enums;
 
 public enum AccountStatus {
     ACTIVE, INACTIVE

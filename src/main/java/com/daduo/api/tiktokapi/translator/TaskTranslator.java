@@ -30,6 +30,7 @@ public class TaskTranslator {
         task.setPrice(taskRequest.getPrice());
         task.setStatus(taskRequest.getStatus());
         task.setUrl(taskRequest.getUrl());
+        task.setPlatform(taskRequest.getPlatform());
         return task;
     }
 
@@ -60,6 +61,7 @@ public class TaskTranslator {
         data.setOwnerId(taskEntity.getOwnerId());
         data.setStatus(taskEntity.getStatus());
         data.setUrl(taskEntity.getUrl());
+        data.setPlatform(taskEntity.getPlatform());
         data.setLastModifiedTime(taskEntity.getLastModifiedTime().toDateTime());
         return data;
     }

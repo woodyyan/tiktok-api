@@ -1,5 +1,8 @@
 package com.daduo.api.tiktokapi.model;
 
+import com.daduo.api.tiktokapi.enums.PlatformType;
+import com.daduo.api.tiktokapi.enums.TaskItem;
+import com.daduo.api.tiktokapi.enums.TaskStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -30,4 +33,6 @@ public class TaskData {
     private DateTime createdTime;
     @ApiModelProperty(value = "任务更新时间")
     private DateTime lastModifiedTime;
+    @ApiModelProperty(value = "平台")
+    private PlatformType platform;
 }
