@@ -2,6 +2,7 @@ package com.daduo.api.tiktokapi.controller;
 
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.service.TaskService;
+import com.daduo.api.tiktokapi.validator.AccountValidator;
 import com.daduo.api.tiktokapi.validator.TaskValidator;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -24,12 +25,16 @@ public class TaskController {
     @Autowired
     private TaskValidator validator;
 
+    @Autowired
+    private AccountValidator accountValidator;
+
     @PostMapping
     @ApiOperation("发布任务")
     @ResponseStatus(HttpStatus.CREATED)
     public TaskResponse publishTask(@RequestBody @ApiParam(value = "任务Json") TaskRequest taskRequest) {
         log.info("[START] Publish task with request: {}", taskRequest);
         validator.validate(taskRequest);
+        accountValidator.validateUserIdExists(taskRequest.getOwnerId());
         TaskData taskData = service.publishTask(taskRequest);
         log.info("[END] Publish task with response: {}", taskData);
         TaskResponse response = new TaskResponse();
@@ -73,9 +78,24 @@ public class TaskController {
         return tasks;
     }
 
-    @PostMapping("/verify")
-    @ApiOperation("验证任务")
-    public VerifyTaskResponse verifyTask(@RequestBody @ApiParam(value = "验证任务请求Json") VerifyTaskRequest verifyTaskRequest) {
-        return service.verifyTask(verifyTaskRequest);
+    @PostMapping("/order")
+    @ApiOperation("创建任务订单")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public TaskOrderResponse createTaskOrder(@RequestBody @ApiParam(value = "验证任务请求Json") TaskOrderRequest taskOrderRequest) {
+        //TODO
+        accountValidator.validateUserIdExists(taskOrderRequest.getUserId());
+        log.info("[START] Create task order with request: {}", taskOrderRequest);
+        TaskOrderResponse taskOrder = service.createTaskOrder(taskOrderRequest);
+        log.info("[END] Create task order with response: {}", taskOrder);
+        return taskOrder;
+    }
+
+    @GetMapping("/order")
+    @ApiOperation("搜索任务订单")
+    public TaskOrders searchTaskOrders(@RequestParam @ApiParam(value = "用户ID") Long userId) {
+        log.info("[START] search task orders with userId: {}", userId);
+        TaskOrders orders = service.searchTaskOrders(userId);
+        log.info("[END] search task orders with userId: {}", userId);
+        return orders;
     }
 }

@@ -4,6 +4,7 @@ import com.daduo.api.tiktokapi.model.CreditData;
 import com.daduo.api.tiktokapi.model.CreditRequest;
 import com.daduo.api.tiktokapi.model.CreditResponse;
 import com.daduo.api.tiktokapi.service.CreditService;
+import com.daduo.api.tiktokapi.validator.AccountValidator;
 import com.daduo.api.tiktokapi.validator.CreditValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +25,9 @@ public class CreditController {
     @Autowired
     private CreditValidator validator;
 
+    @Autowired
+    private AccountValidator accountValidate;
+
     @GetMapping("/{userId}")
     @ApiOperation("获取当前ID的充值币")
     public CreditResponse getCreditByUserId(@RequestParam @ApiParam("用户ID") Long userId) {
@@ -40,6 +44,7 @@ public class CreditController {
     @ResponseStatus(HttpStatus.CREATED)
     public CreditResponse addCredit(@RequestBody @ApiParam(value = "充值币Json") CreditRequest creditRequest) {
         log.info("[START] Add credit with request: {}", creditRequest);
+        accountValidate.validateUserIdExists(creditRequest.getUserId());
         validator.validate(creditRequest);
         CreditData creditData = service.addCredit(creditRequest);
         CreditResponse response = new CreditResponse();

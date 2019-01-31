@@ -10,7 +10,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@ApiModel("任务Json")
+@ApiModel("任务请求")
 public class TaskRequest {
     @ApiModelProperty(value = "任务名", example = "给林志玲点赞")
     private String name;

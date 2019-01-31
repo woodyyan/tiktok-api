@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-@ApiModel("任务Json")
+@ApiModel("任务返回Json")
 public class TaskResponse {
     @ApiModelProperty(value = "任务数据")
     private TaskData data;
