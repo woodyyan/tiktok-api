@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.enums.OrderStatus;
 import com.daduo.api.tiktokapi.model.ExchangeRequest;
 import com.daduo.api.tiktokapi.model.ExchangeResponse;
 import com.daduo.api.tiktokapi.service.OrderService;
@@ -8,10 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/order")
 @RestController
@@ -31,7 +30,10 @@ public class OrderController {
         return response;
     }
 
-    public void updateExchangeOrder() {
-
+    @PatchMapping("/exchange/{id}")
+    @ApiOperation(value = "审核通过兑换现金订单")
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public void updateExchangeOrderStatus(@PathVariable Long id, @RequestParam @ApiParam("状态") OrderStatus status) {
+        service.updateExchangeOrderStatus(id, status);
     }
 }

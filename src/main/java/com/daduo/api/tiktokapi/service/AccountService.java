@@ -5,15 +5,15 @@ import com.daduo.api.tiktokapi.enums.AccountStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.AccountData;
 import com.daduo.api.tiktokapi.model.AccountRequest;
-import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.repository.AccountRepository;
 import com.daduo.api.tiktokapi.translator.AccountTranslator;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+import static com.daduo.api.tiktokapi.model.error.ErrorBuilder.buildNotFoundErrorException;
 
 @Service
 public class AccountService {
@@ -36,17 +36,8 @@ public class AccountService {
             Account savedAccount = repository.saveAndFlush(existingAccount);
             return translator.translateToAccountData(savedAccount);
         } else {
-            throwNotFound();
+            throw buildNotFoundErrorException("账号找不到，请确认ID是否正确。");
         }
-        return null;
-    }
-
-    private void throwNotFound() throws ErrorException {
-        Error error = new Error();
-        error.setStatus("404");
-        error.setDetails("账号找不到，请确认ID是否正确。");
-        error.setTitle("账号找不到");
-        throw new ErrorException(HttpStatus.NOT_FOUND, error);
     }
 
     public boolean activateAccount(Long userId) {
@@ -56,8 +47,7 @@ public class AccountService {
             existingAccount.setStatus(AccountStatus.ACTIVE);
             return true;
         } else {
-            throwNotFound();
+            throw buildNotFoundErrorException("账号找不到，请确认ID是否正确。");
         }
-        return false;
     }
 }
