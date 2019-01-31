@@ -35,8 +35,13 @@ public class TaskService {
         }
     }
 
-    public Tasks searchTasks(Pageable page) {
-        Page<TaskEntity> entities = repository.findAll(page);
+    public Tasks searchTasks(Long userId, Pageable page) {
+        Page<TaskEntity> entities;
+        if (userId == null) {
+            entities = repository.findAll(page);
+        } else {
+            entities = repository.findAllByOwnerId(userId, page);
+        }
         return translator.translateToTasks(entities);
     }
 

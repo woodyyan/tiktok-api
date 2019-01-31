@@ -64,11 +64,11 @@ public class TaskController {
             @ApiImplicitParam(name = "size", value = "一页的总数",
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
-    public Tasks searchTasks(@RequestParam Long userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
-            @ApiParam(value = "分页")
-                                     Pageable page) {
-        log.info("[START] search tasks with page: {}", page);
-        Tasks tasks = service.searchTasks(page);
+    public Tasks searchTasks(@RequestParam(required = false) @ApiParam(value = "用户ID") Long userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+    @ApiParam(value = "分页")
+            Pageable page) {
+        log.info("[START] search tasks with userId: {}, and page: {}", userId, page);
+        Tasks tasks = service.searchTasks(userId, page);
         log.info("[END] search tasks with response: {}", tasks);
         return tasks;
     }
