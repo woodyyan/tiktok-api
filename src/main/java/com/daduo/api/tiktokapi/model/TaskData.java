@@ -35,4 +35,6 @@ public class TaskData {
     private DateTime lastModifiedTime;
     @ApiModelProperty(value = "平台")
     private PlatformType platform;
+    @ApiModelProperty(value = "是否激活")
+    private boolean isActive;
 }

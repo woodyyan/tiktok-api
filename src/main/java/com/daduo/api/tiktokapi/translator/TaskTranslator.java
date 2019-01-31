@@ -29,6 +29,7 @@ public class TaskTranslator {
         task.setOwnerId(taskRequest.getOwnerId());
         task.setPrice(taskRequest.getPrice());
         task.setStatus(taskRequest.getStatus());
+        task.setActive(true);
         task.setUrl(taskRequest.getUrl());
         task.setPlatform(taskRequest.getPlatform());
         return task;
@@ -62,6 +63,7 @@ public class TaskTranslator {
         data.setStatus(taskEntity.getStatus());
         data.setUrl(taskEntity.getUrl());
         data.setPlatform(taskEntity.getPlatform());
+        data.setActive(taskEntity.isActive());
         data.setLastModifiedTime(taskEntity.getLastModifiedTime().toDateTime());
         return data;
     }

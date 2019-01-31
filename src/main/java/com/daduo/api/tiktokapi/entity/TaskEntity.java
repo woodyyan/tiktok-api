@@ -37,6 +37,9 @@ public class TaskEntity {
     @Column(name = "status")
     private TaskStatus status;
 
+    @Column(name = "active")
+    private boolean isActive = true;
+
     @Column(name = "url")
     private String url;
 

@@ -3,10 +3,12 @@ package com.daduo.api.tiktokapi.enums;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel("任务项")
+@ApiModel("任务状态")
 public enum TaskStatus {
-    @ApiModelProperty(value = "有效")
-    ACTIVE,
-    @ApiModelProperty(value = "无效")
-    INACTIVE
+    @ApiModelProperty(value = "进行中")
+    IN_PROGRESS,
+    @ApiModelProperty(value = "已完成")
+    COMPLETED,
+    @ApiModelProperty(value = "已终止")
+    TERMINATED
 }
