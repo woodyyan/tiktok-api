@@ -3,7 +3,8 @@ package com.daduo.api.tiktokapi.controller;
 import com.daduo.api.tiktokapi.model.AdminLoginRequest;
 import com.daduo.api.tiktokapi.model.AdminRequest;
 import com.daduo.api.tiktokapi.model.AdminResponse;
-import com.daduo.api.tiktokapi.service.AdminLoginService;
+import com.daduo.api.tiktokapi.model.ResetAdminPasswordRequest;
+import com.daduo.api.tiktokapi.service.AdminService;
 import com.daduo.api.tiktokapi.validator.AdminValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "管理员接口", description = "管理员管理")
 public class AdminController {
     @Autowired
-    private AdminLoginService service;
+    private AdminService service;
 
     @Autowired
     private AdminValidator validator;
@@ -42,5 +43,13 @@ public class AdminController {
         AdminResponse response = service.addAdminUser(request);
         log.info("[END] Add admin user with response: {}", response);
         return response;
+    }
+
+    @PostMapping("/resetPassword")
+    @ApiOperation(value = "重置密码接口")
+    public void resetPassword(@RequestBody @ApiParam("重置密码请求") ResetAdminPasswordRequest request) {
+        log.info("[START] Reset admin password with request: {}", request);
+        service.resetPassword(request);
+        log.info("[END] Reset admin password.");
     }
 }

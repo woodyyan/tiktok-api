@@ -3,8 +3,9 @@ package com.daduo.api.tiktokapi.service;
 import com.daduo.api.tiktokapi.entity.Admin;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.AdminLoginRequest;
-import com.daduo.api.tiktokapi.model.AdminResponse;
 import com.daduo.api.tiktokapi.model.AdminRequest;
+import com.daduo.api.tiktokapi.model.AdminResponse;
+import com.daduo.api.tiktokapi.model.ResetAdminPasswordRequest;
 import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.repository.AdminRepository;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
-public class AdminLoginService {
+public class AdminService {
     @Autowired
     private AdminRepository repository;
 
@@ -45,5 +46,23 @@ public class AdminLoginService {
         return translator.toResponse(savedAdmin);
     }
 
-    //TODO 找回密码
+    public void resetPassword(ResetAdminPasswordRequest request) {
+        Admin admin = repository.findByPhoneNumber(request.getPhoneNumber());
+        if (admin != null) {
+            //TODO 验证 code验证码
+            if (validateCode(request.getCode())) {
+                admin.setPassword(request.getPassword());
+                repository.saveAndFlush(admin);
+            } else {
+                Error error = ErrorBuilder.buildInvalidParameterError("验证码错误");
+                throw new ErrorException(HttpStatus.BAD_REQUEST, error);
+            }
+        } else {
+            throw ErrorBuilder.buildNotFoundErrorException("用户不存在");
+        }
+    }
+
+    private boolean validateCode(Integer code) {
+        return false;
+    }
 }
