@@ -2,10 +2,9 @@ package com.daduo.api.tiktokapi.translator;
 
 import com.daduo.api.tiktokapi.entity.Account;
 import com.daduo.api.tiktokapi.enums.AccountStatus;
-import com.daduo.api.tiktokapi.model.AccountData;
-import com.daduo.api.tiktokapi.model.AuthData;
-import com.daduo.api.tiktokapi.model.LoginResponse;
+import com.daduo.api.tiktokapi.model.*;
 import org.joda.time.LocalDateTime;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -52,5 +51,19 @@ public class AccountTranslator {
         data.setWechat(savedAccount.getWechat());
         data.setStatus(savedAccount.getStatus());
         return data;
+    }
+
+    public Accounts toAccounts(Page<Account> pagedAccounts) {
+        Accounts accounts = new Accounts();
+        for (Account account : pagedAccounts.getContent()) {
+            accounts.getData().add(translateToAccountData(account));
+        }
+        PagingMeta meta = new PagingMeta();
+        meta.setPageNumber(pagedAccounts.getNumber());
+        meta.setPageSize(pagedAccounts.getSize());
+        meta.setTotalElements(pagedAccounts.getTotalElements());
+        meta.setTotalPages(pagedAccounts.getTotalPages());
+        accounts.setMeta(meta);
+        return accounts;
     }
 }

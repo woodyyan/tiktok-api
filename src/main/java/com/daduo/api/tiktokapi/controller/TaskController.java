@@ -79,7 +79,7 @@ public class TaskController {
     }
 
     @PostMapping("/order")
-    @ApiOperation("创建任务订单")
+    @ApiOperation("创建验证任务订单")
     @ResponseStatus(value = HttpStatus.CREATED)
     public TaskOrderResponse createTaskOrder(@RequestBody @ApiParam(value = "验证任务请求Json") TaskOrderRequest taskOrderRequest) {
         //TODO
