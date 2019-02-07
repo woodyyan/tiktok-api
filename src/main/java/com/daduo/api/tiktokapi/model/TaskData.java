@@ -7,11 +7,13 @@ import com.daduo.api.tiktokapi.model.base.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
 @Data
 @ApiModel("任务Json")
+@EqualsAndHashCode(callSuper = true)
 public class TaskData extends BaseModel {
     @ApiModelProperty(value = "创建者用户ID", example = "1234567890")
     private Long ownerId;

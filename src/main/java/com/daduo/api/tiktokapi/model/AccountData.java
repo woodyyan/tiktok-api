@@ -5,10 +5,12 @@ import com.daduo.api.tiktokapi.model.base.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.joda.time.LocalDateTime;
 
 @Data
 @ApiModel("账号Json")
+@EqualsAndHashCode(callSuper = true)
 public class AccountData extends BaseModel {
 
     @ApiModelProperty(value = "用户名", example = "张三")

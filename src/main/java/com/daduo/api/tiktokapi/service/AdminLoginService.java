@@ -37,4 +37,7 @@ public class AdminLoginService {
         }
         throw ErrorBuilder.buildNotFoundErrorException("用户找不到");
     }
+
+    //TODO 添加管理员
+    //TODO 找回密码
 }

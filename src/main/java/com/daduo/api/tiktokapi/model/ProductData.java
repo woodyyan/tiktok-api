@@ -4,9 +4,11 @@ import com.daduo.api.tiktokapi.model.base.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @ApiModel("商品数据")
+@EqualsAndHashCode(callSuper = true)
 public class ProductData extends BaseModel {
     @ApiModelProperty(value = "商品描述")
     private String description;

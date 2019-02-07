@@ -4,9 +4,11 @@ import com.daduo.api.tiktokapi.model.base.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @ApiModel(value = "充值币积分数据")
+@EqualsAndHashCode(callSuper = true)
 public class CreditData extends BaseModel {
     @ApiModelProperty(value = "充值币")
     private Long credit;

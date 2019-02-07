@@ -42,4 +42,6 @@ public class AccountController {
         log.info("[END] Activated account with END: {}", result);
         return result;
     }
+
+    //TODO 搜索用户（会员管理）
 }

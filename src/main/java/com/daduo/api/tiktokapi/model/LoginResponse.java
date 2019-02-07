@@ -4,9 +4,11 @@ import com.daduo.api.tiktokapi.model.base.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @ApiModel("登陆结果返回Json")
+@EqualsAndHashCode(callSuper = true)
 public class LoginResponse extends BaseModel {
     @ApiModelProperty(value = "用户名", example = "张三")
     private String username;
