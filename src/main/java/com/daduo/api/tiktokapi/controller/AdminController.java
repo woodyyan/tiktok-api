@@ -1,9 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
-import com.daduo.api.tiktokapi.model.AdminLoginRequest;
-import com.daduo.api.tiktokapi.model.AdminRequest;
-import com.daduo.api.tiktokapi.model.AdminResponse;
-import com.daduo.api.tiktokapi.model.ResetAdminPasswordRequest;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.service.AdminService;
 import com.daduo.api.tiktokapi.validator.AdminValidator;
 import io.swagger.annotations.Api;
@@ -51,5 +48,14 @@ public class AdminController {
         log.info("[START] Reset admin password with request: {}", request);
         service.resetPassword(request);
         log.info("[END] Reset admin password.");
+    }
+
+    @GetMapping
+    @ApiOperation(value = "获取所有管理员")
+    public Admins getAllAdmins() {
+        log.info("[START] Get all admins");
+        Admins admins = service.getAllAdmins();
+        log.info("[START] Get all admins with response: {}", admins);
+        return admins;
     }
 }

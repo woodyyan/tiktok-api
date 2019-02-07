@@ -2,10 +2,7 @@ package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.Admin;
 import com.daduo.api.tiktokapi.exception.ErrorException;
-import com.daduo.api.tiktokapi.model.AdminLoginRequest;
-import com.daduo.api.tiktokapi.model.AdminRequest;
-import com.daduo.api.tiktokapi.model.AdminResponse;
-import com.daduo.api.tiktokapi.model.ResetAdminPasswordRequest;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.repository.AdminRepository;
@@ -13,6 +10,8 @@ import com.daduo.api.tiktokapi.translator.AdminTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -60,6 +59,11 @@ public class AdminService {
         } else {
             throw ErrorBuilder.buildNotFoundErrorException("用户不存在");
         }
+    }
+
+    public Admins getAllAdmins() {
+        List<Admin> admins = repository.findAll();
+        return translator.toAdmins(admins);
     }
 
     private boolean validateCode(Integer code) {
