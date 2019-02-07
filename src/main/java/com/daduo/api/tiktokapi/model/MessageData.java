@@ -10,4 +10,7 @@ import lombok.Data;
 public class MessageData extends BaseModel {
     @ApiModelProperty(value = "内容")
     private String content;
+
+    @ApiModelProperty(value = "用户ID")
+    private Long userId;
 }

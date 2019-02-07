@@ -1,13 +1,17 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.model.MessageData;
 import com.daduo.api.tiktokapi.model.MessageRequest;
 import com.daduo.api.tiktokapi.model.MessageResponse;
+import com.daduo.api.tiktokapi.model.Messages;
 import com.daduo.api.tiktokapi.service.MessageService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import com.daduo.api.tiktokapi.validator.AccountValidator;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +24,36 @@ public class MessageController {
     @Autowired
     private MessageService service;
 
+    @Autowired
+    private AccountValidator accountValidator;
+
     @PostMapping
     @ApiOperation("创建消息")
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponse createMessage(@RequestBody @ApiParam("消息请求") MessageRequest request) {
         log.info("[START] Create message with request: {}", request);
-        MessageResponse response = service.createMessage(request);
+        accountValidator.validateUserIdExists(request.getUserId());
+        MessageData data = service.createMessage(request);
+        MessageResponse response = new MessageResponse();
+        response.setData(data);
         log.info("[END] Create message with response: {}", response);
         return response;
+    }
+
+    @GetMapping
+    @ApiOperation("搜索消息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "请求第几页",
+                    defaultValue = "0", dataType = "integer", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "一页的总数",
+                    defaultValue = "20", dataType = "integer", paramType = "query")
+    })
+    public Messages searchMessage(@RequestParam @ApiParam("用户ID") Long userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+    @ApiParam(value = "分页")
+            Pageable page) {
+        log.info("[START] search message with user id: {}", userId);
+        Messages messages = service.searchMessage(userId, page);
+        log.info("[END] search message with messages: {}", messages);
+        return messages;
     }
 }

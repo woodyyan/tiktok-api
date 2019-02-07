@@ -22,4 +22,7 @@ public class Message {
 
     @Column(name = "last_modified_time")
     private LocalDateTime lastModifiedTime;
+
+    @Column(name = "user_id")
+    private Long userId;
 }
