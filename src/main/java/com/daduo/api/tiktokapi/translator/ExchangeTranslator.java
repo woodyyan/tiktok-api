@@ -1,8 +1,10 @@
 package com.daduo.api.tiktokapi.translator;
 
 import com.daduo.api.tiktokapi.entity.ExchangeOrder;
+import com.daduo.api.tiktokapi.entity.ProductOrder;
 import com.daduo.api.tiktokapi.enums.OrderStatus;
 import com.daduo.api.tiktokapi.model.ExchangeRequest;
+import com.daduo.api.tiktokapi.model.ProductOrderResponse;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -7,25 +7,19 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "member_points")
-public class Product {
+@Table(name = "product_order")
+public class ProductOrder {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "product_id", nullable = false)
+    private Long productId;
 
-    @Column(name = "price")
-    private Double price;
-
-    @Column(name = "image_url")
-    private String imageUrl;
-
-    @Column(name = "description")
-    private String description;
-
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+    
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 

@@ -3,6 +3,7 @@ package com.daduo.api.tiktokapi.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.joda.time.LocalDateTime;
 
 @Data
 @ApiModel("商品数据")
@@ -17,4 +18,8 @@ public class ProductData {
     private String name;
     @ApiModelProperty(value = "商品价格")
     private Double price;
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createdTime;
+    @ApiModelProperty(value = "修改时间")
+    private LocalDateTime lastModifiedTime;
 }

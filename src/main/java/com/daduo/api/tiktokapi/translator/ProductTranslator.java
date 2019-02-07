@@ -20,6 +20,8 @@ public class ProductTranslator {
             productData.setImageUrl(product.getImageUrl());
             productData.setName(product.getName());
             productData.setPrice(product.getPrice());
+            productData.setCreatedTime(product.getCreatedTime());
+            productData.setLastModifiedTime(product.getLastModifiedTime());
             data.add(productData);
         }
         result.setData(data);

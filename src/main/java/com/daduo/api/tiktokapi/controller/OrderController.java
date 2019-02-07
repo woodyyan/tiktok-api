@@ -3,6 +3,8 @@ package com.daduo.api.tiktokapi.controller;
 import com.daduo.api.tiktokapi.enums.OrderStatus;
 import com.daduo.api.tiktokapi.model.ExchangeRequest;
 import com.daduo.api.tiktokapi.model.ExchangeResponse;
+import com.daduo.api.tiktokapi.model.ProductOrderRequest;
+import com.daduo.api.tiktokapi.model.ProductOrderResponse;
 import com.daduo.api.tiktokapi.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +36,16 @@ public class OrderController {
     @ApiOperation(value = "审核通过兑换现金订单")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public void updateExchangeOrderStatus(@PathVariable Long id, @RequestParam @ApiParam("状态") OrderStatus status) {
+        log.info("[START] Update exchange money order status with status: {}", status);
         service.updateExchangeOrderStatus(id, status);
+        log.info("[END] Update exchange money order status with status: {}", status);
+    }
+
+    @PostMapping("/product")
+    public ProductOrderResponse createProductOrder(@RequestBody @ApiParam("订单请求") ProductOrderRequest productOrderRequest) {
+        log.info("[START] Create order with request: {}", productOrderRequest);
+        ProductOrderResponse response = service.createProductOrder(productOrderRequest);
+        log.info("[END] Create order with response: {}", response);
+        return response;
     }
 }

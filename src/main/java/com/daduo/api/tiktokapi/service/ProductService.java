@@ -4,6 +4,7 @@ import com.daduo.api.tiktokapi.entity.Product;
 import com.daduo.api.tiktokapi.model.Products;
 import com.daduo.api.tiktokapi.repository.ProductRepository;
 import com.daduo.api.tiktokapi.translator.ProductTranslator;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,8 @@ public class ProductService {
             product1.setName("iPhone");
             product1.setPrice(10D);
             product1.setImageUrl("");
+            product1.setCreatedTime(LocalDateTime.now());
+            product1.setLastModifiedTime(LocalDateTime.now());
             products.add(product1);
             Product product2 = new Product();
             product2.setDescription("这是商品描述2");
@@ -35,7 +38,10 @@ public class ProductService {
             product2.setName("雨伞");
             product2.setPrice(12D);
             product2.setImageUrl("");
+            product2.setCreatedTime(LocalDateTime.now());
+            product2.setLastModifiedTime(LocalDateTime.now());
             products.add(product2);
+
         }
         return translator.translateToProducts(products);
     }

@@ -1,11 +1,16 @@
 package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.ExchangeOrder;
+import com.daduo.api.tiktokapi.entity.ProductOrder;
 import com.daduo.api.tiktokapi.enums.OrderStatus;
 import com.daduo.api.tiktokapi.model.ExchangeRequest;
 import com.daduo.api.tiktokapi.model.ExchangeResponse;
+import com.daduo.api.tiktokapi.model.ProductOrderRequest;
+import com.daduo.api.tiktokapi.model.ProductOrderResponse;
 import com.daduo.api.tiktokapi.repository.ExchangeOrderRepository;
+import com.daduo.api.tiktokapi.repository.ProductOrderRepository;
 import com.daduo.api.tiktokapi.translator.ExchangeTranslator;
+import com.daduo.api.tiktokapi.translator.ProductOrderTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +26,12 @@ public class OrderService {
 
     @Autowired
     private ExchangeOrderRepository repository;
+
+    @Autowired
+    private ProductOrderTranslator productTranslator;
+
+    @Autowired
+    private ProductOrderRepository productOrderRepository;
 
     public ExchangeResponse createExchangeMoneyOrder(ExchangeRequest exchangeRequest) {
         ExchangeOrder order = translator.translateToExchangeOrder(exchangeRequest);
@@ -40,5 +51,11 @@ public class OrderService {
         } else {
             throw buildNotFoundErrorException("ID找不到，请确认ID是否正确。");
         }
+    }
+
+    public ProductOrderResponse createProductOrder(ProductOrderRequest productOrderRequest) {
+        ProductOrder productOrder = productTranslator.translate(productOrderRequest);
+        ProductOrder savedOrder = productOrderRepository.save(productOrder);
+        return productTranslator.translateToResponse(savedOrder);
     }
 }
