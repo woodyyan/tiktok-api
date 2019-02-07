@@ -2,6 +2,7 @@ package com.daduo.api.tiktokapi.entity;
 
 import com.daduo.api.tiktokapi.enums.RoleType;
 import lombok.Data;
+import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
 
@@ -25,4 +26,10 @@ public class Admin {
 
     @Column(name = "role", nullable = false)
     private RoleType role;
+
+    @Column(name = "created_time")
+    private LocalDateTime createdTime;
+
+    @Column(name = "last_modified_time")
+    private LocalDateTime lastModifiedTime;
 }

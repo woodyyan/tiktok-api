@@ -3,7 +3,8 @@ package com.daduo.api.tiktokapi.service;
 import com.daduo.api.tiktokapi.entity.Admin;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.AdminLoginRequest;
-import com.daduo.api.tiktokapi.model.AdminLoginResponse;
+import com.daduo.api.tiktokapi.model.AdminResponse;
+import com.daduo.api.tiktokapi.model.AdminRequest;
 import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.repository.AdminRepository;
@@ -22,7 +23,7 @@ public class AdminLoginService {
     @Autowired
     private AdminTranslator translator;
 
-    public AdminLoginResponse login(AdminLoginRequest loginRequest) {
+    public AdminResponse login(AdminLoginRequest loginRequest) {
         Admin admin = repository.findByPhoneNumber(loginRequest.getPhoneNumber());
         if (admin != null) {
             if (admin.getPassword().equals(loginRequest.getPassword())) {
@@ -38,6 +39,11 @@ public class AdminLoginService {
         throw ErrorBuilder.buildNotFoundErrorException("用户找不到");
     }
 
-    //TODO 添加管理员
+    public AdminResponse addAdminUser(AdminRequest request) {
+        Admin admin = translator.toAdmin(request);
+        Admin savedAdmin = repository.save(admin);
+        return translator.toResponse(savedAdmin);
+    }
+
     //TODO 找回密码
 }
