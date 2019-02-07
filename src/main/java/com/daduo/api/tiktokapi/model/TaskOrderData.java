@@ -1,15 +1,14 @@
 package com.daduo.api.tiktokapi.model;
 
 import com.daduo.api.tiktokapi.enums.TaskOrderStatus;
+import com.daduo.api.tiktokapi.model.base.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
 @ApiModel("任务订单")
-public class TaskOrderData {
-    @ApiModelProperty(value = "ID")
-    private Long id;
+public class TaskOrderData extends BaseModel {
     @ApiModelProperty(value = "任务")
     private TaskData task;
     @ApiModelProperty(value = "任务截图OSS链接")

@@ -43,9 +43,9 @@ public class AccountTranslator {
         AccountData data = new AccountData();
         data.setAddress(savedAccount.getAddress());
         data.setAvatar(savedAccount.getAvatar());
-        data.setCreatedTime(savedAccount.getCreatedTime());
+        data.setCreatedTime(savedAccount.getCreatedTime().toDateTime());
         data.setId(savedAccount.getId());
-        data.setLastModifiedTime(savedAccount.getLastModifiedTime());
+        data.setLastModifiedTime(savedAccount.getLastModifiedTime().toDateTime());
         data.setPhoneNumber(savedAccount.getPhoneNumber());
         data.setQq(savedAccount.getQq());
         data.setUsername(savedAccount.getUsername());
