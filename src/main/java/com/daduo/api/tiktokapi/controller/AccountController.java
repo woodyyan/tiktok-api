@@ -1,6 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
- import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.service.AccountService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/account")
@@ -56,5 +57,23 @@ public class AccountController {
         Accounts accounts = accountService.searchAccount(page);
         log.info("[END] Search account with accounts: {}", accounts);
         return accounts;
+    }
+
+    @PostMapping("/online/{userId}")
+    @ApiOperation(value = "保存在线心跳")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void storeOnlineStatus(@PathVariable @ApiParam("用户ID") Long userId) {
+        log.info("[START] User id {} is online");
+        accountService.storeOnlineStatus(userId);
+        log.info("[END] User id {} is online");
+    }
+
+    @GetMapping("/online")
+    @ApiOperation(value = "获取所有在线用户")
+    public OnlineAccounts getAllOnlineAccounts() {
+        log.info("[START] Get all online users");
+        OnlineAccounts response = accountService.getAllOnlineAccounts();
+        log.info("[END] Get all online users with response: {}", response);
+        return response;
     }
 }
