@@ -16,11 +16,15 @@ public class AdminValidator {
     public void validateExists(Long phoneNumber) {
         Admin admin = repository.findByPhoneNumber(phoneNumber);
         if (admin != null) {
-            Error error = new Error();
-            error.setTitle("用户已存在");
-            error.setDetails("手机号已注册");
-            error.setStatus("400");
-            throw new ErrorException(HttpStatus.BAD_REQUEST, error);
+            throwNotFound();
         }
+    }
+
+    private void throwNotFound() {
+        Error error = new Error();
+        error.setTitle("用户已存在");
+        error.setDetails("手机号已注册");
+        error.setStatus("400");
+        throw new ErrorException(HttpStatus.BAD_REQUEST, error);
     }
 }

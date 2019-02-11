@@ -24,9 +24,6 @@ public class Admin {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "role", nullable = false)
-    private RoleType role;
-
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 

@@ -1,17 +1,20 @@
 package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.Admin;
+import com.daduo.api.tiktokapi.entity.Permission;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.repository.AdminRepository;
+import com.daduo.api.tiktokapi.repository.PermissionRepository;
 import com.daduo.api.tiktokapi.translator.AdminTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -23,11 +26,17 @@ public class AdminService {
     @Autowired
     private AdminTranslator translator;
 
+    @Autowired
+    private PermissionRepository permissionRepository;
+
     public AdminResponse login(AdminLoginRequest loginRequest) {
         Admin admin = repository.findByPhoneNumber(loginRequest.getPhoneNumber());
         if (admin != null) {
             if (admin.getPassword().equals(loginRequest.getPassword())) {
-                return translator.toResponse(admin);
+                Permission permission = permissionRepository.findOneByAdminId(admin.getId());
+                if (permission != null) {
+                    return translator.toResponse(admin, permission);
+                }
             } else {
                 Error error = new Error();
                 error.setStatus(String.valueOf(BAD_REQUEST.value()));
@@ -42,7 +51,9 @@ public class AdminService {
     public AdminResponse addAdminUser(AdminRequest request) {
         Admin admin = translator.toAdmin(request);
         Admin savedAdmin = repository.save(admin);
-        return translator.toResponse(savedAdmin);
+        Permission permission = translator.toPermission(admin.getId(), request.getPermissions(), request.getRole());
+        Permission savedPermission = permissionRepository.save(permission);
+        return translator.toResponse(savedAdmin, savedPermission);
     }
 
     public void resetPassword(ResetAdminPasswordRequest request) {
@@ -63,10 +74,22 @@ public class AdminService {
 
     public Admins getAllAdmins() {
         List<Admin> admins = repository.findAll();
-        return translator.toAdmins(admins);
+        List<Permission> permissions = permissionRepository.findAll();
+        return translator.toAdmins(admins, permissions);
     }
 
     private boolean validateCode(Integer code) {
         return false;
+    }
+
+    public void modifyPassword(ModifyAdminPasswordRequest request) {
+        Optional<Admin> adminOptional = repository.findById(request.getAdminId());
+        if (adminOptional.isPresent()) {
+            Admin admin = adminOptional.get();
+            admin.setPassword(request.getPassword());
+            repository.saveAndFlush(admin);
+        } else {
+            throw ErrorBuilder.buildNotFoundErrorException("用户不存在");
+        }
     }
 }
