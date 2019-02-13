@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ValueReferenceService {
+public class ReferenceValueService {
     @Autowired
     private ValueReferenceRepository repository;
 
@@ -27,9 +27,25 @@ public class ValueReferenceService {
 
     private void getDefaultValue(List<ReferenceValue> all) {
         ReferenceValue value = new ReferenceValue();
-        value.setCredit(1L);
-        value.setPoints(1L);
-        value.setRmb(1L);
+        value.setCommissionPercent(40);
+        value.setCreditOfPerRmb(100);
+        value.setPointsOfPerKuaishouComment(100);
+        value.setPointsOfPerKuaishouFollow(100);
+        value.setPointsOfPerKuaishouLike(100);
+        value.setPointsOfPerKuaishouPlay(100);
+        value.setPointsOfPerRmb(100);
+        value.setPointsOfPerTiktokComment(100);
+        value.setPointsOfPerTiktokFollow(100);
+        value.setPointsOfPerTiktokLike(100);
+        value.setPointsOfPerTiktokPlay(100);
+        value.setPresentedCreditFor10(100);
+        value.setPresentedCreditFor30(100);
+        value.setPresentedCreditFor50(100);
+        value.setPresentedCreditFor100(100);
+        value.setPresentedCreditFor200(100);
+        value.setPresentedCreditFor500(100);
+        value.setPresentedCreditFor1000(100);
+        value.setPresentedCreditFor5000(100);
         all.add(value);
     }
 }
