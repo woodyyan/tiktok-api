@@ -42,7 +42,7 @@ dependencies {
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.10.0'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda', version: '2.9.4'
     compileOnly 'org.projectlombok:lombok:1.18.2'
-//    implementation('mysql,mysql-connector-java,6.0.6')
+    implementation('mysql:mysql-connector-java:6.0.6')
     runtime('org.hsqldb:hsqldb')
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
