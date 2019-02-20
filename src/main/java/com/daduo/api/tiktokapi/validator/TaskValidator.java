@@ -1,7 +1,6 @@
 package com.daduo.api.tiktokapi.validator;
 
 import com.daduo.api.tiktokapi.exception.ErrorException;
-import com.daduo.api.tiktokapi.model.TaskOrderRequest;
 import com.daduo.api.tiktokapi.model.TaskRequest;
 import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.model.error.Errors;
@@ -37,6 +36,13 @@ public class TaskValidator {
             Error error = new Error();
             error.setTitle("Items至少要包含一个");
             error.setDetails("Items至少要包含一个");
+            error.setStatus("400");
+            errorList.add(error);
+        }
+        if (taskRequest.getCount() < 1) {
+            Error error = new Error();
+            error.setTitle("次数不能小于1");
+            error.setDetails("次数不能小于1");
             error.setStatus("400");
             errorList.add(error);
         }

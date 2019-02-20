@@ -1,6 +1,5 @@
 package com.daduo.api.tiktokapi.entity;
 
-import com.daduo.api.tiktokapi.enums.RoleType;
 import lombok.Data;
 import org.joda.time.LocalDateTime;
 
@@ -8,7 +7,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "account")
+@Table(name = "admin")
 public class Admin {
     @Id
     @Column(name = "id", nullable = false)

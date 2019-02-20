@@ -29,7 +29,7 @@ public class TaskController {
     private AccountValidator accountValidator;
 
     @PostMapping
-    @ApiOperation("发布任务")
+    @ApiOperation(value = "发布任务", notes = "任务项：点赞是LIKE, 点击率是CLICK_RATE, 关注是FOLLOW, 评论是COMMENT")
     @ResponseStatus(HttpStatus.CREATED)
     public TaskResponse publishTask(@RequestBody @ApiParam(value = "任务Json") TaskRequest taskRequest) {
         log.info("[START] Publish task with request: {}", taskRequest);

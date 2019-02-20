@@ -29,6 +29,7 @@ public class TaskTranslator {
         task.setOwnerId(taskRequest.getOwnerId());
         task.setPrice(taskRequest.getPrice());
         task.setStatus(taskRequest.getStatus());
+        task.setCount(taskRequest.getCount());
         task.setActive(true);
         task.setUrl(taskRequest.getUrl());
         task.setPlatform(taskRequest.getPlatform());
@@ -59,6 +60,7 @@ public class TaskTranslator {
         data.setItems(taskEntity.getItems());
         data.setName(taskEntity.getName());
         data.setPrice(taskEntity.getPrice());
+        data.setCount(taskEntity.getCount());
         data.setOwnerId(taskEntity.getOwnerId());
         data.setStatus(taskEntity.getStatus());
         data.setUrl(taskEntity.getUrl());

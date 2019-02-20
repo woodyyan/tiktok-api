@@ -51,4 +51,7 @@ public class TaskEntity {
 
     @Column(name = "platform")
     private PlatformType platform;
+
+    @Column(name = "count")
+    private int count;
 }

@@ -33,4 +33,6 @@ public class TaskData extends BaseModel {
     private PlatformType platform;
     @ApiModelProperty(value = "是否激活")
     private boolean isActive;
+    @ApiModelProperty(value = "次数")
+    private int count;
 }

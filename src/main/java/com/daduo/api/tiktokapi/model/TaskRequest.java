@@ -24,6 +24,8 @@ public class TaskRequest {
     private List<TaskItem> items;
     @ApiModelProperty(value = "价格")
     private Double price;
+    @ApiModelProperty(value = "次数")
+    private int count;
     @ApiModelProperty(value = "任务状态")
     private TaskStatus status;
     @ApiModelProperty(value = "平台")
