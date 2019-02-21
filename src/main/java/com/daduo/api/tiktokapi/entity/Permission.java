@@ -47,10 +47,14 @@ public class Permission {
     private boolean canCreditStoreManage;
 
     @Column(name = "created_time")
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime", parameters = {
+            @org.hibernate.annotations.Parameter(name = "databaseZone", value = "Asia/Shanghai")
+    })
     private LocalDateTime createdTime;
 
     @Column(name = "last_modified_time")
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime", parameters = {
+            @org.hibernate.annotations.Parameter(name = "databaseZone", value = "Asia/Shanghai")
+    })
     private LocalDateTime lastModifiedTime;
 }
