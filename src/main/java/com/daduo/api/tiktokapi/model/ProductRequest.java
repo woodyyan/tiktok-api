@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.model;
 
+import com.daduo.api.tiktokapi.enums.ProductStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,4 +18,6 @@ public class ProductRequest {
     private String description;
     @ApiModelProperty(value = "总数")
     private int count;
+    @ApiModelProperty(value = "状态")
+    private ProductStatus status;
 }

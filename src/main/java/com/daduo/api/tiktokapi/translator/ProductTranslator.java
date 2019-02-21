@@ -30,6 +30,7 @@ public class ProductTranslator {
         product.setCreatedTime(LocalDateTime.now());
         product.setImageUrl(request.getImageUrl());
         product.setPrice(request.getPrice());
+        product.setStatus(request.getStatus());
         product.setName(request.getName());
         product.setDescription(request.getDescription());
         product.setCount(request.getCount());
@@ -49,6 +50,7 @@ public class ProductTranslator {
         productData.setId(product.getId());
         productData.setImageUrl(product.getImageUrl());
         productData.setName(product.getName());
+        productData.setStatus(product.getStatus());
         productData.setPrice(product.getPrice());
         productData.setCount(product.getCount());
         productData.setCreatedTime(product.getCreatedTime().toDateTime());

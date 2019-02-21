@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.model;
 
+import com.daduo.api.tiktokapi.enums.ProductStatus;
 import com.daduo.api.tiktokapi.model.base.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,4 +21,6 @@ public class ProductData extends BaseModel {
     private Double price;
     @ApiModelProperty(value = "总数")
     private int count;
+    @ApiModelProperty(value = "状态")
+    private ProductStatus status;
 }

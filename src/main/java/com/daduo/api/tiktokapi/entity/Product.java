@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.entity;
 
+import com.daduo.api.tiktokapi.enums.ProductStatus;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
@@ -41,4 +42,7 @@ public class Product {
 
     @Column(name = "count")
     private int count;
+
+    @Column(name = "status")
+    private ProductStatus status;
 }

@@ -30,7 +30,7 @@ public class ProductController {
     }
 
     @PostMapping
-    @ApiOperation("添加商品")
+    @ApiOperation(value = "添加商品", notes = "商品状态：SALE是在售, SOLD_OUT是售完, UNSHELVES是下架")
     @ResponseStatus(HttpStatus.CREATED)
     public ProductResponse addProduct(ProductRequest request) {
         log.info("[START] Add product with request: {}", request);
