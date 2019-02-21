@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class Admin {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "phone_number", nullable = false)

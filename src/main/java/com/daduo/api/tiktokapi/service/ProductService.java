@@ -1,6 +1,8 @@
 package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.Product;
+import com.daduo.api.tiktokapi.model.ProductRequest;
+import com.daduo.api.tiktokapi.model.ProductResponse;
 import com.daduo.api.tiktokapi.model.Products;
 import com.daduo.api.tiktokapi.repository.ProductRepository;
 import com.daduo.api.tiktokapi.translator.ProductTranslator;
@@ -44,5 +46,11 @@ public class ProductService {
 
         }
         return translator.translateToProducts(products);
+    }
+
+    public ProductResponse addProduct(ProductRequest request) {
+        Product product = translator.toProduct(request);
+        Product savedProduct = repository.save(product);
+        return translator.toProductResponse(savedProduct);
     }
 }

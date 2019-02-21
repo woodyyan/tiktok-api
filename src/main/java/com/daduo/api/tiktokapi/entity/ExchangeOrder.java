@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class ExchangeOrder {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "method")

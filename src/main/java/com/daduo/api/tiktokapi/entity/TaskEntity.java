@@ -16,7 +16,7 @@ import java.util.List;
 public class TaskEntity {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "owner_id")

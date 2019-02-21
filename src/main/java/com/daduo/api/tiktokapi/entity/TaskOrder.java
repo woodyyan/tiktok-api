@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class TaskOrder {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "image_url")

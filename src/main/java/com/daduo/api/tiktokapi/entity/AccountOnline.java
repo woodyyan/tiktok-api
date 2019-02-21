@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class AccountOnline {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "user_id")

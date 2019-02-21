@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Permission {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "admin_id", nullable = false)
