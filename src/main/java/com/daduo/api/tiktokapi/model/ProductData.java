@@ -18,4 +18,6 @@ public class ProductData extends BaseModel {
     private String name;
     @ApiModelProperty(value = "商品价格")
     private Double price;
+    @ApiModelProperty(value = "总数")
+    private int count;
 }

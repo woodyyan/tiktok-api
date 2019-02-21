@@ -8,6 +8,7 @@ import com.daduo.api.tiktokapi.model.TaskOrderRequest;
 import com.daduo.api.tiktokapi.model.TaskOrders;
 import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.repository.TaskRepository;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,6 +40,8 @@ public class TaskOrderTranslator {
         order.setStatus(status);
         order.setImageUrl(taskOrderRequest.getImageUrl());
         order.setUserId(taskOrderRequest.getUserId());
+        order.setCreatedTime(LocalDateTime.now());
+        order.setLastModifiedTime(LocalDateTime.now());
         Optional<TaskEntity> task = repository.findById(taskOrderRequest.getTaskId());
         if (task.isPresent()) {
             order.setTask(task.get());
@@ -53,6 +56,8 @@ public class TaskOrderTranslator {
         data.setId(order.getId());
         data.setImageUrl(order.getImageUrl());
         data.setUserId(order.getUserId());
+        data.setCreatedTime(order.getCreatedTime().toDateTime());
+        data.setLastModifiedTime(order.getLastModifiedTime().toDateTime());
         data.setStatus(order.getStatus());
         data.setTask(taskTranslator.translateToTaskResponse(order.getTask()));
         return data;

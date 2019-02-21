@@ -4,6 +4,7 @@ import com.daduo.api.tiktokapi.enums.PlatformType;
 import com.daduo.api.tiktokapi.enums.TaskItem;
 import com.daduo.api.tiktokapi.enums.TaskStatus;
 import lombok.Data;
+import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
@@ -44,9 +45,11 @@ public class TaskEntity {
     private String url;
 
     @Column(name = "created_time")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     private LocalDateTime createdTime;
 
     @Column(name = "last_modified_time")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     private LocalDateTime lastModifiedTime;
 
     @Column(name = "platform")
