@@ -2,6 +2,7 @@ package com.daduo.api.tiktokapi.translator;
 
 import com.daduo.api.tiktokapi.entity.ReferenceValue;
 import com.daduo.api.tiktokapi.model.ValueData;
+import com.daduo.api.tiktokapi.model.ValueResponseRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,5 +29,9 @@ public class ValueReferenceTranslator {
         data.setPresentedCreditFor1000(referenceValue.getPresentedCreditFor1000());
         data.setPresentedCreditFor5000(referenceValue.getPresentedCreditFor5000());
         return data;
+    }
+
+    public ValueData toValueData(ValueResponseRequest request) {
+        return null;
     }
 }

@@ -2,14 +2,15 @@ package com.daduo.api.tiktokapi.controller;
 
 import com.daduo.api.tiktokapi.model.ValueData;
 import com.daduo.api.tiktokapi.model.ValueResponse;
+import com.daduo.api.tiktokapi.model.ValueResponseRequest;
 import com.daduo.api.tiktokapi.service.ReferenceValueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/member/reference/values")
 @RestController
@@ -31,5 +32,15 @@ public class ReferenceValueController {
         return response;
     }
 
-    //TODO 修改
+    @PatchMapping
+    @ApiOperation(value = "修改基础数据设置", notes = "需要改哪些值就只传哪些值")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ValueResponse modifyReferenceValues(@RequestBody @ApiParam("基础数据修改请求体") ValueResponseRequest request) {
+        log.info("[START] Modify reference values with request: {}", request);
+        ValueData data = service.modifyReferenceValues(request);
+        ValueResponse response = new ValueResponse();
+        response.setData(data);
+        log.info("[END] Modify reference values with response: {}", response);
+        return response;
+    }
 }
