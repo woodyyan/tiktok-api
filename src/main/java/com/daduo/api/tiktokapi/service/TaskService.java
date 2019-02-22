@@ -19,6 +19,8 @@ import java.util.Optional;
 
 @Service
 public class TaskService {
+    private static final double STICKY_PERCENT = 1.2;
+
     @Autowired
     private TaskRepository repository;
 
@@ -37,15 +39,20 @@ public class TaskService {
     public TaskData publishTask(TaskRequest taskRequest) {
         TaskEntity task = translator.translateToTask(taskRequest);
         TaskEntity savedTask = repository.save(task);
-        deductPoints(taskRequest.getOwnerId(), taskRequest.getCreditPrice(), taskRequest.getPointPrice());
+        deductPoints(taskRequest.getOwnerId(), taskRequest.getCreditPrice(), taskRequest.getPointPrice(), taskRequest.isSticky());
         return translator.translateToTaskResponse(savedTask);
     }
 
-    private void deductPoints(Long ownerId, Double creditPrice, Double pointPrice) {
+    private void deductPoints(Long ownerId, Double creditPrice, Double pointPrice, boolean sticky) {
         CreditRequest creditRequest = new CreditRequest();
         creditRequest.setUserId(ownerId);
-        creditRequest.setCredit(-creditPrice);
-        creditRequest.setPoints(-pointPrice);
+        if (sticky) {
+            creditRequest.setCredit(-creditPrice * STICKY_PERCENT);
+            creditRequest.setPoints(-pointPrice * STICKY_PERCENT);
+        } else {
+            creditRequest.setCredit(-creditPrice);
+            creditRequest.setPoints(-pointPrice);
+        }
         creditService.modifyCredit(creditRequest);
     }
 
