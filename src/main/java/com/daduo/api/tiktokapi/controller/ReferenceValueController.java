@@ -44,5 +44,12 @@ public class ReferenceValueController {
         return response;
     }
 
-    //TODO 查询接口，组合单价
+    @GetMapping("/{name}")
+    @ApiOperation("查询基础数据设置")
+    public Double getReferenceValues(@PathVariable @ApiParam("参数名") String name) {
+        log.info("[START] Search reference value with name: {}", name);
+        Double value = service.searchReferenceValue(name);
+        log.info("[END] Search reference value with value: {}", value);
+        return value;
+    }
 }

@@ -1,14 +1,19 @@
 package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.ReferenceValue;
+import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.ValueData;
 import com.daduo.api.tiktokapi.model.ValueResponseRequest;
+import com.daduo.api.tiktokapi.model.error.Error;
+import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.repository.ValueReferenceRepository;
 import com.daduo.api.tiktokapi.translator.ValueReferenceTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ReferenceValueService {
@@ -19,22 +24,80 @@ public class ReferenceValueService {
     private ValueReferenceTranslator translator;
 
     public ValueData getReferenceValues() {
-        List<ReferenceValue> all = repository.findAll();
-        if (all.size() == 0) {
-            getDefaultValue(all);
-        }
-        return translator.translateToValueData(all.get(0));
+        ReferenceValue referenceValue = getReferenceValue();
+        return translator.translateToValueData(referenceValue);
     }
 
     public ValueData modifyReferenceValues(ValueResponseRequest request) {
+        ReferenceValue referenceValue = getReferenceValue();
+        modifyValues(request, referenceValue);
+        ReferenceValue savedValue = repository.saveAndFlush(referenceValue);
+        return translator.translateToValueData(savedValue);
+    }
+
+    public Double searchReferenceValue(String name) {
+        ReferenceValue referenceValue = getReferenceValue();
+        return searchByName(name, referenceValue);
+    }
+
+    private ReferenceValue getReferenceValue() {
         List<ReferenceValue> all = repository.findAll();
         if (all.size() == 0) {
             getDefaultValue(all);
         }
-        ReferenceValue referenceValue = all.get(0);
-        modifyValues(request, referenceValue);
-        ReferenceValue savedValue = repository.saveAndFlush(referenceValue);
-        return translator.translateToValueData(savedValue);
+        return all.get(0);
+    }
+
+    private Double searchByName(String name, ReferenceValue referenceValue) {
+        if (Objects.equals(name, "creditOfPerRmb")) {
+            return referenceValue.getCreditOfPerRmb();
+        } else if (Objects.equals(name, "pointsOfPerKuaishouComment")) {
+            return referenceValue.getPointsOfPerKuaishouComment();
+        } else if (Objects.equals(name, "pointsOfPerKuaishouFollow")) {
+            return referenceValue.getPointsOfPerKuaishouFollow();
+        } else if (Objects.equals(name, "pointsOfPerKuaishouLike")) {
+            return referenceValue.getPointsOfPerKuaishouLike();
+        } else if (Objects.equals(name, "pointsOfPerKuaishouLikeAndFollow")) {
+            return referenceValue.getPointsOfPerKuaishouLikeAndFollow();
+        } else if (Objects.equals(name, "pointsOfPerKuaishouLikeAndFollowAndComment")) {
+            return referenceValue.getPointsOfPerKuaishouLikeAndFollowAndComment();
+        } else if (Objects.equals(name, "pointsOfPerKuaishouPlay")) {
+            return referenceValue.getPointsOfPerKuaishouPlay();
+        } else if (Objects.equals(name, "pointsOfPerRmb")) {
+            return referenceValue.getPointsOfPerRmb();
+        } else if (Objects.equals(name, "pointsOfPerTiktokComment")) {
+            return referenceValue.getPointsOfPerTiktokComment();
+        } else if (Objects.equals(name, "pointsOfPerTiktokFollow")) {
+            return referenceValue.getPointsOfPerTiktokFollow();
+        } else if (Objects.equals(name, "pointsOfPerTiktokLike")) {
+            return referenceValue.getPointsOfPerTiktokLike();
+        } else if (Objects.equals(name, "pointsOfPerTiktokLikeAndFollow")) {
+            return referenceValue.getPointsOfPerTiktokLikeAndFollow();
+        } else if (Objects.equals(name, "pointsOfPerTiktokLikeAndFollowAndComment")) {
+            return referenceValue.getPointsOfPerTiktokLikeAndFollowAndComment();
+        } else if (Objects.equals(name, "pointsOfPerTiktokPlay")) {
+            return referenceValue.getPointsOfPerTiktokPlay();
+        } else if (Objects.equals(name, "presentedCreditFor10")) {
+            return referenceValue.getPresentedCreditFor10();
+        } else if (Objects.equals(name, "presentedCreditFor30")) {
+            return referenceValue.getPresentedCreditFor30();
+        } else if (Objects.equals(name, "presentedCreditFor50")) {
+            return referenceValue.getPresentedCreditFor50();
+        } else if (Objects.equals(name, "presentedCreditFor100")) {
+            return referenceValue.getPresentedCreditFor100();
+        } else if (Objects.equals(name, "presentedCreditFor200")) {
+            return referenceValue.getPresentedCreditFor200();
+        } else if (Objects.equals(name, "presentedCreditFor500")) {
+            return referenceValue.getPresentedCreditFor500();
+        } else if (Objects.equals(name, "presentedCreditFor1000")) {
+            return referenceValue.getPresentedCreditFor1000();
+        } else if (Objects.equals(name, "presentedCreditFor5000")) {
+            return referenceValue.getPresentedCreditFor5000();
+        } else if (Objects.equals(name, "commissionPercent")) {
+            return (double) referenceValue.getCommissionPercent();
+        }
+        Error error = ErrorBuilder.buildInvalidParameterError("参数名找不到。");
+        throw new ErrorException(HttpStatus.BAD_REQUEST, error);
     }
 
     private void modifyValues(ValueResponseRequest request, ReferenceValue referenceValue) {
