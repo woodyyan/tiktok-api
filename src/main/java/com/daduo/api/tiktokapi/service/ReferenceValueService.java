@@ -56,6 +56,13 @@ public class ReferenceValueService {
         if (request.getPointsOfPerKuaishouPlay() != null) {
             referenceValue.setPointsOfPerKuaishouPlay(request.getPointsOfPerKuaishouPlay());
         }
+        if (request.getPointsOfPerKuaishouLikeAndFollow() != null) {
+            referenceValue.setPointsOfPerKuaishouLikeAndFollow(request.getPointsOfPerKuaishouLikeAndFollow());
+        }
+        if (request.getPointsOfPerKuaishouLikeAndFollowAndComment() != null) {
+            referenceValue.setPointsOfPerKuaishouLikeAndFollowAndComment(request.getPointsOfPerKuaishouLikeAndFollowAndComment());
+        }
+
         if (request.getPointsOfPerRmb() != null) {
             referenceValue.setPointsOfPerRmb(request.getPointsOfPerRmb());
         }
@@ -71,6 +78,13 @@ public class ReferenceValueService {
         if (request.getPointsOfPerTiktokPlay() != null) {
             referenceValue.setPointsOfPerTiktokPlay(request.getPointsOfPerTiktokPlay());
         }
+        if (request.getPointsOfPerTiktokLikeAndFollow() != null) {
+            referenceValue.setPointsOfPerTiktokLikeAndFollow(request.getPointsOfPerTiktokLikeAndFollow());
+        }
+        if (request.getPointsOfPerTiktokLikeAndFollowAndComment() != null) {
+            referenceValue.setPointsOfPerTiktokLikeAndFollowAndComment(request.getPointsOfPerTiktokLikeAndFollowAndComment());
+        }
+
         if (request.getPresentedCreditFor10() != null) {
             referenceValue.setPresentedCreditFor10(request.getPresentedCreditFor10());
         }
