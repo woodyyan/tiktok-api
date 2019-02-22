@@ -40,13 +40,13 @@ public class CreditController {
     }
 
     @PostMapping
-    @ApiOperation("充值或者添加积分")
-    @ResponseStatus(HttpStatus.CREATED)
-    public CreditResponse addCredit(@RequestBody @ApiParam(value = "充值币Json") CreditRequest creditRequest) {
+    @ApiOperation(value = "充值或者添加积分", notes = "扣除充值币积分就传负数")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public CreditResponse modifyCredit(@RequestBody @ApiParam(value = "充值币Json") CreditRequest creditRequest) {
         log.info("[START] Add credit with request: {}", creditRequest);
         accountValidate.validateUserIdExists(creditRequest.getUserId());
         validator.validate(creditRequest);
-        CreditData creditData = service.addCredit(creditRequest);
+        CreditData creditData = service.modifyCredit(creditRequest);
         CreditResponse response = new CreditResponse();
         response.setData(creditData);
         log.info("[END] Add credit with response: {}", response);

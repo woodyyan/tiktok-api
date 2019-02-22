@@ -38,8 +38,11 @@ public class TaskEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "price")
-    private Double price;
+    @Column(name = "point_price")
+    private Double pointPrice;
+
+    @Column(name = "credit_price")
+    private Double creditPrice;
 
     @Column(name = "status")
     private TaskStatus status;

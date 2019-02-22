@@ -39,7 +39,8 @@ public class TaskTranslator {
         }
         task.setName(taskRequest.getName());
         task.setOwnerId(taskRequest.getOwnerId());
-        task.setPrice(taskRequest.getPrice());
+        task.setPointPrice(taskRequest.getCreditPrice());
+        task.setCreditPrice(taskRequest.getPointPrice());
         task.setStatus(TaskStatus.IN_PROGRESS);
         task.setSticky(taskRequest.isSticky());
         task.setCount(taskRequest.getCount());
@@ -87,7 +88,8 @@ public class TaskTranslator {
             data.getItems().add(TaskItem.CLICK_RATE);
         }
         data.setName(taskEntity.getName());
-        data.setPrice(taskEntity.getPrice());
+        data.setPointPrice(taskEntity.getPointPrice());
+        data.setCreditPrice(taskEntity.getCreditPrice());
         data.setCount(taskEntity.getCount());
         data.setOwnerId(taskEntity.getOwnerId());
         data.setStatus(taskEntity.getStatus());

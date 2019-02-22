@@ -25,16 +25,16 @@ public class CreditService {
         return translator.translateToCreditData(credit);
     }
 
-    public CreditData addCredit(CreditRequest creditRequest) {
+    public CreditData modifyCredit(CreditRequest creditRequest) {
         Credit credit = repository.findByUserId(creditRequest.getUserId());
         if (credit == null) {
             credit = addDefaultCredit(creditRequest.getUserId());
         }
         if (creditRequest.getCredit() != null) {
-            credit.setCredit(creditRequest.getCredit());
+            credit.setCredit(credit.getCredit() + creditRequest.getCredit());
         }
         if (creditRequest.getPoints() != null) {
-            credit.setPoints(creditRequest.getPoints());
+            credit.setPoints(credit.getPoints() + creditRequest.getPoints());
         }
         Credit savedCredit = repository.saveAndFlush(credit);
         return translator.translateToCreditData(savedCredit);
@@ -44,9 +44,9 @@ public class CreditService {
         Credit credit = new Credit();
         credit.setCreatedTime(LocalDateTime.now());
         credit.setLastModifiedTime(LocalDateTime.now());
-        credit.setCredit(0L);
+        credit.setCredit(0D);
         credit.setUserId(userId);
-        credit.setPoints(0L);
+        credit.setPoints(0D);
         return repository.save(credit);
     }
 }

@@ -31,11 +31,22 @@ public class TaskService {
     @Autowired
     private TaskOrderTranslator orderTranslator;
 
+    @Autowired
+    private CreditService creditService;
+
     public TaskData publishTask(TaskRequest taskRequest) {
         TaskEntity task = translator.translateToTask(taskRequest);
         TaskEntity savedTask = repository.save(task);
-        //TODO 扣除积分
+        deductPoints(taskRequest.getOwnerId(), taskRequest.getCreditPrice(), taskRequest.getPointPrice());
         return translator.translateToTaskResponse(savedTask);
+    }
+
+    private void deductPoints(Long ownerId, Double creditPrice, Double pointPrice) {
+        CreditRequest creditRequest = new CreditRequest();
+        creditRequest.setUserId(ownerId);
+        creditRequest.setCredit(-creditPrice);
+        creditRequest.setPoints(-pointPrice);
+        creditService.modifyCredit(creditRequest);
     }
 
     public void deleteTask(Long taskId) {

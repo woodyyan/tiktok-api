@@ -5,7 +5,8 @@ import org.junit.Test;
 public class SignUpServiceTest {
     @Test
     public void test() {
-        long l = System.currentTimeMillis();
-        System.out.println(l);
+        long a = 1;
+        long b = -2;
+        System.out.println(a + b);
     }
 }

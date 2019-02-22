@@ -19,10 +19,10 @@ public class Credit {
     private Long userId;
 
     @Column(name = "credit", nullable = false)
-    private Long credit;
+    private Double credit;
 
     @Column(name = "points", nullable = false)
-    private Long points;
+    private Double points;
 
     @Column(name = "created_time")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime", parameters = {
