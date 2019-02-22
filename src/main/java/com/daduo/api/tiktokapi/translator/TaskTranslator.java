@@ -1,6 +1,8 @@
 package com.daduo.api.tiktokapi.translator;
 
 import com.daduo.api.tiktokapi.entity.TaskEntity;
+import com.daduo.api.tiktokapi.enums.TaskItem;
+import com.daduo.api.tiktokapi.enums.TaskStatus;
 import com.daduo.api.tiktokapi.model.PagingMeta;
 import com.daduo.api.tiktokapi.model.TaskData;
 import com.daduo.api.tiktokapi.model.TaskRequest;
@@ -24,11 +26,22 @@ public class TaskTranslator {
         task.setCreatedTime(now);
         task.setLastModifiedTime(now);
         task.setDescription(taskRequest.getDescription());
-        task.setItems(taskRequest.getItems());
+        for (TaskItem item : taskRequest.getItems()) {
+            if (item == TaskItem.CLICK_RATE) {
+                task.setNeedPlay(true);
+            } else if (item == TaskItem.COMMENT) {
+                task.setNeedComment(true);
+            } else if (item == TaskItem.FOLLOW) {
+                task.setNeedFollow(true);
+            } else if (item == TaskItem.LIKE) {
+                task.setNeedLike(true);
+            }
+        }
         task.setName(taskRequest.getName());
         task.setOwnerId(taskRequest.getOwnerId());
         task.setPrice(taskRequest.getPrice());
-        task.setStatus(taskRequest.getStatus());
+        task.setStatus(TaskStatus.IN_PROGRESS);
+        task.setSticky(taskRequest.isSticky());
         task.setCount(taskRequest.getCount());
         task.setActive(true);
         task.setUrl(taskRequest.getUrl());
@@ -57,12 +70,24 @@ public class TaskTranslator {
         data.setCreatedTime(taskEntity.getCreatedTime().toDateTime());
         data.setDescription(taskEntity.getDescription());
         data.setId(taskEntity.getId());
-        data.setItems(taskEntity.getItems());
+        if (taskEntity.isNeedComment()) {
+            data.getItems().add(TaskItem.COMMENT);
+        }
+        if (taskEntity.isNeedFollow()) {
+            data.getItems().add(TaskItem.FOLLOW);
+        }
+        if (taskEntity.isNeedLike()) {
+            data.getItems().add(TaskItem.LIKE);
+        }
+        if (taskEntity.isNeedPlay()) {
+            data.getItems().add(TaskItem.CLICK_RATE);
+        }
         data.setName(taskEntity.getName());
         data.setPrice(taskEntity.getPrice());
         data.setCount(taskEntity.getCount());
         data.setOwnerId(taskEntity.getOwnerId());
         data.setStatus(taskEntity.getStatus());
+        data.setSticky(taskEntity.isSticky());
         data.setUrl(taskEntity.getUrl());
         data.setPlatform(taskEntity.getPlatform());
         data.setActive(taskEntity.isActive());

@@ -1,14 +1,12 @@
 package com.daduo.api.tiktokapi.entity;
 
 import com.daduo.api.tiktokapi.enums.PlatformType;
-import com.daduo.api.tiktokapi.enums.TaskItem;
 import com.daduo.api.tiktokapi.enums.TaskStatus;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @Entity
@@ -22,9 +20,17 @@ public class TaskEntity {
     @Column(name = "owner_id")
     private Long ownerId;
 
-    @ElementCollection
-    @Column(name = "items")
-    private List<TaskItem> items;
+    @Column(name = "need_like")
+    private boolean needLike = false;
+
+    @Column(name = "need_comment")
+    private boolean needComment = false;
+
+    @Column(name = "need_follow")
+    private boolean needFollow = false;
+
+    @Column(name = "need_play")
+    private boolean needPlay = false;
 
     @Column(name = "description")
     private String description;
@@ -37,6 +43,9 @@ public class TaskEntity {
 
     @Column(name = "status")
     private TaskStatus status;
+
+    @Column(name = "is_sticky")
+    private boolean isSticky;
 
     @Column(name = "active")
     private boolean isActive = true;

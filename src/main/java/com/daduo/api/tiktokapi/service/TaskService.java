@@ -5,7 +5,6 @@ import com.daduo.api.tiktokapi.entity.TaskOrder;
 import com.daduo.api.tiktokapi.enums.TaskOrderStatus;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
-import com.daduo.api.tiktokapi.repository.AccountRepository;
 import com.daduo.api.tiktokapi.repository.TaskOrderRepository;
 import com.daduo.api.tiktokapi.repository.TaskRepository;
 import com.daduo.api.tiktokapi.translator.TaskOrderTranslator;
@@ -35,6 +34,7 @@ public class TaskService {
     public TaskData publishTask(TaskRequest taskRequest) {
         TaskEntity task = translator.translateToTask(taskRequest);
         TaskEntity savedTask = repository.save(task);
+        //TODO 扣除积分
         return translator.translateToTaskResponse(savedTask);
     }
 

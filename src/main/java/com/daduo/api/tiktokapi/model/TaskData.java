@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -24,11 +25,13 @@ public class TaskData extends BaseModel {
     @ApiModelProperty(value = "抖音URL")
     private String url;
     @ApiModelProperty(value = "任务项")
-    private List<TaskItem> items;
+    private List<TaskItem> items = new ArrayList<>();
     @ApiModelProperty(value = "任务价格")
     private Double price;
     @ApiModelProperty(value = "任务状态")
     private TaskStatus status;
+    @ApiModelProperty(value = "置顶")
+    private boolean isSticky;
     @ApiModelProperty(value = "平台")
     private PlatformType platform;
     @ApiModelProperty(value = "是否激活")

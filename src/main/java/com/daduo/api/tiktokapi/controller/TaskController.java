@@ -29,7 +29,7 @@ public class TaskController {
     private AccountValidator accountValidator;
 
     @PostMapping
-    @ApiOperation(value = "发布任务", notes = "任务项：点赞是LIKE, 点击率是CLICK_RATE, 关注是FOLLOW, 评论是COMMENT")
+    @ApiOperation(value = "发布任务", notes = "任务项：点赞是LIKE, 点击率是CLICK_RATE, 关注是FOLLOW, 评论是COMMENT。平台platfromType：DOUYIN, KUAISHOU")
     @ResponseStatus(HttpStatus.CREATED)
     public TaskResponse publishTask(@RequestBody @ApiParam(value = "任务Json") TaskRequest taskRequest) {
         log.info("[START] Publish task with request: {}", taskRequest);
@@ -72,6 +72,7 @@ public class TaskController {
     public Tasks searchTasks(@RequestParam(required = false) @ApiParam(value = "用户ID") Long userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
     @ApiParam(value = "分页")
             Pageable page) {
+        //TODO 置顶优先排序
         log.info("[START] search tasks with userId: {}, and page: {}", userId, page);
         Tasks tasks = service.searchTasks(userId, page);
         log.info("[END] search tasks with response: {}", tasks);
@@ -98,4 +99,6 @@ public class TaskController {
         log.info("[END] search task orders with userId: {}", userId);
         return orders;
     }
+
+    //TODO 消耗积分
 }

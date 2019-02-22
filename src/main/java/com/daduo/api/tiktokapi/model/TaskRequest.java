@@ -2,7 +2,6 @@ package com.daduo.api.tiktokapi.model;
 
 import com.daduo.api.tiktokapi.enums.PlatformType;
 import com.daduo.api.tiktokapi.enums.TaskItem;
-import com.daduo.api.tiktokapi.enums.TaskStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -22,12 +21,12 @@ public class TaskRequest {
     private String url;
     @ApiModelProperty(value = "任务项")
     private List<TaskItem> items;
-    @ApiModelProperty(value = "价格")
+    @ApiModelProperty(value = "总价格")
     private Double price;
     @ApiModelProperty(value = "次数")
     private int count;
-    @ApiModelProperty(value = "任务状态")
-    private TaskStatus status;
     @ApiModelProperty(value = "平台")
     private PlatformType platform;
+    @ApiModelProperty(value = "置顶", example = "false")
+    private boolean isSticky = false;
 }
