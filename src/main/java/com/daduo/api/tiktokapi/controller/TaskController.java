@@ -72,7 +72,6 @@ public class TaskController {
     public Tasks searchTasks(@RequestParam(required = false) @ApiParam(value = "用户ID") Long userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
     @ApiParam(value = "分页")
             Pageable page) {
-        //TODO 置顶优先排序
         log.info("[START] search tasks with userId: {}, and page: {}", userId, page);
         Tasks tasks = service.searchTasks(userId, page);
         log.info("[END] search tasks with response: {}", tasks);

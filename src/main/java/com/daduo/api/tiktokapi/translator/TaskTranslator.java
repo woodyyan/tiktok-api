@@ -53,7 +53,11 @@ public class TaskTranslator {
         Tasks tasks = new Tasks();
         List<TaskData> data = new ArrayList<>();
         for (TaskEntity entity : entities.getContent()) {
-            data.add(translateTaskData(entity));
+            if (entity.isSticky()) {
+                data.add(0, translateTaskData(entity));
+            } else {
+                data.add(translateTaskData(entity));
+            }
         }
         tasks.setData(data);
         PagingMeta meta = new PagingMeta();
