@@ -21,10 +21,6 @@ public class TaskRequest {
     private String url;
     @ApiModelProperty(value = "任务项")
     private List<TaskItem> items;
-    @ApiModelProperty(value = "积分总价格")
-    private Double pointPrice;
-    @ApiModelProperty(value = "充值币总价格")
-    private Double creditPrice;
     @ApiModelProperty(value = "次数")
     private int count;
     @ApiModelProperty(value = "平台")

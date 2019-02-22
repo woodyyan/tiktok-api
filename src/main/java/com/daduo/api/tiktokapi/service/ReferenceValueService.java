@@ -37,16 +37,15 @@ public class ReferenceValueService {
     }
 
     public JsonObject searchReferenceValue(String name) {
-        ReferenceValue referenceValue = getReferenceValue();
         JsonObject jsonObject = new JsonObject();
         if (name.contains(",")) {
             String[] names = name.split(",");
             for (String item : names) {
-                Double value = searchByName(item, referenceValue);
+                Double value = searchByName(item);
                 jsonObject.addProperty(item, value);
             }
         } else {
-            Double value = searchByName(name, referenceValue);
+            Double value = searchByName(name);
             jsonObject.addProperty(name, value);
         }
         return jsonObject;
@@ -60,7 +59,8 @@ public class ReferenceValueService {
         return all.get(0);
     }
 
-    private Double searchByName(String name, ReferenceValue referenceValue) {
+    Double searchByName(String name) {
+        ReferenceValue referenceValue = getReferenceValue();
         if (Objects.equals(name, "creditOfPerRmb")) {
             return referenceValue.getCreditOfPerRmb();
         } else if (Objects.equals(name, "pointsOfPerKuaishouComment")) {
