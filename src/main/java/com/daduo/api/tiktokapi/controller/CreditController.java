@@ -30,8 +30,9 @@ public class CreditController {
 
     @GetMapping("/{userId}")
     @ApiOperation("获取当前ID的充值币")
-    public CreditResponse getCreditByUserId(@RequestParam @ApiParam("用户ID") Long userId) {
+    public CreditResponse getCreditByUserId(@PathVariable @ApiParam("用户ID") Long userId) {
         log.info("[START] Get credit with userId: {}", userId);
+        accountValidate.validateUserIdExists(userId);
         CreditData data = service.getCreditById(userId);
         CreditResponse response = new CreditResponse();
         response.setData(data);
