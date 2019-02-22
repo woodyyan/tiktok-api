@@ -4,6 +4,7 @@ import com.daduo.api.tiktokapi.model.ValueData;
 import com.daduo.api.tiktokapi.model.ValueResponse;
 import com.daduo.api.tiktokapi.model.ValueResponseRequest;
 import com.daduo.api.tiktokapi.service.ReferenceValueService;
+import com.google.gson.JsonObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -46,10 +47,10 @@ public class ReferenceValueController {
 
     @GetMapping("/{name}")
     @ApiOperation("查询基础数据设置")
-    public Double getReferenceValues(@PathVariable @ApiParam("参数名") String name) {
+    public String getReferenceValues(@PathVariable @ApiParam("参数名") String name) {
         log.info("[START] Search reference value with name: {}", name);
-        Double value = service.searchReferenceValue(name);
-        log.info("[END] Search reference value with value: {}", value);
-        return value;
+        JsonObject value = service.searchReferenceValue(name);
+        log.info("[END] Search reference value with value: {}", value.toString());
+        return value.toString();
     }
 }

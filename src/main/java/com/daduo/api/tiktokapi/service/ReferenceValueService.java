@@ -8,6 +8,7 @@ import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.repository.ValueReferenceRepository;
 import com.daduo.api.tiktokapi.translator.ValueReferenceTranslator;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -35,9 +36,20 @@ public class ReferenceValueService {
         return translator.translateToValueData(savedValue);
     }
 
-    public Double searchReferenceValue(String name) {
+    public JsonObject searchReferenceValue(String name) {
         ReferenceValue referenceValue = getReferenceValue();
-        return searchByName(name, referenceValue);
+        JsonObject jsonObject = new JsonObject();
+        if (name.contains(",")) {
+            String[] names = name.split(",");
+            for (String item : names) {
+                Double value = searchByName(item, referenceValue);
+                jsonObject.addProperty(item, value);
+            }
+        } else {
+            Double value = searchByName(name, referenceValue);
+            jsonObject.addProperty(name, value);
+        }
+        return jsonObject;
     }
 
     private ReferenceValue getReferenceValue() {
