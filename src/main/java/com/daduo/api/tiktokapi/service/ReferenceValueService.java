@@ -101,6 +101,10 @@ public class ReferenceValueService {
         ReferenceValue value = new ReferenceValue();
         value.setCommissionPercent(40);
         value.setCreditOfPerRmb(100);
+        value.setPointsOfPerKuaishouLikeAndFollow(200);
+        value.setPointsOfPerKuaishouLikeAndFollowAndComment(300);
+        value.setPointsOfPerTiktokLikeAndFollow(200);
+        value.setPointsOfPerTiktokLikeAndFollowAndComment(300);
         value.setPointsOfPerKuaishouComment(100);
         value.setPointsOfPerKuaishouFollow(100);
         value.setPointsOfPerKuaishouLike(100);

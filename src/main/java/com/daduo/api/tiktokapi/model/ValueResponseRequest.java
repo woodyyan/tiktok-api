@@ -19,6 +19,12 @@ public class ValueResponseRequest {
     private Double pointsOfPerTiktokComment;
     @ApiModelProperty(value = "抖音1播放等于多少积分")
     private Double pointsOfPerTiktokPlay;
+
+    @ApiModelProperty(value = "抖音1点赞加关注等于多少积分")
+    private Double pointsOfPerTiktokLikeAndFollow;
+    @ApiModelProperty(value = "抖音1点赞加关注加评论等于多少积分")
+    private Double pointsOfPerTiktokLikeAndFollowAndComment;
+
     @ApiModelProperty(value = "快手1赞等于多少积分")
     private Double pointsOfPerKuaishouLike;
     @ApiModelProperty(value = "快手1关注等于多少积分")
@@ -27,6 +33,12 @@ public class ValueResponseRequest {
     private Double pointsOfPerKuaishouComment;
     @ApiModelProperty(value = "快手1播放等于多少积分")
     private Double pointsOfPerKuaishouPlay;
+
+    @ApiModelProperty(value = "快手1点赞加关注等于多少积分")
+    private Double pointsOfPerKuaishouLikeAndFollow;
+    @ApiModelProperty(value = "快手1点赞加关注加评论等于多少积分")
+    private Double pointsOfPerKuaishouLikeAndFollowAndComment;
+
     @ApiModelProperty(value = "佣金百分比")
     private Integer commissionPercent;
     @ApiModelProperty(value = "充10块送多少充值币")

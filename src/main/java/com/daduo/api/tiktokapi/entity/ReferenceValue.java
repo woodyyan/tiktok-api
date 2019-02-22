@@ -37,6 +37,14 @@ public class ReferenceValue {
     @ApiModelProperty(value = "抖音1播放等于多少积分")
     private double pointsOfPerTiktokPlay;
 
+    @Column(name = "points_of_per_tiktok_like_follow")
+    @ApiModelProperty(value = "抖音1点赞加关注等于多少积分")
+    private double pointsOfPerTiktokLikeAndFollow;
+
+    @Column(name = "points_of_per_tiktok_like_follow_comment")
+    @ApiModelProperty(value = "抖音1点赞加关注加评论等于多少积分")
+    private double pointsOfPerTiktokLikeAndFollowAndComment;
+
     @Column(name = "points_of_per_kuaishou_like")
     @ApiModelProperty(value = "快手1赞等于多少积分")
     private double pointsOfPerKuaishouLike;
@@ -52,6 +60,14 @@ public class ReferenceValue {
     @Column(name = "points_of_per_kuaishou_play")
     @ApiModelProperty(value = "快手1播放等于多少积分")
     private double pointsOfPerKuaishouPlay;
+
+    @Column(name = "points_of_per_kuaishou_like_follow")
+    @ApiModelProperty(value = "快手1点赞加关注等于多少积分")
+    private double pointsOfPerKuaishouLikeAndFollow;
+
+    @Column(name = "points_of_per_kuaishou_like_follow_comment")
+    @ApiModelProperty(value = "快手1点赞加关注加评论等于多少积分")
+    private double pointsOfPerKuaishouLikeAndFollowAndComment;
 
     @Column(name = "commission_percent")
     @ApiModelProperty(value = "佣金百分比")

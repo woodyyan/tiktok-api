@@ -15,11 +15,15 @@ public class ValueReferenceTranslator {
         data.setPointsOfPerKuaishouFollow(referenceValue.getPointsOfPerKuaishouFollow());
         data.setPointsOfPerKuaishouLike(referenceValue.getPointsOfPerKuaishouLike());
         data.setPointsOfPerKuaishouPlay(referenceValue.getPointsOfPerKuaishouPlay());
+        data.setPointsOfPerKuaishouLikeAndFollow(referenceValue.getPointsOfPerKuaishouLikeAndFollow());
+        data.setPointsOfPerKuaishouLikeAndFollowAndComment(referenceValue.getPointsOfPerKuaishouLikeAndFollowAndComment());
         data.setPointsOfPerRmb(referenceValue.getPointsOfPerRmb());
         data.setPointsOfPerTiktokComment(referenceValue.getPointsOfPerTiktokComment());
         data.setPointsOfPerTiktokFollow(referenceValue.getPointsOfPerTiktokFollow());
         data.setPointsOfPerTiktokLike(referenceValue.getPointsOfPerTiktokLike());
         data.setPointsOfPerTiktokPlay(referenceValue.getPointsOfPerTiktokPlay());
+        data.setPointsOfPerTiktokLikeAndFollow(referenceValue.getPointsOfPerTiktokLikeAndFollow());
+        data.setPointsOfPerTiktokLikeAndFollowAndComment(referenceValue.getPointsOfPerTiktokLikeAndFollowAndComment());
         data.setPresentedCreditFor10(referenceValue.getPresentedCreditFor10());
         data.setPresentedCreditFor30(referenceValue.getPresentedCreditFor30());
         data.setPresentedCreditFor50(referenceValue.getPresentedCreditFor50());
