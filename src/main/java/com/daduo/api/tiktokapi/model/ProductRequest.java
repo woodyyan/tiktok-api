@@ -11,7 +11,7 @@ public class ProductRequest {
     @ApiModelProperty(value = "图片地址")
     private String imageUrl;
     @ApiModelProperty(value = "单价")
-    private Double price;
+    private Integer price;
     @ApiModelProperty(value = "名称")
     private String name;
     @ApiModelProperty(value = "描述")

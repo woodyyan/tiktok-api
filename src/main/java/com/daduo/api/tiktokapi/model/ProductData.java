@@ -17,8 +17,8 @@ public class ProductData extends BaseModel {
     private String imageUrl;
     @ApiModelProperty(value = "商品名字")
     private String name;
-    @ApiModelProperty(value = "商品价格")
-    private Double price;
+    @ApiModelProperty(value = "单价")
+    private Integer price;
     @ApiModelProperty(value = "总数")
     private int count;
     @ApiModelProperty(value = "状态")

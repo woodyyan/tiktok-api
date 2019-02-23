@@ -1,8 +1,11 @@
 package com.daduo.api.tiktokapi.translator;
 
 import com.daduo.api.tiktokapi.entity.Product;
+import com.daduo.api.tiktokapi.entity.ProductOrder;
 import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.repository.ProductOrderRepository;
 import org.joda.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +14,13 @@ import java.util.List;
 
 @Component
 public class ProductTranslator {
+    @Autowired
+    private ProductOrderRepository productOrderRepository;
+
     public Products translateToProducts(Page<Product> products) {
         Products result = new Products();
         List<ProductData> data = new ArrayList<>();
-        for (Product product : products) {
+        for (Product product : products.getContent()) {
             ProductData productData = toProductData(product);
             data.add(productData);
         }
@@ -60,5 +66,36 @@ public class ProductTranslator {
         productData.setCreatedTime(product.getCreatedTime().toDateTime());
         productData.setLastModifiedTime(product.getLastModifiedTime().toDateTime());
         return productData;
+    }
+
+    public ProductInfos toProductInfos(Page<Product> productPage) {
+        ProductInfos result = new ProductInfos();
+        List<ProductInfoData> data = new ArrayList<>();
+        for (Product product : productPage.getContent()) {
+            ProductInfoData infoData = new ProductInfoData();
+            infoData.setDescription(product.getDescription());
+            infoData.setId(product.getId());
+            infoData.setImageUrl(product.getImageUrl());
+            infoData.setName(product.getName());
+            infoData.setStatus(product.getStatus());
+            infoData.setPrice(product.getPrice());
+            infoData.setCount(product.getCount());
+            infoData.setCreatedTime(product.getCreatedTime().toDateTime());
+            infoData.setLastModifiedTime(product.getLastModifiedTime().toDateTime());
+            List<ProductOrder> orders = productOrderRepository.findAllByProductId(product.getId());
+            infoData.setTotalPrice(product.getPrice() * product.getCount());
+            infoData.setSaleCount(orders.size());
+            infoData.setSaleAmount(orders.size() * product.getPrice());
+            infoData.setUnSaleCount(product.getCount() - orders.size());
+            data.add(infoData);
+        }
+        result.setData(data);
+        PagingMeta meta = new PagingMeta();
+        meta.setPageNumber(productPage.getNumber());
+        meta.setPageSize(productPage.getSize());
+        meta.setTotalElements(productPage.getTotalElements());
+        meta.setTotalPages(productPage.getTotalPages());
+        result.setMeta(meta);
+        return result;
     }
 }

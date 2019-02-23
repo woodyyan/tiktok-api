@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.model.ProductInfos;
 import com.daduo.api.tiktokapi.model.ProductRequest;
 import com.daduo.api.tiktokapi.model.ProductResponse;
 import com.daduo.api.tiktokapi.model.Products;
@@ -47,13 +48,13 @@ public class ProductController {
             @ApiImplicitParam(name = "size", value = "一页的总数",
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
-    public Products getAllProducts(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
-                                   @ApiParam(value = "分页")
-                                           Pageable page) {
+    public ProductInfos getAllProducts(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+                                       @ApiParam(value = "分页")
+                                               Pageable page) {
         log.info("[START] Get all products with page: {}", page);
-        Products products = service.getAllProducts(page);
-        log.info("[END] Get all products with response: {}", products);
-        return products;
+        ProductInfos allProducts = service.getAllProducts(page);
+        log.info("[END] Get all products with response: {}", allProducts);
+        return allProducts;
     }
 
     @PostMapping

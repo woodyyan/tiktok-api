@@ -2,6 +2,7 @@ package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.Product;
 import com.daduo.api.tiktokapi.enums.ProductStatus;
+import com.daduo.api.tiktokapi.model.ProductInfos;
 import com.daduo.api.tiktokapi.model.ProductRequest;
 import com.daduo.api.tiktokapi.model.ProductResponse;
 import com.daduo.api.tiktokapi.model.Products;
@@ -25,10 +26,10 @@ public class ProductService {
     @Autowired
     private ProductTranslator translator;
 
-    public Products getAllProducts(Pageable page) {
+    public ProductInfos getAllProducts(Pageable page) {
         Page<Product> productPage;
         productPage = repository.findAll(page);
-        return translator.translateToProducts(productPage);
+        return translator.toProductInfos(productPage);
     }
 
     public ProductResponse addProduct(ProductRequest request) {
