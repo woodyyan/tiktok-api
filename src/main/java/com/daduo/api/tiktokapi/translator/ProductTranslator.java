@@ -1,11 +1,9 @@
 package com.daduo.api.tiktokapi.translator;
 
 import com.daduo.api.tiktokapi.entity.Product;
-import com.daduo.api.tiktokapi.model.ProductData;
-import com.daduo.api.tiktokapi.model.ProductRequest;
-import com.daduo.api.tiktokapi.model.ProductResponse;
-import com.daduo.api.tiktokapi.model.Products;
+import com.daduo.api.tiktokapi.model.*;
 import org.joda.time.LocalDateTime;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,7 +11,7 @@ import java.util.List;
 
 @Component
 public class ProductTranslator {
-    public Products translateToProducts(List<Product> products) {
+    public Products translateToProducts(Page<Product> products) {
         Products result = new Products();
         List<ProductData> data = new ArrayList<>();
         for (Product product : products) {
@@ -21,6 +19,12 @@ public class ProductTranslator {
             data.add(productData);
         }
         result.setData(data);
+        PagingMeta meta = new PagingMeta();
+        meta.setPageNumber(products.getNumber());
+        meta.setPageSize(products.getSize());
+        meta.setTotalElements(products.getTotalElements());
+        meta.setTotalPages(products.getTotalPages());
+        result.setMeta(meta);
         return result;
     }
 

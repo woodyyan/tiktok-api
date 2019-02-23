@@ -12,4 +12,6 @@ import java.util.List;
 public class Products {
     @ApiModelProperty(value = "商品列表")
     private List<ProductData> data = new ArrayList<>();
+    @ApiModelProperty(value = "分页数据")
+    private PagingMeta meta = new PagingMeta();
 }

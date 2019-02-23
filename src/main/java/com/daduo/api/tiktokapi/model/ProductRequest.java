@@ -10,7 +10,7 @@ import lombok.Data;
 public class ProductRequest {
     @ApiModelProperty(value = "图片地址")
     private String imageUrl;
-    @ApiModelProperty(value = "价格")
+    @ApiModelProperty(value = "单价")
     private Double price;
     @ApiModelProperty(value = "名称")
     private String name;
