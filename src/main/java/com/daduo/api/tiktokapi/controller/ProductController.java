@@ -32,10 +32,20 @@ public class ProductController {
     @PostMapping
     @ApiOperation(value = "添加商品", notes = "商品状态：SALE是在售, SOLD_OUT是售完, UNSHELVES是下架")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponse addProduct(ProductRequest request) {
+    public ProductResponse addProduct(@RequestBody ProductRequest request) {
         log.info("[START] Add product with request: {}", request);
         ProductResponse response = service.addProduct(request);
         log.info("[END] Add product with response: {}", response);
+        return response;
+    }
+
+    @PatchMapping("/{productId}")
+    @ApiOperation(value = "修改商品", notes = "商品状态：SALE是在售, SOLD_OUT是售完, UNSHELVES是下架")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ProductResponse modifyProduct(@PathVariable Long productId, @RequestBody ProductRequest request) {
+        log.info("[START] Modify product with request: {}", request);
+        ProductResponse response = service.modifyProduct(productId, request);
+        log.info("[END] Modify product with response: {}", response);
         return response;
     }
 }
