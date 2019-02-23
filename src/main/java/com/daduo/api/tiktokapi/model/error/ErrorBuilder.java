@@ -4,7 +4,7 @@ import com.daduo.api.tiktokapi.exception.ErrorException;
 import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
 public final class ErrorBuilder {
     public static Error buildInvalidParameterError(String details) {
@@ -25,6 +25,6 @@ public final class ErrorBuilder {
 
     public static ErrorException buildNotFoundErrorException(String message) {
         Error error = buildNotFoundError(message);
-        return new ErrorException(NOT_FOUND, error);
+        return new ErrorException(OK, error);
     }
 }
