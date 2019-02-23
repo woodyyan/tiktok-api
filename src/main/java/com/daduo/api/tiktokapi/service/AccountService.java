@@ -9,7 +9,6 @@ import com.daduo.api.tiktokapi.model.AccountRequest;
 import com.daduo.api.tiktokapi.model.Accounts;
 import com.daduo.api.tiktokapi.model.OnlineAccounts;
 import com.daduo.api.tiktokapi.repository.AccountRepository;
-import com.daduo.api.tiktokapi.repository.CreditRepository;
 import com.daduo.api.tiktokapi.repository.OnlineRepository;
 import com.daduo.api.tiktokapi.translator.AccountTranslator;
 import org.joda.time.LocalDateTime;
@@ -56,8 +55,8 @@ public class AccountService {
             if (!StringUtils.isEmpty(accountRequest.getAvatar())) {
                 existingAccount.setAvatar(accountRequest.getAvatar());
             }
-            if (!StringUtils.isEmpty(accountRequest.getAvatar())) {
-                existingAccount.setAddress(accountRequest.getAvatar());
+            if (!StringUtils.isEmpty(accountRequest.getAddress())) {
+                existingAccount.setAddress(accountRequest.getAddress());
             }
             Account savedAccount = repository.saveAndFlush(existingAccount);
             return translator.toAccountData(savedAccount);
