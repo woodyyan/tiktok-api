@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.joda.time.LocalDateTime;
 
 @Data
 @ApiModel("账号Json")
@@ -33,4 +32,10 @@ public class AccountData extends BaseModel {
 
     @ApiModelProperty(value = "状态")
     private AccountStatus status;
+
+    @ApiModelProperty(value = "充值币")
+    private Integer credit;
+
+    @ApiModelProperty(value = "积分")
+    private Integer points;
 }

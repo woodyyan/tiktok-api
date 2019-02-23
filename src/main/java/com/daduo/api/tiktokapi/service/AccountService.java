@@ -9,6 +9,7 @@ import com.daduo.api.tiktokapi.model.AccountRequest;
 import com.daduo.api.tiktokapi.model.Accounts;
 import com.daduo.api.tiktokapi.model.OnlineAccounts;
 import com.daduo.api.tiktokapi.repository.AccountRepository;
+import com.daduo.api.tiktokapi.repository.CreditRepository;
 import com.daduo.api.tiktokapi.repository.OnlineRepository;
 import com.daduo.api.tiktokapi.translator.AccountTranslator;
 import org.joda.time.LocalDateTime;
@@ -59,7 +60,7 @@ public class AccountService {
                 existingAccount.setAddress(accountRequest.getAvatar());
             }
             Account savedAccount = repository.saveAndFlush(existingAccount);
-            return translator.translateToAccountData(savedAccount);
+            return translator.toAccountData(savedAccount);
         } else {
             throw buildNotFoundErrorException("账号找不到，请确认ID是否正确。");
         }
@@ -79,6 +80,15 @@ public class AccountService {
     public Accounts searchAccount(Pageable page) {
         Page<Account> pagedAccounts = repository.findAll(page);
         return translator.toAccounts(pagedAccounts);
+    }
+
+    public AccountData getAccount(Long userId) {
+        Optional<Account> account = repository.findById(userId);
+        if (account.isPresent()) {
+            return translator.toAccountData(account.get());
+        } else {
+            throw buildNotFoundErrorException("账号找不到，请确认ID是否正确。");
+        }
     }
 
     public void storeOnlineStatus(Long userId) {

@@ -3,12 +3,17 @@ package com.daduo.api.tiktokapi.translator;
 import com.daduo.api.tiktokapi.entity.Account;
 import com.daduo.api.tiktokapi.enums.AccountStatus;
 import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.service.CreditService;
 import org.joda.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AccountTranslator {
+    @Autowired
+    private CreditService creditService;
+
     public LoginResponse translateToLoginResponse(Account account, String token) {
         LoginResponse response = new LoginResponse();
         response.setCreatedTime(account.getCreatedTime().toDateTime());
@@ -38,25 +43,10 @@ public class AccountTranslator {
         return account;
     }
 
-    public AccountData translateToAccountData(Account savedAccount) {
-        AccountData data = new AccountData();
-        data.setAddress(savedAccount.getAddress());
-        data.setAvatar(savedAccount.getAvatar());
-        data.setCreatedTime(savedAccount.getCreatedTime().toDateTime());
-        data.setId(savedAccount.getId());
-        data.setLastModifiedTime(savedAccount.getLastModifiedTime().toDateTime());
-        data.setPhoneNumber(savedAccount.getPhoneNumber());
-        data.setQq(savedAccount.getQq());
-        data.setUsername(savedAccount.getUsername());
-        data.setWechat(savedAccount.getWechat());
-        data.setStatus(savedAccount.getStatus());
-        return data;
-    }
-
     public Accounts toAccounts(Page<Account> pagedAccounts) {
         Accounts accounts = new Accounts();
         for (Account account : pagedAccounts.getContent()) {
-            accounts.getData().add(translateToAccountData(account));
+            accounts.getData().add(toAccountData(account));
         }
         PagingMeta meta = new PagingMeta();
         meta.setPageNumber(pagedAccounts.getNumber());
@@ -65,5 +55,23 @@ public class AccountTranslator {
         meta.setTotalPages(pagedAccounts.getTotalPages());
         accounts.setMeta(meta);
         return accounts;
+    }
+
+    public AccountData toAccountData(Account account) {
+        CreditData credit = creditService.getCreditById(account.getId());
+        AccountData data = new AccountData();
+        data.setAddress(account.getAddress());
+        data.setAvatar(account.getAvatar());
+        data.setCreatedTime(account.getCreatedTime().toDateTime());
+        data.setId(account.getId());
+        data.setLastModifiedTime(account.getLastModifiedTime().toDateTime());
+        data.setPhoneNumber(account.getPhoneNumber());
+        data.setQq(account.getQq());
+        data.setUsername(account.getUsername());
+        data.setWechat(account.getWechat());
+        data.setStatus(account.getStatus());
+        data.setCredit(credit.getCredit());
+        data.setPoints(credit.getPoints());
+        return data;
     }
 }

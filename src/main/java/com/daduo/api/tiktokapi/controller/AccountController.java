@@ -42,6 +42,17 @@ public class AccountController {
         return result;
     }
 
+    @GetMapping("/{userId}")
+    @ApiOperation(value = "获取账号信息")
+    public AccountResponse getAccount(@PathVariable Long userId) {
+        log.info("[START] Update account with user id: {}.", userId);
+        AccountData data = accountService.getAccount(userId);
+        log.info("[END] Update account with response: {}", data);
+        AccountResponse response = new AccountResponse();
+        response.setData(data);
+        return response;
+    }
+
     @GetMapping
     @ApiOperation(value = "搜索账号")
     @ApiImplicitParams({
