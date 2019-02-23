@@ -1,6 +1,5 @@
 package com.daduo.api.tiktokapi.controller;
 
-import com.daduo.api.tiktokapi.enums.ProductStatus;
 import com.daduo.api.tiktokapi.model.ProductRequest;
 import com.daduo.api.tiktokapi.model.ProductResponse;
 import com.daduo.api.tiktokapi.model.Products;
@@ -23,25 +22,42 @@ public class ProductController {
     @Autowired
     private ProductService service;
 
-    @GetMapping
-    @ApiOperation("获取所有商品")
+    @GetMapping("/sale")
+    @ApiOperation("获取所有在售商品")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "请求第几页",
                     defaultValue = "0", dataType = "integer", paramType = "query"),
             @ApiImplicitParam(name = "size", value = "一页的总数",
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
-    public Products getAllProducts(@RequestParam(required = false) @ApiParam(value = "商品状态") ProductStatus status, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
-    @ApiParam(value = "分页")
-            Pageable page) {
-        log.info("[START] Get all products");
-        Products products = service.getAllProducts(status, page);
+    public Products getAllSaleProducts(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+                                       @ApiParam(value = "分页")
+                                               Pageable page) {
+        log.info("[START] Get all sale products with page: {}", page);
+        Products products = service.getAllSaleProducts(page);
+        log.info("[END] Get all sale products with response: {}", products);
+        return products;
+    }
+
+    @GetMapping
+    @ApiOperation("获取所有商品和统计")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "请求第几页",
+                    defaultValue = "0", dataType = "integer", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "一页的总数",
+                    defaultValue = "20", dataType = "integer", paramType = "query")
+    })
+    public Products getAllProducts(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+                                   @ApiParam(value = "分页")
+                                           Pageable page) {
+        log.info("[START] Get all products with page: {}", page);
+        Products products = service.getAllProducts(page);
         log.info("[END] Get all products with response: {}", products);
         return products;
     }
 
     @PostMapping
-    @ApiOperation(value = "添加商品", notes = "商品状态：SALE是在售, SOLD_OUT是售完, UNSHELVES是下架")
+    @ApiOperation(value = "添加商品", notes = "商品状态：ON_SALE是在售, SOLD_OUT是售完, OFF_SALE是下架")
     @ResponseStatus(HttpStatus.CREATED)
     public ProductResponse addProduct(@RequestBody ProductRequest request) {
         log.info("[START] Add product with request: {}", request);
@@ -51,7 +67,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{productId}")
-    @ApiOperation(value = "修改商品", notes = "商品状态：SALE是在售, SOLD_OUT是售完, UNSHELVES是下架")
+    @ApiOperation(value = "修改商品", notes = "商品状态：ON_SALE是在售, SOLD_OUT是售完, OFF_SALE是下架")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ProductResponse modifyProduct(@PathVariable Long productId, @RequestBody ProductRequest request) {
         log.info("[START] Modify product with request: {}", request);

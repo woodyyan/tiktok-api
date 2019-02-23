@@ -17,7 +17,7 @@ public class ProductRequest {
     @ApiModelProperty(value = "描述")
     private String description;
     @ApiModelProperty(value = "总数")
-    private int count;
+    private Integer count;
     @ApiModelProperty(value = "状态")
     private ProductStatus status;
 }
