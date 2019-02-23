@@ -11,9 +11,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class CreditData extends BaseModel {
     @ApiModelProperty(value = "充值币")
-    private Double credit;
+    private Integer credit;
     @ApiModelProperty(value = "用户ID")
     private Long userId;
     @ApiModelProperty(value = "积分数")
-    private Double points;
+    private Integer points;
 }

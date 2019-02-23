@@ -44,9 +44,9 @@ public class CreditService {
         Credit credit = new Credit();
         credit.setCreatedTime(LocalDateTime.now());
         credit.setLastModifiedTime(LocalDateTime.now());
-        credit.setCredit(0D);
+        credit.setCredit(0);
         credit.setUserId(userId);
-        credit.setPoints(0D);
+        credit.setPoints(0);
         return repository.save(credit);
     }
 }

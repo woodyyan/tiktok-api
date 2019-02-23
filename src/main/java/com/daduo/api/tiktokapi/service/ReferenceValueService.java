@@ -41,11 +41,11 @@ public class ReferenceValueService {
         if (name.contains(",")) {
             String[] names = name.split(",");
             for (String item : names) {
-                Double value = searchByName(item);
+                int value = searchByName(item);
                 jsonObject.addProperty(item, value);
             }
         } else {
-            Double value = searchByName(name);
+            int value = searchByName(name);
             jsonObject.addProperty(name, value);
         }
         return jsonObject;
@@ -59,7 +59,7 @@ public class ReferenceValueService {
         return all.get(0);
     }
 
-    Double searchByName(String name) {
+    Integer searchByName(String name) {
         ReferenceValue referenceValue = getReferenceValue();
         if (Objects.equals(name, "creditOfPerRmb")) {
             return referenceValue.getCreditOfPerRmb();
@@ -106,7 +106,7 @@ public class ReferenceValueService {
         } else if (Objects.equals(name, "presentedCreditFor5000")) {
             return referenceValue.getPresentedCreditFor5000();
         } else if (Objects.equals(name, "commissionPercent")) {
-            return (double) referenceValue.getCommissionPercent();
+            return referenceValue.getCommissionPercent();
         }
         Error error = ErrorBuilder.buildInvalidParameterError("参数名找不到。");
         throw new ErrorException(HttpStatus.BAD_REQUEST, error);

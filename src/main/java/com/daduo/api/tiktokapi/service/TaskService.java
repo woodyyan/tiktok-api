@@ -45,15 +45,15 @@ public class TaskService {
     private CreditService creditService;
 
     public TaskData publishTask(TaskRequest taskRequest) {
-        double pointPrice = getPointPrice(taskRequest.getItems(), taskRequest.getPlatform());
-        double totalPrice = taskRequest.isSticky() ? pointPrice * taskRequest.getCount() * STICKY_PERCENT : pointPrice * taskRequest.getCount();
+        int pointPrice = getPointPrice(taskRequest.getItems(), taskRequest.getPlatform());
+        int totalPrice = taskRequest.isSticky() ? (int) (pointPrice * taskRequest.getCount() * STICKY_PERCENT) : pointPrice * taskRequest.getCount();
         deductPoints(taskRequest.getOwnerId(), totalPrice);
         TaskEntity task = translator.translateToTask(taskRequest);
         TaskEntity savedTask = repository.save(task);
         return translator.translateToTaskResponse(savedTask);
     }
 
-    private double getPointPrice(List<TaskItem> items, PlatformType platform) {
+    private int getPointPrice(List<TaskItem> items, PlatformType platform) {
         if (platform == PlatformType.DOUYIN) {
             if (items.size() == 1 && items.get(0) == TaskItem.CLICK_RATE) {
                 return referenceValueService.searchByName("pointsOfPerTiktokPlay");
@@ -86,16 +86,15 @@ public class TaskService {
         return 0;
     }
 
-
-    private void deductPoints(Long ownerId, Double totalPointPrice) {
+    private void deductPoints(Long ownerId, Integer totalPointPrice) {
         CreditData creditData = creditService.getCreditById(ownerId);
-        double totalCreditPrice = (referenceValueService.searchByName("creditOfPerRmb") / referenceValueService.searchByName("pointsOfPerRmb")) * totalPointPrice;
+        Integer totalCreditPrice = (referenceValueService.searchByName("creditOfPerRmb") / referenceValueService.searchByName("pointsOfPerRmb")) * totalPointPrice;
         if (creditData.getPoints() < totalPointPrice && creditData.getCredit() < totalCreditPrice) {
             Error error = new Error();
             error.setTitle("余额不足");
             error.setDetails("余额不足，请充值。");
-            error.setStatus(HttpStatus.PRECONDITION_FAILED.toString());
-            throw new ErrorException(HttpStatus.PRECONDITION_FAILED, error);
+            error.setStatus("412");
+            throw new ErrorException(HttpStatus.OK, error);
         }
 
         CreditRequest creditRequest = new CreditRequest();

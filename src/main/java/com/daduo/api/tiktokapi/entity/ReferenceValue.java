@@ -15,59 +15,59 @@ public class ReferenceValue {
     @Id
     @Column(name = "rmb", nullable = false)
     @ApiModelProperty(value = "1元等于多少积分")
-    private double pointsOfPerRmb;
+    private int pointsOfPerRmb;
 
     @Column(name = "credit_of_per_rmb")
     @ApiModelProperty(value = "1元等于多少充值币")
-    private double creditOfPerRmb;
+    private int creditOfPerRmb;
 
     @Column(name = "points_of_per_tiktok_like")
     @ApiModelProperty(value = "抖音1赞等于多少积分")
-    private double pointsOfPerTiktokLike;
+    private int pointsOfPerTiktokLike;
 
     @Column(name = "points_of_per_tiktok_follow")
     @ApiModelProperty(value = "抖音1关注等于多少积分")
-    private double pointsOfPerTiktokFollow;
+    private int pointsOfPerTiktokFollow;
 
     @Column(name = "points_of_per_tiktok_comment")
     @ApiModelProperty(value = "抖音1评论等于多少积分")
-    private double pointsOfPerTiktokComment;
+    private int pointsOfPerTiktokComment;
 
     @Column(name = "points_of_per_tiktok_play")
     @ApiModelProperty(value = "抖音1播放等于多少积分")
-    private double pointsOfPerTiktokPlay;
+    private int pointsOfPerTiktokPlay;
 
     @Column(name = "points_of_per_tiktok_like_follow")
     @ApiModelProperty(value = "抖音1点赞加关注等于多少积分")
-    private double pointsOfPerTiktokLikeAndFollow;
+    private int pointsOfPerTiktokLikeAndFollow;
 
     @Column(name = "points_of_per_tiktok_like_follow_comment")
     @ApiModelProperty(value = "抖音1点赞加关注加评论等于多少积分")
-    private double pointsOfPerTiktokLikeAndFollowAndComment;
+    private int pointsOfPerTiktokLikeAndFollowAndComment;
 
     @Column(name = "points_of_per_kuaishou_like")
     @ApiModelProperty(value = "快手1赞等于多少积分")
-    private double pointsOfPerKuaishouLike;
+    private int pointsOfPerKuaishouLike;
 
     @Column(name = "points_of_per_kuaishou_follow")
     @ApiModelProperty(value = "快手1关注等于多少积分")
-    private double pointsOfPerKuaishouFollow;
+    private int pointsOfPerKuaishouFollow;
 
     @Column(name = "points_of_per_kuaishou_comment")
     @ApiModelProperty(value = "快手1评论等于多少积分")
-    private double pointsOfPerKuaishouComment;
+    private int pointsOfPerKuaishouComment;
 
     @Column(name = "points_of_per_kuaishou_play")
     @ApiModelProperty(value = "快手1播放等于多少积分")
-    private double pointsOfPerKuaishouPlay;
+    private int pointsOfPerKuaishouPlay;
 
     @Column(name = "points_of_per_kuaishou_like_follow")
     @ApiModelProperty(value = "快手1点赞加关注等于多少积分")
-    private double pointsOfPerKuaishouLikeAndFollow;
+    private int pointsOfPerKuaishouLikeAndFollow;
 
     @Column(name = "points_of_per_kuaishou_like_follow_comment")
     @ApiModelProperty(value = "快手1点赞加关注加评论等于多少积分")
-    private double pointsOfPerKuaishouLikeAndFollowAndComment;
+    private int pointsOfPerKuaishouLikeAndFollowAndComment;
 
     @Column(name = "commission_percent")
     @ApiModelProperty(value = "佣金百分比")
@@ -75,33 +75,33 @@ public class ReferenceValue {
 
     @Column(name = "presented_credit_for_10")
     @ApiModelProperty(value = "充10块送多少充值币")
-    private double presentedCreditFor10;
+    private int presentedCreditFor10;
 
     @Column(name = "presented_credit_for_30")
     @ApiModelProperty(value = "充30块送多少充值币")
-    private double presentedCreditFor30;
+    private int presentedCreditFor30;
 
     @Column(name = "presented_credit_for_50")
     @ApiModelProperty(value = "充50块送多少充值币")
-    private double presentedCreditFor50;
+    private int presentedCreditFor50;
 
     @Column(name = "presented_credit_for_100")
     @ApiModelProperty(value = "充100块送多少充值币")
-    private double presentedCreditFor100;
+    private int presentedCreditFor100;
 
     @Column(name = "presented_credit_for_200")
     @ApiModelProperty(value = "充200块送多少充值币")
-    private double presentedCreditFor200;
+    private int presentedCreditFor200;
 
     @Column(name = "presented_credit_for_500")
     @ApiModelProperty(value = "充500块送多少充值币")
-    private double presentedCreditFor500;
+    private int presentedCreditFor500;
 
     @Column(name = "presented_credit_for_1000")
     @ApiModelProperty(value = "充1000块送多少充值币")
-    private double presentedCreditFor1000;
+    private int presentedCreditFor1000;
 
     @Column(name = "presented_credit_for_5000")
     @ApiModelProperty(value = "充5000块送多少充值币")
-    private double presentedCreditFor5000;
+    private int presentedCreditFor5000;
 }

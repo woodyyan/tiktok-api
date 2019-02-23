@@ -2,7 +2,6 @@ package com.daduo.api.tiktokapi.translator;
 
 import com.daduo.api.tiktokapi.entity.Credit;
 import com.daduo.api.tiktokapi.model.CreditData;
-import com.daduo.api.tiktokapi.model.CreditRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,9 +15,5 @@ public class CreditTranslator {
         data.setCreatedTime(credit.getCreatedTime().toDateTime());
         data.setLastModifiedTime(credit.getLastModifiedTime().toDateTime());
         return data;
-    }
-
-    public Credit translateToCredit(CreditRequest creditRequest) {
-        return null;
     }
 }
