@@ -19,7 +19,7 @@ public class Product {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "pointPrice")
+    @Column(name = "price")
     private Double price;
 
     @Column(name = "image_url")
