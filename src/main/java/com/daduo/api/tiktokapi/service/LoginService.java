@@ -1,5 +1,12 @@
 package com.daduo.api.tiktokapi.service;
 
+import com.aliyuncs.CommonRequest;
+import com.aliyuncs.CommonResponse;
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.IAcsClient;
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.http.MethodType;
+import com.aliyuncs.profile.DefaultProfile;
 import com.daduo.api.tiktokapi.entity.Account;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.AuthenticationCodeResponse;
@@ -56,7 +63,7 @@ public class LoginService {
     public AuthenticationCodeResponse sendMessageAuthenticationCode(Long number) {
         AuthenticationCodeResponse result = new AuthenticationCodeResponse();
         try {
-            send(number);
+//            send(number);
             result.setSuccess(true);
             result.setTitle("发送成功");
         } catch (Exception ex) {
@@ -74,5 +81,23 @@ public class LoginService {
 
     private void send(Long number) {
         //TODO 发送短信验证码
+        DefaultProfile profile = DefaultProfile.getProfile("default", "<accessKeyId>", "<accessSecret>");
+        IAcsClient client = new DefaultAcsClient(profile);
+
+        CommonRequest request = new CommonRequest();
+        //request.setProtocol(ProtocolType.HTTPS);
+        request.setMethod(MethodType.POST);
+        request.setDomain("dysmsapi.aliyuncs.com");
+        request.setVersion("2017-05-25");
+        request.setAction("SendSms");
+        request.putQueryParameter("PhoneNumbers", "186234452233");
+        request.putQueryParameter("SignName", "abc");
+        request.putQueryParameter("TemplateCode", "123");
+        try {
+            CommonResponse response = client.getCommonResponse(request);
+            System.out.println(response.getData());
+        } catch (ClientException e) {
+            e.printStackTrace();
+        }
     }
 }
