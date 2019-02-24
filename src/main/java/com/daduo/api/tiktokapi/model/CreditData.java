@@ -16,4 +16,6 @@ public class CreditData extends BaseModel {
     private Long userId;
     @ApiModelProperty(value = "积分数")
     private Integer points;
+    @ApiModelProperty(value = "可兑换金额")
+    private int money;
 }

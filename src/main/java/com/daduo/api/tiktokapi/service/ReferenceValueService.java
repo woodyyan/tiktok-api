@@ -59,7 +59,7 @@ public class ReferenceValueService {
         return all.get(0);
     }
 
-    Integer searchByName(String name) {
+    public Integer searchByName(String name) {
         ReferenceValue referenceValue = getReferenceValue();
         if (Objects.equals(name, "creditOfPerRmb")) {
             return referenceValue.getCreditOfPerRmb();
