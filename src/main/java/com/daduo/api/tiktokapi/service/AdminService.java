@@ -10,6 +10,8 @@ import com.daduo.api.tiktokapi.repository.AdminRepository;
 import com.daduo.api.tiktokapi.repository.PermissionRepository;
 import com.daduo.api.tiktokapi.translator.AdminTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -72,8 +74,8 @@ public class AdminService {
         }
     }
 
-    public Admins getAllAdmins() {
-        List<Admin> admins = repository.findAll();
+    public Admins getAllAdmins(Pageable page) {
+        Page<Admin> admins = repository.findAll(page);
         List<Permission> permissions = permissionRepository.findAll();
         return translator.toAdmins(admins, permissions);
     }

@@ -4,11 +4,9 @@ import com.daduo.api.tiktokapi.entity.Admin;
 import com.daduo.api.tiktokapi.entity.Permission;
 import com.daduo.api.tiktokapi.enums.PermissionType;
 import com.daduo.api.tiktokapi.enums.RoleType;
-import com.daduo.api.tiktokapi.model.AdminData;
-import com.daduo.api.tiktokapi.model.AdminRequest;
-import com.daduo.api.tiktokapi.model.AdminResponse;
-import com.daduo.api.tiktokapi.model.Admins;
+import com.daduo.api.tiktokapi.model.*;
 import org.joda.time.LocalDateTime;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,12 +30,18 @@ public class AdminTranslator {
         return admin;
     }
 
-    public Admins toAdmins(List<Admin> admins, List<Permission> permissions) {
+    public Admins toAdmins(Page<Admin> admins, List<Permission> permissions) {
         Admins response = new Admins();
-        for (Admin admin : admins) {
+        for (Admin admin : admins.getContent()) {
             Optional<Permission> permission = permissions.stream().filter(it -> it.getAdminId().equals(admin.getId())).findFirst();
             permission.ifPresent(permission1 -> response.getData().add(toAdminData(admin, permission1)));
         }
+        PagingMeta meta = new PagingMeta();
+        meta.setPageNumber(admins.getNumber());
+        meta.setPageSize(admins.getSize());
+        meta.setTotalElements(admins.getTotalElements());
+        meta.setTotalPages(admins.getTotalPages());
+        response.setMeta(meta);
         return response;
     }
 

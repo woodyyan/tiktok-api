@@ -3,11 +3,12 @@ package com.daduo.api.tiktokapi.controller;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.service.AdminService;
 import com.daduo.api.tiktokapi.validator.AdminValidator;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,9 +61,17 @@ public class AdminController {
 
     @GetMapping
     @ApiOperation(value = "获取所有管理员")
-    public Admins getAllAdmins() {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "请求第几页",
+                    defaultValue = "0", dataType = "integer", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "一页的总数",
+                    defaultValue = "20", dataType = "integer", paramType = "query")
+    })
+    public Admins getAllAdmins(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+                               @ApiParam(value = "分页")
+                                       Pageable page) {
         log.info("[START] Get all admins");
-        Admins admins = service.getAllAdmins();
+        Admins admins = service.getAllAdmins(page);
         log.info("[START] Get all admins with response: {}", admins);
         return admins;
     }

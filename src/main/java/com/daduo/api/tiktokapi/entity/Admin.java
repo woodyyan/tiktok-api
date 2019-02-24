@@ -22,7 +22,7 @@ public class Admin {
     private String password;
 
     @Column(name = "nickname", nullable = false)
-    private String nicknameF;
+    private String nickname;
 
     @Column(name = "created_time")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime", parameters = {
