@@ -1,6 +1,7 @@
 package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.Credit;
+import com.daduo.api.tiktokapi.model.AccountData;
 import com.daduo.api.tiktokapi.model.CreditData;
 import com.daduo.api.tiktokapi.model.CreditRequest;
 import com.daduo.api.tiktokapi.repository.CreditRepository;
@@ -17,12 +18,16 @@ public class CreditService {
     @Autowired
     private CreditTranslator translator;
 
+    @Autowired
+    private AccountService accountService;
+
     public CreditData getCreditById(Long userId) {
         Credit credit = repository.findByUserId(userId);
         if (credit == null) {
             credit = addDefaultCredit(userId);
         }
-        return translator.translateToCreditData(credit);
+        String username = accountService.getAccountUsername(userId);
+        return translator.translateToCreditData(credit, username);
     }
 
     public CreditData modifyCredit(CreditRequest creditRequest) {
@@ -37,7 +42,8 @@ public class CreditService {
             credit.setPoints(credit.getPoints() + creditRequest.getPoints());
         }
         Credit savedCredit = repository.saveAndFlush(credit);
-        return translator.translateToCreditData(savedCredit);
+        AccountData account = accountService.getAccount(creditRequest.getUserId());
+        return translator.translateToCreditData(savedCredit, account.getUsername());
     }
 
     private Credit addDefaultCredit(Long userId) {
