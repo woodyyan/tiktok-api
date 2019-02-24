@@ -14,6 +14,8 @@ import java.util.List;
 
 @Component
 public class ProductTranslator {
+    private static final int TEN_THOUSAND = 10000;
+
     @Autowired
     private ProductOrderRepository productOrderRepository;
 
@@ -83,9 +85,9 @@ public class ProductTranslator {
             infoData.setCreatedTime(product.getCreatedTime().toDateTime());
             infoData.setLastModifiedTime(product.getLastModifiedTime().toDateTime());
             List<ProductOrder> orders = productOrderRepository.findAllByProductId(product.getId());
-            infoData.setTotalPrice(product.getPrice() * product.getCount());
+            infoData.setTotalPrice((product.getPrice() * product.getCount()) / TEN_THOUSAND);
             infoData.setSaleCount(orders.size());
-            infoData.setSaleAmount(orders.size() * product.getPrice());
+            infoData.setSaleAmount((orders.size() * product.getPrice()) / TEN_THOUSAND);
             infoData.setUnSaleCount(product.getCount() - orders.size());
             data.add(infoData);
         }
