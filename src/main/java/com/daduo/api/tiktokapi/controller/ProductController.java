@@ -1,9 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
-import com.daduo.api.tiktokapi.model.ProductInfos;
-import com.daduo.api.tiktokapi.model.ProductRequest;
-import com.daduo.api.tiktokapi.model.ProductResponse;
-import com.daduo.api.tiktokapi.model.Products;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.service.ProductService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -71,8 +68,18 @@ public class ProductController {
     @ApiOperation(value = "修改商品", notes = "商品状态：ON_SALE是在售, SOLD_OUT是售完, OFF_SALE是下架")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ProductResponse modifyProduct(@PathVariable Long productId, @RequestBody ProductRequest request) {
-        log.info("[START] Modify product with request: {}", request);
+        log.info("[START] Modify product with id: {}, request: {}", productId, request);
         ProductResponse response = service.modifyProduct(productId, request);
+        log.info("[END] Modify product with response: {}", response);
+        return response;
+    }
+
+    @GetMapping("/{productId}")
+    @ApiOperation(value = "获取单个商品", notes = "商品状态：ON_SALE是在售, SOLD_OUT是售完, OFF_SALE是下架")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ProductInfoResponse getProduct(@PathVariable Long productId) {
+        log.info("[START] Modify product with request: {}", productId);
+        ProductInfoResponse response = service.getProduct(productId);
         log.info("[END] Modify product with response: {}", response);
         return response;
     }

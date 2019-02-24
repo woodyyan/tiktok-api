@@ -74,21 +74,7 @@ public class ProductTranslator {
         ProductInfos result = new ProductInfos();
         List<ProductInfoData> data = new ArrayList<>();
         for (Product product : productPage.getContent()) {
-            ProductInfoData infoData = new ProductInfoData();
-            infoData.setDescription(product.getDescription());
-            infoData.setId(product.getId());
-            infoData.setImageUrl(product.getImageUrl());
-            infoData.setName(product.getName());
-            infoData.setStatus(product.getStatus());
-            infoData.setPrice(product.getPrice());
-            infoData.setCount(product.getCount());
-            infoData.setCreatedTime(product.getCreatedTime().toDateTime());
-            infoData.setLastModifiedTime(product.getLastModifiedTime().toDateTime());
-            List<ProductOrder> orders = productOrderRepository.findAllByProductId(product.getId());
-            infoData.setTotalPrice((product.getPrice() * product.getCount()) / TEN_THOUSAND);
-            infoData.setSaleCount(orders.size());
-            infoData.setSaleAmount((orders.size() * product.getPrice()) / TEN_THOUSAND);
-            infoData.setUnSaleCount(product.getCount() - orders.size());
+            ProductInfoData infoData = getProductInfoData(product);
             data.add(infoData);
         }
         result.setData(data);
@@ -99,5 +85,24 @@ public class ProductTranslator {
         meta.setTotalPages(productPage.getTotalPages());
         result.setMeta(meta);
         return result;
+    }
+
+    public ProductInfoData getProductInfoData(Product product) {
+        ProductInfoData infoData = new ProductInfoData();
+        infoData.setDescription(product.getDescription());
+        infoData.setId(product.getId());
+        infoData.setImageUrl(product.getImageUrl());
+        infoData.setName(product.getName());
+        infoData.setStatus(product.getStatus());
+        infoData.setPrice(product.getPrice());
+        infoData.setCount(product.getCount());
+        infoData.setCreatedTime(product.getCreatedTime().toDateTime());
+        infoData.setLastModifiedTime(product.getLastModifiedTime().toDateTime());
+        List<ProductOrder> orders = productOrderRepository.findAllByProductId(product.getId());
+        infoData.setTotalPrice((product.getPrice() * product.getCount()) / TEN_THOUSAND);
+        infoData.setSaleCount(orders.size());
+        infoData.setSaleAmount((orders.size() * product.getPrice()) / TEN_THOUSAND);
+        infoData.setUnSaleCount(product.getCount() - orders.size());
+        return infoData;
     }
 }

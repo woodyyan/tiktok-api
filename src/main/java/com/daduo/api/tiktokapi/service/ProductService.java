@@ -2,10 +2,7 @@ package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.Product;
 import com.daduo.api.tiktokapi.enums.ProductStatus;
-import com.daduo.api.tiktokapi.model.ProductInfos;
-import com.daduo.api.tiktokapi.model.ProductRequest;
-import com.daduo.api.tiktokapi.model.ProductResponse;
-import com.daduo.api.tiktokapi.model.Products;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.repository.ProductRepository;
 import com.daduo.api.tiktokapi.translator.ProductTranslator;
@@ -72,5 +69,17 @@ public class ProductService {
         Page<Product> productPage;
         productPage = repository.findAllByStatus(ProductStatus.ON_SALE, page);
         return translator.translateToProducts(productPage);
+    }
+
+    public ProductInfoResponse getProduct(Long productId) {
+        Optional<Product> product = repository.findById(productId);
+        if (product.isPresent()) {
+            ProductInfoData productInfoData = translator.getProductInfoData(product.get());
+            ProductInfoResponse response = new ProductInfoResponse();
+            response.setInfoData(productInfoData);
+            return response;
+        } else {
+            throw ErrorBuilder.buildNotFoundErrorException("商品找不到。");
+        }
     }
 }
