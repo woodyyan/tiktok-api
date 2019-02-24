@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/member/credit")
 @RestController
 @Slf4j
-@Api(tags = "充值币接口", description = "充值币管理")
+@Api(tags = "充值币积分接口", description = "充值币积分管理")
 public class CreditController {
     @Autowired
     private CreditService service;
@@ -29,7 +29,7 @@ public class CreditController {
     private AccountValidator accountValidate;
 
     @GetMapping("/{userId}")
-    @ApiOperation("获取当前ID的充值币")
+    @ApiOperation(value = "获取当前ID的充值币积分", notes = "money是可兑换金额")
     public CreditResponse getCreditByUserId(@PathVariable @ApiParam("用户ID") Long userId) {
         log.info("[START] Get credit with userId: {}", userId);
         accountValidate.validateUserIdExists(userId);
