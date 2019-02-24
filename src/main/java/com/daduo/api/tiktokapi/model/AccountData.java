@@ -38,4 +38,7 @@ public class AccountData extends BaseModel {
 
     @ApiModelProperty(value = "积分")
     private Integer points;
+
+    @ApiModelProperty(value = "姓名")
+    private String name;
 }

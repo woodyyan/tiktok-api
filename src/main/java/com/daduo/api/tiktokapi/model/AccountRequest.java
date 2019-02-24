@@ -15,6 +15,9 @@ public class AccountRequest {
     @ApiModelProperty(value = "微信号")
     private String wechat;
 
+    @ApiModelProperty(value = "姓名")
+    private String name;
+
     @ApiModelProperty(value = "头像URL")
     private String avatar;
 
