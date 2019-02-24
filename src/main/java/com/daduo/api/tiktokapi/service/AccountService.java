@@ -43,8 +43,8 @@ public class AccountService {
         if (account.isPresent()) {
             Account existingAccount = account.get();
             existingAccount.setLastModifiedTime(LocalDateTime.now());
-            if (!StringUtils.isEmpty(accountRequest.getUsername())) {
-                existingAccount.setUsername(accountRequest.getUsername());
+            if (!StringUtils.isEmpty(accountRequest.getNickname())) {
+                existingAccount.setNickname(accountRequest.getNickname());
             }
             if (!StringUtils.isEmpty(accountRequest.getQq())) {
                 existingAccount.setQq(accountRequest.getQq());
@@ -104,10 +104,10 @@ public class AccountService {
         clearOffline();
     }
 
-    String getAccountUsername(Long userId) {
+    String getAccountNickname(Long userId) {
         Optional<Account> account = repository.findById(userId);
         if (account.isPresent()) {
-            return account.get().getUsername();
+            return account.get().getNickname();
         } else {
             throw buildNotFoundErrorException("账号找不到，请确认ID是否正确。");
         }

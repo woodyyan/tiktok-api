@@ -26,8 +26,8 @@ public class CreditService {
         if (credit == null) {
             credit = addDefaultCredit(userId);
         }
-        String username = accountService.getAccountUsername(userId);
-        return translator.translateToCreditData(credit, username);
+        String nickname = accountService.getAccountNickname(userId);
+        return translator.translateToCreditData(credit, nickname);
     }
 
     public CreditData modifyCredit(CreditRequest creditRequest) {
@@ -43,7 +43,7 @@ public class CreditService {
         }
         Credit savedCredit = repository.saveAndFlush(credit);
         AccountData account = accountService.getAccount(creditRequest.getUserId());
-        return translator.translateToCreditData(savedCredit, account.getUsername());
+        return translator.translateToCreditData(savedCredit, account.getNickname());
     }
 
     private Credit addDefaultCredit(Long userId) {

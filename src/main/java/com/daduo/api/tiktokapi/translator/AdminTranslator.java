@@ -26,7 +26,7 @@ public class AdminTranslator {
         Admin admin = new Admin();
         admin.setPassword(request.getPassword());
         admin.setPhoneNumber(request.getPhoneNumber());
-        admin.setUsername(request.getUsername());
+        admin.setNickname(request.getNickname());
         admin.setCreatedTime(LocalDateTime.now());
         admin.setLastModifiedTime(LocalDateTime.now());
         return admin;
@@ -45,7 +45,7 @@ public class AdminTranslator {
         AdminData data = new AdminData();
         data.setPhoneNumber(admin.getPhoneNumber());
         data.setId(admin.getId());
-        data.setUsername(admin.getUsername());
+        data.setNickname(admin.getNickname());
         data.setRole(permission.getRole());
         data.setRole(permission.getRole());
         if (permission.isCanAutoTaskManage()) {

@@ -23,6 +23,6 @@ public class AdminData extends BaseModel {
     private Long id;
     @ApiModelProperty(value = "角色")
     private RoleType role;
-    @ApiModelProperty(value = "用户名")
-    private String username;
-}
+    @ApiModelProperty(value = "昵称")
+    private String nickname;
+}F

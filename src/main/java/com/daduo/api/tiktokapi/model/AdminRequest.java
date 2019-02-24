@@ -17,8 +17,8 @@ public class AdminRequest {
     private Long phoneNumber;
     @ApiModelProperty(value = "角色")
     private RoleType role;
-    @ApiModelProperty(value = "用户名")
-    private String username;
+    @ApiModelProperty(value = "昵称")
+    private String nickname;
     @ApiModelProperty(value = "权限")
     private List<PermissionType> permissions;
 }

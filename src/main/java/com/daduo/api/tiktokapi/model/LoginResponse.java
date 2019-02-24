@@ -10,8 +10,8 @@ import lombok.EqualsAndHashCode;
 @ApiModel("登陆结果返回Json")
 @EqualsAndHashCode(callSuper = true)
 public class LoginResponse extends BaseModel {
-    @ApiModelProperty(value = "用户名", example = "张三")
-    private String username;
+    @ApiModelProperty(value = "昵称", example = "张三")
+    private String nickname;
     @ApiModelProperty(value = "手机号码", example = "13888888888")
     private Long phoneNumber;
     @ApiModelProperty(value = "登陆凭证")

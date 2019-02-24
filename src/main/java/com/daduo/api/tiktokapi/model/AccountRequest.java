@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Data
 public class AccountRequest {
-    @ApiModelProperty(value = "用户名", example = "张三")
-    private String username;
+    @ApiModelProperty(value = "昵称", example = "张三")
+    private String nickname;
 
     @ApiModelProperty(value = "QQ号")
     private Long qq;

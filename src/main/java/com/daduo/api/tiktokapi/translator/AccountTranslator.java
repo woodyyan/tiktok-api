@@ -21,7 +21,7 @@ public class AccountTranslator {
         response.setLastModifiedTime(account.getLastModifiedTime().toDateTime());
         response.setPhoneNumber(account.getPhoneNumber());
         response.setSessionToken(token);
-        response.setUsername(account.getUsername());
+        response.setNickname(account.getNickname());
         AuthData authData = new AuthData();
         authData.setAccessToken(account.getAccessToken());
         authData.setExpiresIn(account.getExpiresIn());
@@ -33,7 +33,7 @@ public class AccountTranslator {
 
     public Account translateToAccount(Long phoneNumber) {
         Account account = new Account();
-        account.setUsername(phoneNumber.toString());
+        account.setNickname(phoneNumber.toString());
         account.setPhoneNumber(phoneNumber);
         LocalDateTime now = LocalDateTime.now();
         account.setCreatedTime(now);
@@ -67,7 +67,7 @@ public class AccountTranslator {
         data.setLastModifiedTime(account.getLastModifiedTime().toDateTime());
         data.setPhoneNumber(account.getPhoneNumber());
         data.setQq(account.getQq());
-        data.setUsername(account.getUsername());
+        data.setNickname(account.getNickname());
         data.setWechat(account.getWechat());
         data.setStatus(account.getStatus());
         data.setCredit(credit.getCredit());

@@ -21,8 +21,8 @@ public class Admin {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "username", nullable = false)
-    private String username;
+    @Column(name = "nickname", nullable = false)
+    private String nicknameF;
 
     @Column(name = "created_time")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime", parameters = {
