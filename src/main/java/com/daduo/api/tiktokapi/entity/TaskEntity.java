@@ -67,4 +67,10 @@ public class TaskEntity {
 
     @Column(name = "count")
     private int count;
+
+    @Column(name = "total_credit")
+    private Integer totalCredit;
+
+    @Column(name = "total_points")
+    private Integer totalPoints;
 }

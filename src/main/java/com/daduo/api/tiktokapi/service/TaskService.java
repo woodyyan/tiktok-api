@@ -45,10 +45,10 @@ public class TaskService {
     private CreditService creditService;
 
     public TaskData publishTask(TaskRequest taskRequest) {
-        int pointPrice = getPointPrice(taskRequest.getItems(), taskRequest.getPlatform());
-        int totalPrice = taskRequest.isSticky() ? (int) (pointPrice * taskRequest.getCount() * STICKY_PERCENT) : pointPrice * taskRequest.getCount();
-        deductPoints(taskRequest.getOwnerId(), totalPrice);
+        DeductResult result = deductPoints(taskRequest.getOwnerId(), taskRequest);
         TaskEntity task = translator.translateToTask(taskRequest);
+        task.setTotalCredit(result.getCredit());
+        task.setTotalPoints(result.getPoints());
         TaskEntity savedTask = repository.save(task);
         return translator.translateToTaskResponse(savedTask);
     }
@@ -86,9 +86,36 @@ public class TaskService {
         return 0;
     }
 
-    private void deductPoints(Long ownerId, Integer totalPointPrice) {
+    private class DeductResult {
+
+        private int points;
+        private Integer credit;
+
+        void setPoints(int points) {
+            this.points = points;
+        }
+
+        public int getPoints() {
+            return points;
+        }
+
+        public void setCredit(Integer credit) {
+            this.credit = credit;
+        }
+
+        public Integer getCredit() {
+            return credit;
+        }
+    }
+
+    private DeductResult deductPoints(Long ownerId, TaskRequest taskRequest) {
+        int pointPrice = getPointPrice(taskRequest.getItems(), taskRequest.getPlatform());
+        int totalPointPrice = taskRequest.isSticky() ? (int) (pointPrice * taskRequest.getCount() * STICKY_PERCENT) : pointPrice * taskRequest.getCount();
+        Integer commissionPercent = referenceValueService.searchByName("commissionPercent");
+        totalPointPrice = totalPointPrice * ((100 + commissionPercent) / 100);
         CreditData creditData = creditService.getCreditById(ownerId);
         Integer totalCreditPrice = (referenceValueService.searchByName("creditOfPerRmb") / referenceValueService.searchByName("pointsOfPerRmb")) * totalPointPrice;
+        totalCreditPrice = (int) (totalCreditPrice * ((100.0 + commissionPercent) / 100.0));
         if (creditData.getPoints() < totalPointPrice && creditData.getCredit() < totalCreditPrice) {
             Error error = new Error();
             error.setTitle("余额不足");
@@ -105,6 +132,10 @@ public class TaskService {
             creditRequest.setCredit(-totalCreditPrice);
         }
         creditService.modifyCredit(creditRequest);
+        DeductResult result = new DeductResult();
+        result.setPoints(totalPointPrice);
+        result.setCredit(totalCreditPrice);
+        return result;
     }
 
     public void deleteTask(Long taskId) {

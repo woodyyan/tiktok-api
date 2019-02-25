@@ -1,7 +1,5 @@
 package com.daduo.api.tiktokapi.entity;
 
-import com.daduo.api.tiktokapi.enums.ExchangeMethod;
-import com.daduo.api.tiktokapi.enums.OrderStatus;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
@@ -10,30 +8,21 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "exchange_order")
-public class ExchangeOrder {
+@Table(name = "credit_order")
+public class CreditOrder {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "method")
-    private ExchangeMethod method;
-
-    @Column(name = "money")
-    private Integer money;
-
-    @Column(name = "image_url")
-    private String imageUrl;
-
-    @Column(name = "pay_qr_code_image_url")
-    private String payQrCodeImageUrl;
-
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "status")
-    private OrderStatus status;
+    @Column(name = "credit", nullable = false)
+    private Integer credit;
+
+    @Column(name = "points", nullable = false)
+    private Integer points;
 
     @Column(name = "created_time")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime", parameters = {
