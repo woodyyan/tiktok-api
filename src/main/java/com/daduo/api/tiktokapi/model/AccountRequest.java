@@ -12,6 +12,9 @@ public class AccountRequest {
     @ApiModelProperty(value = "QQ号")
     private Long qq;
 
+    @ApiModelProperty(value = "收货手机号")
+    private Long shippingPhone;
+
     @ApiModelProperty(value = "微信号")
     private String wechat;
 

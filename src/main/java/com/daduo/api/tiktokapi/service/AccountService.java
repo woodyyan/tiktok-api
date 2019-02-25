@@ -61,6 +61,9 @@ public class AccountService {
             if (!StringUtils.isEmpty(accountRequest.getName())) {
                 existingAccount.setName(accountRequest.getName());
             }
+            if (!StringUtils.isEmpty(accountRequest.getShippingPhone())) {
+                existingAccount.setShippingPhone(accountRequest.getShippingPhone());
+            }
             Account savedAccount = repository.saveAndFlush(existingAccount);
             return translator.toAccountData(savedAccount);
         } else {

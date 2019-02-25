@@ -41,4 +41,7 @@ public class AccountData extends BaseModel {
 
     @ApiModelProperty(value = "姓名")
     private String name;
+
+    @ApiModelProperty(value = "收货电话")
+    private Long shippingPhone;
 }
