@@ -20,6 +20,9 @@ public class ProductOrder {
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
+
+    @Column(name = "price")
+    private Integer price;
     
     @Column(name = "created_time")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime", parameters = {

@@ -24,6 +24,9 @@ public class CreditService {
     private AccountService accountService;
 
     @Autowired
+    private ReferenceValueService referenceValueService;
+
+    @Autowired
     private CreditOrderRepository creditOrderRepository;
 
     public CreditData getCreditById(Long userId) {
@@ -40,22 +43,46 @@ public class CreditService {
         if (credit == null) {
             credit = addDefaultCredit(creditRequest.getUserId());
         }
+        int presentedCredit = 0;
         if (creditRequest.getCredit() != null) {
+            presentedCredit = calculatePresentedCredit(creditRequest.getCredit());
             credit.setCredit(credit.getCredit() + creditRequest.getCredit());
         }
         if (creditRequest.getPoints() != null) {
             credit.setPoints(credit.getPoints() + creditRequest.getPoints());
         }
-        saveCreditOrder(creditRequest);
+        saveCreditOrder(creditRequest, presentedCredit);
         Credit savedCredit = repository.saveAndFlush(credit);
         AccountData account = accountService.getAccount(creditRequest.getUserId());
         return translator.translateToCreditData(savedCredit, account.getNickname());
     }
 
-    private void saveCreditOrder(CreditRequest creditRequest) {
+    private int calculatePresentedCredit(Integer credit) {
+        if (credit >= 5000) {
+            return referenceValueService.searchByName("presentedCreditFor5000");
+        } else if (credit >= 1000) {
+            return referenceValueService.searchByName("presentedCreditFor1000");
+        } else if (credit >= 500) {
+            return referenceValueService.searchByName("presentedCreditFor500");
+        } else if (credit >= 200) {
+            return referenceValueService.searchByName("presentedCreditFor200");
+        } else if (credit >= 100) {
+            return referenceValueService.searchByName("presentedCreditFor100");
+        } else if (credit >= 50) {
+            return referenceValueService.searchByName("presentedCreditFor50");
+        } else if (credit >= 30) {
+            return referenceValueService.searchByName("presentedCreditFor30");
+        } else if (credit >= 10) {
+            return referenceValueService.searchByName("presentedCreditFor10");
+        }
+        return 0;
+    }
+
+    private void saveCreditOrder(CreditRequest creditRequest, int presentedCredit) {
         CreditOrder creditOrder = new CreditOrder();
         creditOrder.setUserId(creditRequest.getUserId());
         creditOrder.setCredit(creditRequest.getCredit());
+        creditOrder.setPresentedCredit(presentedCredit);
         creditOrder.setPoints(creditRequest.getPoints());
         creditOrder.setCreatedTime(LocalDateTime.now());
         creditOrder.setLastModifiedTime(LocalDateTime.now());

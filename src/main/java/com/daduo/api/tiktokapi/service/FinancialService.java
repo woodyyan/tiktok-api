@@ -2,10 +2,13 @@ package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.*;
 import com.daduo.api.tiktokapi.model.FinancialInfo;
+import com.daduo.api.tiktokapi.model.UserFinancialInfo;
+import com.daduo.api.tiktokapi.model.UserFinancialInfoResponse;
 import com.daduo.api.tiktokapi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +34,9 @@ public class FinancialService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     public FinancialInfo getAllFinancialInfo() {
         FinancialInfo info = new FinancialInfo();
@@ -66,33 +72,82 @@ public class FinancialService {
         int totalPointsPrice = products.stream().mapToInt(Product::getPrice).sum();
         info.setExchangeProductAmount(totalPointsPrice / pointsOfPerRmb);
 
-        //充值赠送积分总额:
-        info.setTopUpPresentedCreditAmount(1);
+        //充值赠送充值币总额: 任务订单presentedCredit加起来 换成人民币
+        int topUpPresentedCreditAmount = creditOrders.stream().mapToInt(CreditOrder::getPresentedCredit).sum() / creditOfPerRmb;
+        info.setTopUpPresentedCreditAmount(topUpPresentedCreditAmount);
+
+        //毛利总额:
         info.setGrossProfitAmount(1);
+
+        //充值币总额
         info.setCreditAmount(1);
+
+        //积分总额
         info.setPointsAmount(1);
+
+        //扣除会员积分总额
         info.setPointsAmountWithoutPoints(1);
+
+        //佣金积分总额
         info.setCommissionPointsAmount(1);
+
+        //充值币余额
         info.setCreditBalance(1);
+
+        //积分余额
         info.setPointsBalance(1);
+
+        //会员兑换现金积分总额
         info.setExchangeMoneyPointsAmount(1);
+
+        //会员兑换商品积分总额
         info.setExchangeProductPointsAmount(1);
         return info;
     }
-}
 
-// 充值现金总额 TopUpMoneyAmount：¥50000
-// 佣金总额 commissionMoneyAmount：¥20000
-// 扣除会员积分总额 MoneyAmountWithoutPoints：¥200
-// 会员兑换现金总额 exchangeMoneyAmount：¥10000
-// 会员兑换商品总额 exchangeProductAmount：¥5000
-// 充值赠送积分总额 TopUpPresentedCreditAmount：¥500
-// 毛利总额 GrossProfitAmount：¥20000
-// 充值币总额 CreditAmount：5000万个
-// 积分总额 PointsAmount：5000万个
-// 扣除会员积分总额 PointsAmountWithoutPoints：5000万个
-// 佣金积分总额 CommissionPointsAmount：20000万个
-// 充值币余额 CreditBalance：200万个
-// 积分余额 PointsBalance：200万个
-// 会员兑换现金积分总额 exchangeMoneyPointsAmount：1000万个
-// 会员兑换商品积分总额 exchangeProductPointsAmount：1000万个
+    public UserFinancialInfoResponse getAllUserFinancialInfo() {
+        List<Account> accounts = accountRepository.findAll();
+        List<UserFinancialInfo> data = new ArrayList<>();
+        for (Account account : accounts) {
+            UserFinancialInfo info = new UserFinancialInfo();
+            info.setUserId(account.getId());
+            info.setNickname(account.getNickname());
+            info.setTopUpMoney(getTopUpMoney(account.getId()));
+            info.setCommissionMoney(getCommissionMoney(account.getId()));
+            info.setMoneyWithoutPoints(getMoneyWithoutPoints(account.getId()));
+            info.setExchangeMoney(getExchangeMoney(account.getId()));
+            info.setProductMoney(getProductMoney(account.getId()));
+            info.setPresentedCreditMoney(getPresentedCreditMoney(account.getId()));
+            data.add(info);
+        }
+        UserFinancialInfoResponse response = new UserFinancialInfoResponse();
+        response.setData(data);
+        return response;
+    }
+
+    private Integer getPresentedCreditMoney(Long id) {
+        List<CreditOrder> orders = creditOrderRepository.findAllByUserId(id);
+        return orders.stream().mapToInt(CreditOrder::getPresentedCredit).sum();
+    }
+
+    private Integer getProductMoney(Long id) {
+        List<ProductOrder> orders = productOrderRepository.findAllByUserId(id);
+        return orders.stream().mapToInt(ProductOrder::getPrice).sum();
+    }
+
+    private Integer getExchangeMoney(Long id) {
+        return 1;
+    }
+
+    private Integer getMoneyWithoutPoints(Long id) {
+        return 1;
+    }
+
+    private Integer getCommissionMoney(Long id) {
+        return 1;
+    }
+
+    private Integer getTopUpMoney(Long id) {
+        return 1;
+    }
+}
