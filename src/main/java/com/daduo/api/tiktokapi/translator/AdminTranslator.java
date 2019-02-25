@@ -50,6 +50,7 @@ public class AdminTranslator {
         data.setPhoneNumber(admin.getPhoneNumber());
         data.setId(admin.getId());
         data.setNickname(admin.getNickname());
+        data.setPassword(admin.getPassword());
         data.setRole(permission.getRole());
         data.setRole(permission.getRole());
         if (permission.isCanAutoTaskManage()) {
