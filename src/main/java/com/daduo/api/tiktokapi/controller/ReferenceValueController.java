@@ -33,7 +33,7 @@ public class ReferenceValueController {
         return response;
     }
 
-    @PatchMapping
+    @PutMapping
     @ApiOperation(value = "修改基础数据设置", notes = "需要改哪些值就只传哪些值")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ValueResponse modifyReferenceValues(@RequestBody @ApiParam("基础数据修改请求体") ValueResponseRequest request) {

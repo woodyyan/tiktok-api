@@ -4,6 +4,7 @@ import com.daduo.api.tiktokapi.model.FinancialInfo;
 import com.daduo.api.tiktokapi.model.UserFinancialInfoResponse;
 import com.daduo.api.tiktokapi.service.FinancialService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ public class FinancialController {
     private FinancialService service;
 
     @GetMapping
+    @ApiOperation(value = "获取整体营收情况")
     public FinancialInfo getAllFinancialInfo() {
         log.info("[START] Get all financial info.");
         FinancialInfo info = service.getAllFinancialInfo();
@@ -28,6 +30,7 @@ public class FinancialController {
     }
 
     @GetMapping("/user")
+    @ApiOperation(value = "获取会员财务情况")
     public UserFinancialInfoResponse getAllUserFinancialInfo() {
         log.info("[START] Get all financial info by user.");
         UserFinancialInfoResponse info = service.getAllUserFinancialInfo();

@@ -20,7 +20,7 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @PatchMapping("/{userId}")
+    @PutMapping("/{userId}")
     @ApiOperation(value = "更新账号信息")
     public AccountResponse updateAccount(@PathVariable Long userId, @RequestBody @ApiParam(value = "账号Json") AccountRequest accountRequest) {
         log.info("[START] Update account with user id: {}, and request: {}", userId, accountRequest);

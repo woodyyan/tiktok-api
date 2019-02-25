@@ -64,7 +64,7 @@ public class ProductController {
         return response;
     }
 
-    @PatchMapping("/{productId}")
+    @PutMapping("/{productId}")
     @ApiOperation(value = "修改商品", notes = "商品状态：ON_SALE是在售, SOLD_OUT是售完, OFF_SALE是下架")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ProductResponse modifyProduct(@PathVariable Long productId, @RequestBody ProductRequest request) {

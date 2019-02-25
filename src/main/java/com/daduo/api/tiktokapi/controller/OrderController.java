@@ -32,7 +32,7 @@ public class OrderController {
         return response;
     }
 
-    @PatchMapping("/exchange/{id}")
+    @PutMapping("/exchange/{id}")
     @ApiOperation(value = "审核通过兑换现金订单")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public void updateExchangeOrderStatus(@PathVariable Long id, @RequestParam @ApiParam("状态") OrderStatus status) {
