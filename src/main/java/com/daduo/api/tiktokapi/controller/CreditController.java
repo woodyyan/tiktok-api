@@ -1,6 +1,7 @@
 package com.daduo.api.tiktokapi.controller;
 
 import com.daduo.api.tiktokapi.model.CreditData;
+import com.daduo.api.tiktokapi.model.CreditOrders;
 import com.daduo.api.tiktokapi.model.CreditRequest;
 import com.daduo.api.tiktokapi.model.CreditResponse;
 import com.daduo.api.tiktokapi.service.CreditService;
@@ -52,5 +53,14 @@ public class CreditController {
         response.setData(creditData);
         log.info("[END] Add credit with response: {}", response);
         return response;
+    }
+
+    @GetMapping("/order/{userId}")
+    @ApiOperation(value = "获取充值明细", notes = "获取充值订单明细")
+    public CreditOrders getCreditOrders(@PathVariable @ApiParam("用户ID") Long userId) {
+        log.info("[START] Get credit orders by user id: {}", userId);
+        CreditOrders orders = service.getCreditOrders(userId);
+        log.info("[END] Get credit orders with: {}", orders);
+        return orders;
     }
 }

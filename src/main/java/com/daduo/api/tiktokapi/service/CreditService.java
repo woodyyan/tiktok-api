@@ -4,13 +4,17 @@ import com.daduo.api.tiktokapi.entity.Credit;
 import com.daduo.api.tiktokapi.entity.CreditOrder;
 import com.daduo.api.tiktokapi.model.AccountData;
 import com.daduo.api.tiktokapi.model.CreditData;
+import com.daduo.api.tiktokapi.model.CreditOrders;
 import com.daduo.api.tiktokapi.model.CreditRequest;
 import com.daduo.api.tiktokapi.repository.CreditOrderRepository;
 import com.daduo.api.tiktokapi.repository.CreditRepository;
+import com.daduo.api.tiktokapi.translator.CreditOrderTranslator;
 import com.daduo.api.tiktokapi.translator.CreditTranslator;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CreditService {
@@ -28,6 +32,9 @@ public class CreditService {
 
     @Autowired
     private CreditOrderRepository creditOrderRepository;
+
+    @Autowired
+    private CreditOrderTranslator creditOrderTranslator;
 
     public CreditData getCreditById(Long userId) {
         Credit credit = repository.findByUserId(userId);
@@ -97,5 +104,10 @@ public class CreditService {
         credit.setUserId(userId);
         credit.setPoints(0);
         return repository.save(credit);
+    }
+
+    public CreditOrders getCreditOrders(Long userId) {
+        List<CreditOrder> creditOrders = creditOrderRepository.findAllByUserId(userId);
+        return creditOrderTranslator.toCreditOrders(creditOrders);
     }
 }
