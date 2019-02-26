@@ -4,16 +4,15 @@ import com.daduo.api.tiktokapi.entity.Credit;
 import com.daduo.api.tiktokapi.entity.ExchangeOrder;
 import com.daduo.api.tiktokapi.entity.ProductOrder;
 import com.daduo.api.tiktokapi.enums.OrderStatus;
-import com.daduo.api.tiktokapi.model.ExchangeRequest;
-import com.daduo.api.tiktokapi.model.ExchangeResponse;
-import com.daduo.api.tiktokapi.model.ProductOrderRequest;
-import com.daduo.api.tiktokapi.model.ProductOrderResponse;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.repository.CreditRepository;
 import com.daduo.api.tiktokapi.repository.ExchangeOrderRepository;
 import com.daduo.api.tiktokapi.repository.ProductOrderRepository;
 import com.daduo.api.tiktokapi.translator.ExchangeTranslator;
 import com.daduo.api.tiktokapi.translator.ProductOrderTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -69,5 +68,30 @@ public class OrderService {
         Credit credit = creditRepository.findByUserId(userId);
         credit.setPoints(credit.getPoints() - price);
         creditRepository.saveAndFlush(credit);
+    }
+
+    public ProductOrders getProductOrders(Pageable page) {
+        Page<ProductOrder> productOrderPage = productOrderRepository.findAll(page);
+        return productTranslator.toProductOrders(productOrderPage);
+    }
+
+    public ProductOrderResponse updateProductOrder(Integer productOrderId, ProductOrderRequest productOrderRequest) {
+        Optional<ProductOrder> optionalProductOrder = productOrderRepository.findById(Long.valueOf(productOrderId));
+        if (optionalProductOrder.isPresent()) {
+            ProductOrder productOrder = optionalProductOrder.get();
+            if (productOrderRequest.getStatus() != null) {
+                productOrder.setStatus(productOrderRequest.getStatus());
+            }
+            if (productOrderRequest.getCount() != null) {
+                productOrder.setCount(productOrderRequest.getCount());
+            }
+            if (productOrderRequest.getTotalPrice() != null) {
+                productOrder.setPrice(productOrderRequest.getTotalPrice());
+            }
+            ProductOrder savedProductOrder = productOrderRepository.saveAndFlush(productOrder);
+            return productTranslator.translateToResponse(savedProductOrder);
+        } else {
+            throw buildNotFoundErrorException("订单ID找不到，请确认ID是否正确。");
+        }
     }
 }

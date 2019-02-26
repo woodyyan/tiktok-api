@@ -1,10 +1,12 @@
 package com.daduo.api.tiktokapi.model;
 
 import com.daduo.api.tiktokapi.enums.AccountStatus;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
+@ApiModel("账号请求")
 public class AccountRequest {
     @ApiModelProperty(value = "昵称", example = "张三")
     private String nickname;

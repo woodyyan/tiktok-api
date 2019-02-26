@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.entity;
 
+import com.daduo.api.tiktokapi.enums.ProductOrderStatus;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
@@ -23,7 +24,13 @@ public class ProductOrder {
 
     @Column(name = "price")
     private Integer price;
-    
+
+    @Column(name = "count")
+    private Integer count;
+
+    @Column(name = "status")
+    private ProductOrderStatus status;
+
     @Column(name = "created_time")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime", parameters = {
             @org.hibernate.annotations.Parameter(name = "databaseZone", value = "Asia/Shanghai")
