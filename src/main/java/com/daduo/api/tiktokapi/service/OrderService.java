@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.service;
 
+import com.daduo.api.tiktokapi.entity.Credit;
 import com.daduo.api.tiktokapi.entity.ExchangeOrder;
 import com.daduo.api.tiktokapi.entity.ProductOrder;
 import com.daduo.api.tiktokapi.enums.OrderStatus;
@@ -7,6 +8,7 @@ import com.daduo.api.tiktokapi.model.ExchangeRequest;
 import com.daduo.api.tiktokapi.model.ExchangeResponse;
 import com.daduo.api.tiktokapi.model.ProductOrderRequest;
 import com.daduo.api.tiktokapi.model.ProductOrderResponse;
+import com.daduo.api.tiktokapi.repository.CreditRepository;
 import com.daduo.api.tiktokapi.repository.ExchangeOrderRepository;
 import com.daduo.api.tiktokapi.repository.ProductOrderRepository;
 import com.daduo.api.tiktokapi.translator.ExchangeTranslator;
@@ -33,6 +35,9 @@ public class OrderService {
     @Autowired
     private ProductOrderRepository productOrderRepository;
 
+    @Autowired
+    private CreditRepository creditRepository;
+
     public ExchangeResponse createExchangeMoneyOrder(ExchangeRequest exchangeRequest) {
         ExchangeOrder order = translator.translateToExchangeOrder(exchangeRequest);
         repository.save(order);
@@ -55,7 +60,14 @@ public class OrderService {
 
     public ProductOrderResponse createProductOrder(ProductOrderRequest productOrderRequest) {
         ProductOrder productOrder = productTranslator.translate(productOrderRequest);
+        deductPoints(productOrder.getUserId(), productOrder.getPrice());
         ProductOrder savedOrder = productOrderRepository.save(productOrder);
         return productTranslator.translateToResponse(savedOrder);
+    }
+
+    private void deductPoints(Long userId, Integer price) {
+        Credit credit = creditRepository.findByUserId(userId);
+        credit.setPoints(credit.getPoints() - price);
+        creditRepository.saveAndFlush(credit);
     }
 }
