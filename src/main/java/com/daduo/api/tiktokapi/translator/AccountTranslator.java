@@ -71,6 +71,7 @@ public class AccountTranslator {
         data.setNickname(account.getNickname());
         data.setName(account.getName());
         data.setWechat(account.getWechat());
+        data.setCanTask(account.getCanTask());
         data.setStatus(account.getStatus());
         data.setCredit(credit.getCredit());
         data.setPoints(credit.getPoints());

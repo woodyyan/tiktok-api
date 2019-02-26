@@ -76,6 +76,7 @@ public class FinancialService {
         int topUpPresentedCreditAmount = creditOrders.stream().mapToInt(CreditOrder::getPresentedCredit).sum() / creditOfPerRmb;
         info.setTopUpPresentedCreditAmount(topUpPresentedCreditAmount);
 
+        //TODO 还有几个值没有实现
         //毛利总额:
         info.setGrossProfitAmount(1);
 
@@ -135,6 +136,7 @@ public class FinancialService {
         return orders.stream().mapToInt(ProductOrder::getPrice).sum();
     }
 
+    //TODO 还有4个方法没实现
     private Integer getExchangeMoney(Long id) {
         return 1;
     }

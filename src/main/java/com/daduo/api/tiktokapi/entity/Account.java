@@ -66,4 +66,7 @@ public class Account {
 
     @Column(name = "shipping_phone")
     private Long shippingPhone;
+
+    @Column(name = "can_task")
+    private Boolean canTask;
 }

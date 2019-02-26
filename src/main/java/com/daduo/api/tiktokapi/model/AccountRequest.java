@@ -29,4 +29,7 @@ public class AccountRequest {
 
     @ApiModelProperty(value = "状态")
     private AccountStatus status;
+
+    @ApiModelProperty(value = "激活刷单")
+    private Boolean canTask;
 }
