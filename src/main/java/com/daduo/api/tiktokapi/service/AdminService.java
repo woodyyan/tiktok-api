@@ -94,4 +94,8 @@ public class AdminService {
             throw ErrorBuilder.buildNotFoundErrorException("用户不存在");
         }
     }
+
+    public void deleteAdminUser(Long adminId) {
+        repository.deleteById(adminId);
+    }
 }

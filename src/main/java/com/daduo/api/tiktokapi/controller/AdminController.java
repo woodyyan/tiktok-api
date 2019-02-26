@@ -43,6 +43,15 @@ public class AdminController {
         return response;
     }
 
+    @DeleteMapping("/{adminId}")
+    @ApiOperation(value = "删除管理员接口")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteAdminUser(@PathVariable @ApiParam("管理员ID") Long adminId) {
+        log.info("[START] Delete admin user with id: {}", adminId);
+        service.deleteAdminUser(adminId);
+        log.info("[END] Delete admin user.");
+    }
+
     @PostMapping("/resetPassword")
     @ApiOperation(value = "重置密码接口")
     public void resetPassword(@RequestBody @ApiParam("重置密码请求") ResetAdminPasswordRequest request) {
