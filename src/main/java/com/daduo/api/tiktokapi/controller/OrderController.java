@@ -22,11 +22,20 @@ public class OrderController {
     private OrderService service;
 
     @PostMapping("/exchange")
-    @ApiOperation(value = "创建兑换现金订单")
+    @ApiOperation(value = "创建兑换现金订单", notes = "付款方式ExchangeMethod：WECHAT, ALIPAY")
     public ExchangeResponse createExchangeMoneyOrder(@RequestBody @ApiParam("兑换现金请求") ExchangeRequest exchangeRequest) {
         log.info("[START] Create exchange money order with request: {}", exchangeRequest);
         ExchangeResponse response = service.createExchangeMoneyOrder(exchangeRequest);
         log.info("[END] Create exchange money order with response: {}", response);
+        return response;
+    }
+
+    @GetMapping("/exchange/{userId}")
+    @ApiOperation(value = "获取兑换现金订单")
+    public ExchangeOrders getExchangeMoneyOrders(@PathVariable @ApiParam("用户ID") Long userId) {
+        log.info("[START] Get exchange money orders with user id: {}", userId);
+        ExchangeOrders response = service.getExchangeMoneyOrders(userId);
+        log.info("[END] Get exchange money orders with response: {}", response);
         return response;
     }
 

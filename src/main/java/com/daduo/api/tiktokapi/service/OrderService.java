@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.daduo.api.tiktokapi.model.error.ErrorBuilder.buildNotFoundErrorException;
@@ -44,6 +45,11 @@ public class OrderService {
         response.setMessage("提交成功，请等客服审核之后付款。");
         response.setStatus("SUCCESS");
         return response;
+    }
+
+    public ExchangeOrders getExchangeMoneyOrders(Long userId) {
+        List<ExchangeOrder> orders = repository.findAllByUserId(userId);
+        return translator.toExchangeOrders(orders);
     }
 
     public void updateExchangeOrderStatus(Long id, OrderStatus status) {
