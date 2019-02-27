@@ -11,4 +11,6 @@ public class LoginRequest {
     private Long phoneNumber;
     @ApiModelProperty(value = "验证码", required = true)
     private Integer code;
+    @ApiModelProperty(value = "推广人的USER ID", required = false)
+    private Long promotionUserId;
 }

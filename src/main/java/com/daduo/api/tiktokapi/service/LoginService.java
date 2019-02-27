@@ -8,6 +8,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.daduo.api.tiktokapi.entity.Account;
+import com.daduo.api.tiktokapi.entity.Promotion;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.AuthenticationCodeResponse;
 import com.daduo.api.tiktokapi.model.LoginRequest;
@@ -15,8 +16,10 @@ import com.daduo.api.tiktokapi.model.LoginResponse;
 import com.daduo.api.tiktokapi.model.PlatformLoginRequest;
 import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.repository.AccountRepository;
+import com.daduo.api.tiktokapi.repository.PromotionRepository;
 import com.daduo.api.tiktokapi.translator.AccountTranslator;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,12 @@ public class LoginService {
     @Autowired
     private AccountTranslator translator;
 
+    @Autowired
+    private PromotionRepository promotionRepository;
+
+    @Autowired
+    private AccountService accountService;
+
     public LoginResponse login(LoginRequest loginRequest) {
         verifyCode(loginRequest);
         Account account = repository.findOneByPhoneNumber(loginRequest.getPhoneNumber());
@@ -40,7 +49,20 @@ public class LoginService {
         } else {
             Account newAccount = translator.translateToAccount(loginRequest.getPhoneNumber());
             Account savedAccount = repository.save(newAccount);
+            savePromotion(loginRequest.getPromotionUserId(), savedAccount.getId());
             return translator.translateToLoginResponse(savedAccount, generateToken(savedAccount));
+        }
+    }
+
+    private void savePromotion(Long promotionUserId, Long childUserId) {
+        if (promotionUserId != null) {
+            Promotion promotion = new Promotion();
+            promotion.setPromotionUserId(promotionUserId);
+            promotion.setChildUserId(childUserId);
+            promotion.setCreatedTime(LocalDateTime.now());
+            String nickname = accountService.getAccountNickname(childUserId);
+            promotion.setChildNickname(nickname);
+            promotionRepository.save(promotion);
         }
     }
 
@@ -76,6 +98,7 @@ public class LoginService {
     }
 
     public LoginResponse platformLogin(PlatformLoginRequest platformLoginRequest) {
+//        savePromotion(platformLoginRequest.getPromotionUserId(), platformLoginRequest.getId());
         return null;
     }
 

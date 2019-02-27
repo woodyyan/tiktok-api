@@ -11,4 +11,6 @@ public class PlatformLoginRequest {
     private AuthData authData;
     @ApiModelProperty(value = "平台名字", example = "wechat")
     private String platform;
+    @ApiModelProperty(value = "推广人的USER ID")
+    private Long promotionUserId;
 }
