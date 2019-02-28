@@ -21,6 +21,7 @@ public class CreditOrderTranslator {
             creditOrderData.setLastModifiedTime(creditOrder.getLastModifiedTime().toDateTime());
             creditOrderData.setId(creditOrder.getId());
             creditOrderData.setPoints(creditOrder.getPoints());
+            creditOrderData.setMoney(creditOrder.getMoney());
             creditOrderData.setUserId(creditOrder.getUserId());
             data.add(creditOrderData);
         }

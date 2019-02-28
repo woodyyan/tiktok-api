@@ -27,6 +27,9 @@ public class CreditOrder {
     @Column(name = "presented_credit", nullable = false)
     private int presentedCredit;
 
+    @Column(name = "money")
+    private Integer money;
+
     @Column(name = "created_time")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime", parameters = {
             @org.hibernate.annotations.Parameter(name = "databaseZone", value = "Asia/Shanghai")

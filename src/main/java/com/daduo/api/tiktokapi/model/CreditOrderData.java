@@ -28,4 +28,7 @@ public class CreditOrderData {
 
     @ApiModelProperty(value = "用户ID")
     private Long userId;
+
+    @ApiModelProperty(value = "金额")
+    private Integer money;
 }
