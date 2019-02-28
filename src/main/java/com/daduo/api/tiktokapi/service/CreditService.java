@@ -42,7 +42,8 @@ public class CreditService {
             credit = addDefaultCredit(userId);
         }
         String nickname = accountService.getAccountNickname(userId);
-        return translator.translateToCreditData(credit, nickname);
+        String avatar = accountService.getAccountAvatar(userId);
+        return translator.translateToCreditData(credit, nickname, avatar);
     }
 
     public CreditData modifyCredit(CreditRequest creditRequest) {
@@ -61,7 +62,7 @@ public class CreditService {
         saveCreditOrder(creditRequest, presentedCredit);
         Credit savedCredit = repository.saveAndFlush(credit);
         AccountData account = accountService.getAccount(creditRequest.getUserId());
-        return translator.translateToCreditData(savedCredit, account.getNickname());
+        return translator.translateToCreditData(savedCredit, account.getNickname(), account.getAvatar());
     }
 
     private int calculatePresentedCredit(Integer credit) {

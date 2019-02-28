@@ -122,6 +122,15 @@ public class AccountService {
         }
     }
 
+    String getAccountAvatar(Long userId) {
+        Optional<Account> account = repository.findById(userId);
+        if (account.isPresent()) {
+            return account.get().getAvatar();
+        } else {
+            throw buildNotFoundErrorException("账号找不到，请确认ID是否正确。");
+        }
+    }
+
     public OnlineAccounts getAllOnlineAccounts() {
         clearOffline();
         List<AccountOnline> all = onlineRepository.findAll();

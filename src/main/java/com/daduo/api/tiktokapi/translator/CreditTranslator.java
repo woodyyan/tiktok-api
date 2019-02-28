@@ -12,7 +12,7 @@ public class CreditTranslator {
     @Autowired
     private ReferenceValueService referenceValueService;
 
-    public CreditData translateToCreditData(Credit credit, String nickname) {
+    public CreditData translateToCreditData(Credit credit, String nickname, String avatar) {
         Integer pointsOfPerRmb = referenceValueService.searchByName("pointsOfPerRmb");
 
         CreditData data = new CreditData();
@@ -21,6 +21,7 @@ public class CreditTranslator {
         data.setPoints(credit.getPoints());
         data.setMoney(credit.getPoints() / pointsOfPerRmb);
         data.setUserId(credit.getUserId());
+        data.setAvatar(avatar);
         data.setNickname(nickname);
         data.setCreatedTime(credit.getCreatedTime().toDateTime());
         data.setLastModifiedTime(credit.getLastModifiedTime().toDateTime());

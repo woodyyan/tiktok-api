@@ -20,4 +20,7 @@ public class CreditData extends BaseModel {
     private int money;
     @ApiModelProperty(value = "昵称")
     private String nickname;
+
+    @ApiModelProperty(value = "头像")
+    private String avatar;
 }
