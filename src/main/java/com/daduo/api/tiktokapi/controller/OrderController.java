@@ -69,7 +69,7 @@ public class OrderController {
     }
 
     @GetMapping("/product")
-    @ApiOperation(value = "获取所有兑换商品订单")
+    @ApiOperation(value = "获取所有兑换商品订单（后台）")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "请求第几页",
                     defaultValue = "0", dataType = "integer", paramType = "query"),
@@ -82,6 +82,23 @@ public class OrderController {
         log.info("[START] Get all product orders with paging: {}", page);
         ProductOrders response = service.getProductOrders(page);
         log.info("[END] Get all product orders with response: {}", response);
+        return response;
+    }
+
+    @GetMapping("/product/{userId}")
+    @ApiOperation(value = "获取用户兑换商品订单明细列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "请求第几页",
+                    defaultValue = "0", dataType = "integer", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "一页的总数",
+                    defaultValue = "20", dataType = "integer", paramType = "query")
+    })
+    public ProductOrders getUserProductOrders(@PathVariable @ApiParam("用户ID") Long userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+    @ApiParam(value = "分页")
+            Pageable page) {
+        log.info("[START] Get user product orders with id: {}, page: {}", userId, page);
+        ProductOrders response = service.getUserProductOrders(userId, page);
+        log.info("[END] Get user product orders with response: {}", response);
         return response;
     }
 }

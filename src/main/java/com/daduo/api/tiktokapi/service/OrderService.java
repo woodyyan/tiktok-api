@@ -81,6 +81,11 @@ public class OrderService {
         return productTranslator.toProductOrders(productOrderPage);
     }
 
+    public ProductOrders getUserProductOrders(Long userId, Pageable page) {
+        Page<ProductOrder> productOrderPage = productOrderRepository.findAllByUserId(userId, page);
+        return productTranslator.toProductOrders(productOrderPage);
+    }
+
     public ProductOrderResponse updateProductOrder(Integer productOrderId, ProductOrderRequest productOrderRequest) {
         Optional<ProductOrder> optionalProductOrder = productOrderRepository.findById(Long.valueOf(productOrderId));
         if (optionalProductOrder.isPresent()) {
