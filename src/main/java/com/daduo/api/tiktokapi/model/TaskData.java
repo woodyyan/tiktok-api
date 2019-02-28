@@ -27,9 +27,9 @@ public class TaskData extends BaseModel {
     @ApiModelProperty(value = "任务项")
     private List<TaskItem> items = new ArrayList<>();
     @ApiModelProperty(value = "任务积分价格")
-    private Double pointPrice;
+    private Integer pointPrice;
     @ApiModelProperty(value = "任务充值币价格")
-    private Double creditPrice;
+    private Integer creditPrice;
     @ApiModelProperty(value = "任务状态")
     private TaskStatus status;
     @ApiModelProperty(value = "置顶")

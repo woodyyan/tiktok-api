@@ -12,6 +12,10 @@ import java.util.List;
 public class Tasks {
     @ApiModelProperty(value = "任务集合")
     private List<TaskData> data = new ArrayList<>();
+
+    @ApiModelProperty(value = "总积分")
+    private Integer totalPoints;
+
     @ApiModelProperty(value = "分页数据")
     private PagingMeta meta = new PagingMeta();
 }

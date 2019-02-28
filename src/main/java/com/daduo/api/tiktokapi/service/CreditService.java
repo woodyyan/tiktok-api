@@ -91,7 +91,9 @@ public class CreditService {
         creditOrder.setUserId(creditRequest.getUserId());
         creditOrder.setCredit(creditRequest.getCredit());
         Integer creditOfPerRmb = referenceValueService.searchByName("creditOfPerRmb");
-        creditOrder.setMoney(creditRequest.getCredit() / creditOfPerRmb);
+        if (creditRequest.getCredit() != null) {
+            creditOrder.setMoney(creditRequest.getCredit() / creditOfPerRmb);
+        }
         creditOrder.setPresentedCredit(presentedCredit);
         creditOrder.setPoints(creditRequest.getPoints());
         creditOrder.setCreatedTime(LocalDateTime.now());

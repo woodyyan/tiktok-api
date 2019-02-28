@@ -65,6 +65,7 @@ public class TaskTranslator {
         meta.setTotalElements(entities.getTotalElements());
         meta.setTotalPages(entities.getTotalPages());
         tasks.setMeta(meta);
+        tasks.setTotalPoints(data.stream().mapToInt(TaskData::getPointPrice).sum());
         return tasks;
     }
 
@@ -90,6 +91,8 @@ public class TaskTranslator {
         data.setOwnerId(taskEntity.getOwnerId());
         data.setStatus(taskEntity.getStatus());
         data.setSticky(taskEntity.isSticky());
+        data.setPointPrice(taskEntity.getTotalPoints());
+        data.setCreditPrice(taskEntity.getTotalCredit());
         data.setUrl(taskEntity.getUrl());
         data.setPlatform(taskEntity.getPlatform());
         data.setActive(taskEntity.isActive());
