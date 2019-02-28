@@ -34,7 +34,7 @@ public class ProductOrderTranslator {
 
     private ProductOrderData getProductOrderData(ProductOrder productOrder) {
         ProductOrderData data = new ProductOrderData();
-        data.setId(Long.valueOf(productOrder.getId()));
+        data.setId(productOrder.getId());
         data.setProductId(productOrder.getProductId());
         data.setUserId(productOrder.getUserId());
         data.setPrice(productOrder.getPrice());
@@ -59,6 +59,8 @@ public class ProductOrderTranslator {
         meta.setTotalElements(productOrderPage.getTotalElements());
         meta.setTotalPages(productOrderPage.getTotalPages());
         result.setMeta(meta);
+
+        result.setTotalPoints(data.stream().mapToInt(ProductOrderData::getPrice).sum());
         return result;
     }
 }

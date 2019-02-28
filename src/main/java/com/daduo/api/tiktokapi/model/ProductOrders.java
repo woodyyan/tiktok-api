@@ -14,4 +14,6 @@ public class ProductOrders {
     private List<ProductOrderData> data = new ArrayList<>();
     @ApiModelProperty(value = "分页")
     private PagingMeta meta;
+    @ApiModelProperty(value = "总积分")
+    private Integer totalPoints;
 }
