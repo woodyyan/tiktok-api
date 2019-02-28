@@ -181,8 +181,8 @@ public class TaskService {
         return response;
     }
 
-    public TaskOrders searchTaskOrders(Long userId) {
-        List<TaskOrder> orders = orderRepository.findAllByUserId(userId);
+    public TaskOrders searchTaskOrders(Long userId, Pageable page) {
+        Page<TaskOrder> orders = orderRepository.findAllByUserId(userId, page);
         return orderTranslator.translateToTaskOrders(orders);
     }
 }

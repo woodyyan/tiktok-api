@@ -3,13 +3,12 @@ package com.daduo.api.tiktokapi.translator;
 import com.daduo.api.tiktokapi.entity.TaskEntity;
 import com.daduo.api.tiktokapi.entity.TaskOrder;
 import com.daduo.api.tiktokapi.enums.TaskOrderStatus;
-import com.daduo.api.tiktokapi.model.TaskOrderData;
-import com.daduo.api.tiktokapi.model.TaskOrderRequest;
-import com.daduo.api.tiktokapi.model.TaskOrders;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.repository.TaskRepository;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -25,13 +24,22 @@ public class TaskOrderTranslator {
     @Autowired
     private TaskRepository repository;
 
-    public TaskOrders translateToTaskOrders(List<TaskOrder> orders) {
+    public TaskOrders translateToTaskOrders(Page<TaskOrder> orders) {
         List<TaskOrderData> orderList = new ArrayList<>();
         for (TaskOrder order : orders) {
             orderList.add(translateToTaskOrderData(order));
         }
         TaskOrders taskOrders = new TaskOrders();
         taskOrders.setData(orderList);
+
+        PagingMeta meta = new PagingMeta();
+        meta.setPageNumber(orders.getNumber());
+        meta.setPageSize(orders.getSize());
+        meta.setTotalElements(orders.getTotalElements());
+        meta.setTotalPages(orders.getTotalPages());
+        taskOrders.setMeta(meta);
+
+        taskOrders.setTotalPoints(orderList.stream().map(TaskOrderData::getTask).mapToInt(TaskData::getPointPrice).sum());
         return taskOrders;
     }
 

@@ -92,9 +92,17 @@ public class TaskController {
 
     @GetMapping("/order")
     @ApiOperation("搜索任务订单")
-    public TaskOrders searchTaskOrders(@RequestParam @ApiParam(value = "用户ID") Long userId) {
-        log.info("[START] search task orders with userId: {}", userId);
-        TaskOrders orders = service.searchTaskOrders(userId);
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "请求第几页",
+                    defaultValue = "0", dataType = "integer", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "一页的总数",
+                    defaultValue = "20", dataType = "integer", paramType = "query")
+    })
+    public TaskOrders searchTaskOrders(@RequestParam @ApiParam(value = "用户ID") Long userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+    @ApiParam(value = "分页")
+            Pageable page) {
+        log.info("[START] search task orders with userId: {}, page: {}", userId, page);
+        TaskOrders orders = service.searchTaskOrders(userId, page);
         log.info("[END] search task orders with userId: {}", userId);
         return orders;
     }
