@@ -4,7 +4,9 @@ import com.daduo.api.tiktokapi.entity.Credit;
 import com.daduo.api.tiktokapi.entity.ExchangeOrder;
 import com.daduo.api.tiktokapi.entity.ProductOrder;
 import com.daduo.api.tiktokapi.enums.OrderStatus;
+import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.repository.CreditRepository;
 import com.daduo.api.tiktokapi.repository.ExchangeOrderRepository;
 import com.daduo.api.tiktokapi.repository.ProductOrderRepository;
@@ -13,6 +15,7 @@ import com.daduo.api.tiktokapi.translator.ProductOrderTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,8 +41,21 @@ public class OrderService {
     @Autowired
     private CreditRepository creditRepository;
 
+    @Autowired
+    private ReferenceValueService referenceValueService;
+
     public ExchangeResponse createExchangeMoneyOrder(ExchangeRequest exchangeRequest) {
-        ExchangeOrder order = translator.translateToExchangeOrder(exchangeRequest);
+        Integer pointsOfPerRmb = referenceValueService.searchByName("pointsOfPerRmb");
+        Integer points = pointsOfPerRmb * exchangeRequest.getMoney();
+        Credit credit = creditRepository.findByUserId(exchangeRequest.getUserId());
+        if (credit.getPoints() < points) {
+            Error error = new Error();
+            error.setTitle("余额不足");
+            error.setDetails("余额不足，请充值。");
+            error.setStatus("412");
+            throw new ErrorException(HttpStatus.OK, error);
+        }
+        ExchangeOrder order = translator.translateToExchangeOrder(exchangeRequest, points);
         repository.save(order);
         ExchangeResponse response = new ExchangeResponse();
         response.setMessage("提交成功，请等客服审核之后付款。");

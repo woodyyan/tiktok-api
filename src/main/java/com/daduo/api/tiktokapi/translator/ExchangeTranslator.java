@@ -13,10 +13,11 @@ import java.util.List;
 
 @Component
 public class ExchangeTranslator {
-    public ExchangeOrder translateToExchangeOrder(ExchangeRequest exchangeRequest) {
+    public ExchangeOrder translateToExchangeOrder(ExchangeRequest exchangeRequest, Integer points) {
         ExchangeOrder order = new ExchangeOrder();
         order.setMethod(exchangeRequest.getExchangeMethod());
         order.setMoney(exchangeRequest.getMoney());
+        order.setPoints(points);
         order.setImageUrl(exchangeRequest.getOtherImageUrl());
         order.setPayQrCodeImageUrl(exchangeRequest.getPayQrCodeImageUrl());
         order.setUserId(exchangeRequest.getUserId());
@@ -37,12 +38,14 @@ public class ExchangeTranslator {
             exchangeOrderData.setMethod(order.getMethod());
             exchangeOrderData.setPayQrCodeImageUrl(order.getPayQrCodeImageUrl());
             exchangeOrderData.setStatus(order.getStatus());
+            exchangeOrderData.setPoints(order.getPoints());
             exchangeOrderData.setUserId(order.getUserId());
             exchangeOrderData.setCreatedTime(order.getCreatedTime().toDateTime());
             exchangeOrderData.setLastModifiedTime(order.getLastModifiedTime().toDateTime());
             data.add(exchangeOrderData);
         }
         exchangeOrders.setData(data);
+        exchangeOrders.setTotalPoints(data.stream().mapToInt(ExchangeOrderData::getPoints).sum());
         return exchangeOrders;
     }
 }

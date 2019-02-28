@@ -12,4 +12,7 @@ import java.util.List;
 public class ExchangeOrders {
     @ApiModelProperty(value = "兑换订单数据们")
     private List<ExchangeOrderData> data = new ArrayList<>();
+
+    @ApiModelProperty(value = "总积分")
+    private Integer totalPoints;
 }

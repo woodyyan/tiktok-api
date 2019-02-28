@@ -28,4 +28,7 @@ public class ExchangeOrderData {
     private DateTime createdTime;
     @ApiModelProperty(value = "修改时间")
     private DateTime lastModifiedTime;
+
+    @ApiModelProperty(value = "积分")
+    private Integer points;
 }
