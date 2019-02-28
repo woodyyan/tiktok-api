@@ -1,21 +1,31 @@
 package com.daduo.api.tiktokapi.translator;
 
 import com.daduo.api.tiktokapi.entity.TaskEntity;
+import com.daduo.api.tiktokapi.entity.TaskOrder;
 import com.daduo.api.tiktokapi.enums.TaskItem;
+import com.daduo.api.tiktokapi.enums.TaskOrderStatus;
 import com.daduo.api.tiktokapi.enums.TaskStatus;
 import com.daduo.api.tiktokapi.model.PagingMeta;
 import com.daduo.api.tiktokapi.model.TaskData;
 import com.daduo.api.tiktokapi.model.TaskRequest;
 import com.daduo.api.tiktokapi.model.Tasks;
+import com.daduo.api.tiktokapi.model.base.BaseModel;
+import com.daduo.api.tiktokapi.repository.TaskOrderRepository;
 import org.joda.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Component
 public class TaskTranslator {
+    @Autowired
+    private TaskOrderRepository taskOrderRepository;
+
     public TaskData translateToTaskResponse(TaskEntity savedTask) {
         return translateTaskData(savedTask);
     }
@@ -65,6 +75,14 @@ public class TaskTranslator {
         meta.setTotalElements(entities.getTotalElements());
         meta.setTotalPages(entities.getTotalPages());
         tasks.setMeta(meta);
+
+        tasks.setTotalCount(data.stream().mapToInt(TaskData::getCount).sum());
+        int completedCount = 0;
+        for (Long taskId : data.stream().map(BaseModel::getId).collect(toList())) {
+            List<TaskOrder> orders = taskOrderRepository.findAllByTaskId(taskId);
+            completedCount += Math.toIntExact(orders.stream().filter(it -> it.getStatus().equals(TaskOrderStatus.COMPLETED)).count());
+        }
+        tasks.setCompletedCount(completedCount);
         tasks.setTotalPoints(data.stream().mapToInt(TaskData::getPointPrice).sum());
         return tasks;
     }

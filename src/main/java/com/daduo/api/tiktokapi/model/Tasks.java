@@ -18,4 +18,10 @@ public class Tasks {
 
     @ApiModelProperty(value = "分页数据")
     private PagingMeta meta = new PagingMeta();
+
+    @ApiModelProperty(value = "总次数")
+    private Integer totalCount;
+
+    @ApiModelProperty(value = "已完成次数")
+    private Integer completedCount;
 }
