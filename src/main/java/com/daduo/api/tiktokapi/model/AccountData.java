@@ -34,7 +34,7 @@ public class AccountData extends BaseModel {
     private AccountStatus status;
 
     @ApiModelProperty(value = "激活刷单")
-    private boolean canTask;
+    private Boolean canTask;
 
     @ApiModelProperty(value = "充值币")
     private Integer credit;
