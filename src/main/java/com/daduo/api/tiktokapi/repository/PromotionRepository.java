@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface PromotionRepository extends JpaRepository<Promotion, Long> {
     List<Promotion> findAllByPromotionUserId(Long userId);
+
+    Integer countByChildUserId(Long childUserId);
 }
