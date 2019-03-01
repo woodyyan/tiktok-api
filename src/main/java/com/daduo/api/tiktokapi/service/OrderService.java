@@ -2,6 +2,7 @@ package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.Credit;
 import com.daduo.api.tiktokapi.entity.ExchangeOrder;
+import com.daduo.api.tiktokapi.entity.Product;
 import com.daduo.api.tiktokapi.entity.ProductOrder;
 import com.daduo.api.tiktokapi.enums.OrderStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
@@ -10,6 +11,7 @@ import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.repository.CreditRepository;
 import com.daduo.api.tiktokapi.repository.ExchangeOrderRepository;
 import com.daduo.api.tiktokapi.repository.ProductOrderRepository;
+import com.daduo.api.tiktokapi.repository.ProductRepository;
 import com.daduo.api.tiktokapi.translator.ExchangeTranslator;
 import com.daduo.api.tiktokapi.translator.ProductOrderTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +46,14 @@ public class OrderService {
     @Autowired
     private ReferenceValueService referenceValueService;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     public ExchangeResponse createExchangeMoneyOrder(ExchangeRequest exchangeRequest) {
         Integer pointsOfPerRmb = referenceValueService.searchByName("pointsOfPerRmb");
         Integer points = pointsOfPerRmb * exchangeRequest.getMoney();
         Credit credit = creditRepository.findByUserId(exchangeRequest.getUserId());
-        if (credit.getPoints() < points) {
+        if (credit == null || credit.getPoints() < points) {
             Error error = new Error();
             error.setTitle("余额不足");
             error.setDetails("余额不足，请充值。");
@@ -61,6 +66,23 @@ public class OrderService {
         response.setMessage("提交成功，请等客服审核之后付款。");
         response.setStatus("SUCCESS");
         return response;
+    }
+
+    public ProductOrderResponse createProductOrder(ProductOrderRequest productOrderRequest) {
+        Credit credit = creditRepository.findByUserId(productOrderRequest.getUserId());
+        Integer totalPrice = productOrderRequest.getTotalPrice() != null ? productOrderRequest.getTotalPrice() : 0;
+        if (credit == null || credit.getPoints() < totalPrice) {
+            Error error = new Error();
+            error.setTitle("余额不足");
+            error.setDetails("余额不足，请充值。");
+            error.setStatus("412");
+            throw new ErrorException(HttpStatus.OK, error);
+        }
+
+        ProductOrder productOrder = productTranslator.translate(productOrderRequest);
+        deductPoints(productOrder.getUserId(), productOrder.getPrice());
+        ProductOrder savedOrder = productOrderRepository.save(productOrder);
+        return productTranslator.translateToResponse(savedOrder);
     }
 
     public ExchangeOrders getExchangeMoneyOrders(Long userId) {
@@ -77,13 +99,6 @@ public class OrderService {
         } else {
             throw buildNotFoundErrorException("ID找不到，请确认ID是否正确。");
         }
-    }
-
-    public ProductOrderResponse createProductOrder(ProductOrderRequest productOrderRequest) {
-        ProductOrder productOrder = productTranslator.translate(productOrderRequest);
-        deductPoints(productOrder.getUserId(), productOrder.getPrice());
-        ProductOrder savedOrder = productOrderRepository.save(productOrder);
-        return productTranslator.translateToResponse(savedOrder);
     }
 
     private void deductPoints(Long userId, Integer price) {

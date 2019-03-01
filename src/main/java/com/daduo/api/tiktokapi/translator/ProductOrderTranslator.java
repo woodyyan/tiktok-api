@@ -1,6 +1,7 @@
 package com.daduo.api.tiktokapi.translator;
 
 import com.daduo.api.tiktokapi.entity.ProductOrder;
+import com.daduo.api.tiktokapi.enums.ProductOrderStatus;
 import com.daduo.api.tiktokapi.model.*;
 import org.joda.time.LocalDateTime;
 import org.springframework.data.domain.Page;
@@ -16,9 +17,9 @@ public class ProductOrderTranslator {
         ProductOrder order = new ProductOrder();
         order.setProductId(productOrderRequest.getProductId());
         order.setUserId(productOrderRequest.getUserId());
-        order.setPrice(productOrderRequest.getTotalPrice());
-        order.setCount(productOrderRequest.getCount());
-        order.setStatus(productOrderRequest.getStatus());
+        order.setPrice(productOrderRequest.getTotalPrice() != null ? productOrderRequest.getTotalPrice() : 0);
+        order.setCount(productOrderRequest.getCount() != null ? productOrderRequest.getCount() : 0);
+        order.setStatus(productOrderRequest.getStatus() != null ? productOrderRequest.getStatus() : ProductOrderStatus.IN_REVIEW);
         LocalDateTime now = LocalDateTime.now();
         order.setCreatedTime(now);
         order.setLastModifiedTime(now);
