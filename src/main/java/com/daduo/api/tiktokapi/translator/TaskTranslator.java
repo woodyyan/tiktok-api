@@ -50,7 +50,7 @@ public class TaskTranslator {
         task.setName(taskRequest.getName());
         task.setOwnerId(taskRequest.getOwnerId());
         task.setStatus(TaskStatus.IN_PROGRESS);
-        task.setSticky(taskRequest.isSticky());
+        task.setSticky(taskRequest.getIsSticky());
         task.setCount(taskRequest.getCount());
         task.setActive(true);
         task.setUrl(taskRequest.getUrl());

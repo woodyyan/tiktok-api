@@ -84,9 +84,15 @@ public class TaskService {
             if (taskRequest.getStatus() != null) {
                 task.setStatus(taskRequest.getStatus());
             }
-            task.setSticky(taskRequest.isSticky());
-            task.setCount(taskRequest.getCount());
-            task.setActive(taskRequest.isActive());
+            if (taskRequest.getIsSticky() != null) {
+                task.setSticky(taskRequest.getIsSticky());
+            }
+            if (taskRequest.getCount() != null) {
+                task.setCount(taskRequest.getCount());
+            }
+            if (taskRequest.getIsActive()) {
+                task.setActive(taskRequest.getIsActive());
+            }
             if (taskRequest.getUrl() != null) {
                 task.setUrl(taskRequest.getUrl());
             }
@@ -157,7 +163,7 @@ public class TaskService {
 
     private DeductResult deductPoints(Long ownerId, TaskRequest taskRequest) {
         int pointPrice = getPointPrice(taskRequest.getItems(), taskRequest.getPlatform());
-        int totalPointPrice = taskRequest.isSticky() ? (int) (pointPrice * taskRequest.getCount() * STICKY_PERCENT) : pointPrice * taskRequest.getCount();
+        int totalPointPrice = taskRequest.getIsSticky() ? (int) (pointPrice * taskRequest.getCount() * STICKY_PERCENT) : pointPrice * taskRequest.getCount();
         Integer commissionPercent = referenceValueService.searchByName("commissionPercent");
         totalPointPrice = totalPointPrice * ((100 + commissionPercent) / 100);
         CreditData creditData = creditService.getCreditById(ownerId);

@@ -25,13 +25,13 @@ public class TaskRequest {
     @ApiModelProperty(value = "任务项")
     private List<TaskItem> items = new ArrayList<>();
     @ApiModelProperty(value = "次数")
-    private int count;
+    private Integer count;
     @ApiModelProperty(value = "平台")
     private PlatformType platform;
     @ApiModelProperty(value = "置顶", example = "false")
-    private boolean isSticky = false;
+    private Boolean isSticky = false;
     @ApiModelProperty(value = "任务状态")
     private TaskStatus status;
     @Column(name = "是否激活")
-    private boolean isActive = true;
+    private Boolean isActive = true;
 }
