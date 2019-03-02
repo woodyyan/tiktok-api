@@ -79,12 +79,16 @@ public class TaskTranslator {
         tasks.setTotalCount(data.stream().mapToInt(TaskData::getCount).sum());
         int completedCount = 0;
         for (Long taskId : data.stream().map(BaseModel::getId).collect(toList())) {
-            List<TaskOrder> orders = taskOrderRepository.findAllByTaskId(taskId);
-            completedCount += Math.toIntExact(orders.stream().filter(it -> it.getStatus().equals(TaskOrderStatus.COMPLETED)).count());
+            completedCount += getCompletedCountByTaskId(taskId);
         }
         tasks.setCompletedCount(completedCount);
         tasks.setTotalPoints(data.stream().mapToInt(TaskData::getPointPrice).sum());
         return tasks;
+    }
+
+    private Integer getCompletedCountByTaskId(Long taskId) {
+        List<TaskOrder> orders = taskOrderRepository.findAllByTaskId(taskId);
+        return Math.toIntExact(orders.stream().filter(it -> it.getStatus().equals(TaskOrderStatus.COMPLETED)).count());
     }
 
     private TaskData translateTaskData(TaskEntity taskEntity) {
@@ -113,6 +117,7 @@ public class TaskTranslator {
         data.setCreditPrice(taskEntity.getTotalCredit());
         data.setUrl(taskEntity.getUrl());
         data.setPlatform(taskEntity.getPlatform());
+        data.setCompletedCount(getCompletedCountByTaskId(taskEntity.getId()));
         data.setActive(taskEntity.isActive());
         data.setLastModifiedTime(taskEntity.getLastModifiedTime().toDateTime());
         return data;

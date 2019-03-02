@@ -40,4 +40,6 @@ public class TaskData extends BaseModel {
     private boolean isActive;
     @ApiModelProperty(value = "次数")
     private int count;
+    @ApiModelProperty(value = "已完成次数")
+    private Integer completedCount;
 }
