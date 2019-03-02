@@ -26,6 +26,8 @@ public class CreditOrderTranslator {
             data.add(creditOrderData);
         }
         result.setData(data);
+
+        result.setTotalPoints(data.stream().mapToInt(CreditOrderData::getPoints).sum());
         return result;
     }
 }

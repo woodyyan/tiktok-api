@@ -12,4 +12,6 @@ import java.util.List;
 public class CreditOrders {
     @ApiModelProperty(value = "充值订单数据")
     private List<CreditOrderData> data = new ArrayList<>();
+    @ApiModelProperty(value = "总积分")
+    private Integer totalPoints;
 }
