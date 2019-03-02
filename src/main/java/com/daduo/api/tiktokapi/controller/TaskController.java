@@ -42,6 +42,18 @@ public class TaskController {
         return response;
     }
 
+    @PutMapping("/{taskId}")
+    @ApiOperation(value = "修改任务", notes = "进行中IN_PROGRESS, 已完成COMPLETED, 已终止TERMINATED。任务项：点赞是LIKE, 点击率是CLICK_RATE, 关注是FOLLOW, 评论是COMMENT。平台platfromType：DOUYIN, KUAISHOU")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public TaskResponse modifyTask(@PathVariable @ApiParam("任务ID") Long taskId, @RequestBody @ApiParam(value = "任务Json") TaskRequest taskRequest) {
+        log.info("[START] Modify task with task id: {}, request: {}", taskId, taskRequest);
+        TaskData taskData = service.modifyTask(taskId, taskRequest);
+        log.info("[END] Modify task with response: {}", taskData);
+        TaskResponse response = new TaskResponse();
+        response.setData(taskData);
+        return response;
+    }
+
     @GetMapping("/{taskId}")
     @ApiOperation("获取任务")
     public TaskResponse getTask(@PathVariable @ApiParam(value = "任务ID") Long taskId) {

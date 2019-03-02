@@ -13,6 +13,7 @@ import com.daduo.api.tiktokapi.repository.TaskOrderRepository;
 import com.daduo.api.tiktokapi.repository.TaskRepository;
 import com.daduo.api.tiktokapi.translator.TaskOrderTranslator;
 import com.daduo.api.tiktokapi.translator.TaskTranslator;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,6 +52,52 @@ public class TaskService {
         task.setTotalPoints(result.getPoints());
         TaskEntity savedTask = repository.save(task);
         return translator.translateToTaskResponse(savedTask);
+    }
+
+    public TaskData modifyTask(Long taskId, TaskRequest taskRequest) {
+        Optional<TaskEntity> taskEntity = repository.findById(taskId);
+        if (taskEntity.isPresent()) {
+            TaskEntity task = taskEntity.get();
+            task.setLastModifiedTime(LocalDateTime.now());
+            if (taskRequest.getDescription() != null) {
+                task.setDescription(taskRequest.getDescription());
+            }
+            if (taskRequest.getItems() != null) {
+                for (TaskItem item : taskRequest.getItems()) {
+                    if (item == TaskItem.CLICK_RATE) {
+                        task.setNeedPlay(true);
+                    } else if (item == TaskItem.COMMENT) {
+                        task.setNeedComment(true);
+                    } else if (item == TaskItem.FOLLOW) {
+                        task.setNeedFollow(true);
+                    } else if (item == TaskItem.LIKE) {
+                        task.setNeedLike(true);
+                    }
+                }
+            }
+            if (taskRequest.getName() != null) {
+                task.setName(taskRequest.getName());
+            }
+            if (taskRequest.getOwnerId() != null) {
+                task.setOwnerId(taskRequest.getOwnerId());
+            }
+            if (taskRequest.getStatus() != null) {
+                task.setStatus(taskRequest.getStatus());
+            }
+            task.setSticky(taskRequest.isSticky());
+            task.setCount(taskRequest.getCount());
+            task.setActive(taskRequest.isActive());
+            if (taskRequest.getUrl() != null) {
+                task.setUrl(taskRequest.getUrl());
+            }
+            if (taskRequest.getPlatform() != null) {
+                task.setPlatform(taskRequest.getPlatform());
+            }
+            TaskEntity savedTask = repository.saveAndFlush(task);
+            return translator.translateToTaskResponse(savedTask);
+        } else {
+            throw ErrorBuilder.buildNotFoundErrorException("Task找不到，请确认ID是否正确。");
+        }
     }
 
     private int getPointPrice(List<TaskItem> items, PlatformType platform) {
