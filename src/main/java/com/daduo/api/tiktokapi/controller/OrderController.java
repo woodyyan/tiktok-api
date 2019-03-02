@@ -39,8 +39,25 @@ public class OrderController {
         return response;
     }
 
+    @GetMapping("/exchange")
+    @ApiOperation(value = "获取所有兑换现金订单（后台）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "请求第几页",
+                    defaultValue = "0", dataType = "integer", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "一页的总数",
+                    defaultValue = "20", dataType = "integer", paramType = "query")
+    })
+    public AllExchangeOrders getAllExchangeMoneyOrders(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+                                                    @ApiParam(value = "分页")
+                                                            Pageable page) {
+        log.info("[START] Get all exchange money orders with page: {}", page);
+        AllExchangeOrders response = service.getAllExchangeMoneyOrders(page);
+        log.info("[END] Get all exchange money orders with response: {}", response);
+        return response;
+    }
+
     @PutMapping("/exchange/{id}")
-    @ApiOperation(value = "审核通过兑换现金订单")
+    @ApiOperation(value = "审核通过兑换现金订单", notes = "已付COMPLETED, 未付IN_REVIEW, 拒付REJECTED")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public void updateExchangeOrderStatus(@PathVariable Long id, @RequestParam @ApiParam("状态") OrderStatus status) {
         log.info("[START] Update exchange money order status with status: {}", status);

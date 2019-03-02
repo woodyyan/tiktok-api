@@ -2,7 +2,6 @@ package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.Credit;
 import com.daduo.api.tiktokapi.entity.ExchangeOrder;
-import com.daduo.api.tiktokapi.entity.Product;
 import com.daduo.api.tiktokapi.entity.ProductOrder;
 import com.daduo.api.tiktokapi.enums.OrderStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
@@ -88,6 +87,11 @@ public class OrderService {
     public ExchangeOrders getExchangeMoneyOrders(Long userId) {
         List<ExchangeOrder> orders = repository.findAllByUserId(userId);
         return translator.toExchangeOrders(orders);
+    }
+
+    public AllExchangeOrders getAllExchangeMoneyOrders(Pageable page) {
+        Page<ExchangeOrder> orders = repository.findAll(page);
+        return translator.toAllExchangeOrders(orders);
     }
 
     public void updateExchangeOrderStatus(Long id, OrderStatus status) {
