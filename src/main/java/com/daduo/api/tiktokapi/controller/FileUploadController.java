@@ -1,17 +1,15 @@
 package com.daduo.api.tiktokapi.controller;
 
-import com.daduo.api.tiktokapi.exception.ErrorException;
-import com.daduo.api.tiktokapi.model.error.Error;
+import com.aliyun.oss.OSSClient;
 import com.daduo.api.tiktokapi.service.FileUploadService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -25,25 +23,20 @@ public class FileUploadController {
     @Autowired
     private FileUploadService storageService;
 
-    @PostMapping("/avatar")
-    @ApiOperation(value = "上传头像")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
-        if (!file.isEmpty()) {
-            try {
-                return storageService.store(file);
-            } catch (IOException | RuntimeException e) {
-                Error error = new Error();
-                error.setTitle("上传失败");
-                error.setDetails(e.getLocalizedMessage());
-                error.setStatus("400");
-                throw new ErrorException(HttpStatus.OK, error);
-            }
-        } else {
-            Error error = new Error();
-            error.setTitle("上传失败");
-            error.setDetails("文件不能为空。");
-            error.setStatus("400");
-            throw new ErrorException(HttpStatus.OK, error);
-        }
+    @Autowired
+    private ResourceLoader resourceLoader;
+
+    @PostMapping("/file/{folder}")
+    @ApiOperation(value = "上传文件", notes = "头像文件夹：avatar， 产品文件夹：product，任务文件夹：task")
+    public String upload(@PathVariable @ApiParam("文件夹名字") String folder, @RequestParam("file") MultipartFile file) throws IOException {
+        String endpoint = "http://oss-cn-shanghai.aliyuncs.com";
+        String accessKeyId = "LTAISI1YFdZQQtI9";
+        String accessKeySecret = "zcozoj7mTOZNbAjzLRV74C76gaO8u5";
+        String bucketName = "tiktok";
+        String objectName = folder + "/" + StringUtils.cleanPath(file.getOriginalFilename());
+        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+        ossClient.putObject(bucketName, objectName, file.getInputStream());
+        ossClient.shutdown();
+        return "https://tiktok.oss-cn-shanghai.aliyuncs.com/" + objectName;
     }
 }
