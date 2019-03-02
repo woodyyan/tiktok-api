@@ -27,7 +27,7 @@ public class FileUploadController {
     private ResourceLoader resourceLoader;
 
     @PostMapping("/file/{folder}")
-    @ApiOperation(value = "上传文件", notes = "头像文件夹：avatar， 产品文件夹：product，任务文件夹：task")
+    @ApiOperation(value = "上传文件", notes = "头像文件夹：avatar， 产品文件夹：product，任务文件夹：task， 收款码文件夹：qrcode")
     public String upload(@PathVariable @ApiParam("文件夹名字") String folder, @RequestParam("file") MultipartFile file) throws IOException {
         String endpoint = "http://oss-cn-shanghai.aliyuncs.com";
         String accessKeyId = "LTAISI1YFdZQQtI9";
