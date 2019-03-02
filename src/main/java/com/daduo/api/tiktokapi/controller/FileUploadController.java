@@ -1,16 +1,18 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.exception.ErrorException;
+import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.service.FileUploadService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
@@ -25,21 +27,23 @@ public class FileUploadController {
 
     @PostMapping("/avatar")
     @ApiOperation(value = "上传头像")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
+    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
             try {
-                storageService.store(file);
-                redirectAttributes.addFlashAttribute("message",
-                        "You successfully uploaded " + file.getOriginalFilename() + "!");
-
-                return "redirect:/";
+                return storageService.store(file);
             } catch (IOException | RuntimeException e) {
-                redirectAttributes.addFlashAttribute("message", "Failued to upload " + file.getOriginalFilename() + " => " + e.getMessage());
+                Error error = new Error();
+                error.setTitle("上传失败");
+                error.setDetails(e.getLocalizedMessage());
+                error.setStatus("400");
+                throw new ErrorException(HttpStatus.OK, error);
             }
         } else {
-            redirectAttributes.addFlashAttribute("message", "Failed to upload " + file.getOriginalFilename() + " because it was empty");
+            Error error = new Error();
+            error.setTitle("上传失败");
+            error.setDetails("文件不能为空。");
+            error.setStatus("400");
+            throw new ErrorException(HttpStatus.OK, error);
         }
-        return "You successfully uploaded.";
     }
 }
