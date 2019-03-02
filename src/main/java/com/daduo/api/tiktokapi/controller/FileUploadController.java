@@ -3,6 +3,7 @@ package com.daduo.api.tiktokapi.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,9 +13,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import static springfox.documentation.spring.web.paths.RelativePathProvider.ROOT;
+import java.nio.file.StandardCopyOption;
 
 @RequestMapping("/upload")
 @RestController
@@ -28,7 +29,11 @@ public class FileUploadController {
                                    RedirectAttributes redirectAttributes) {
         if (!file.isEmpty()) {
             try {
-                Files.copy(file.getInputStream(), Paths.get(ROOT, "files", "avatar", file.getOriginalFilename()));
+                Path rootLocation = Paths.get("files/avatars");
+                String filename = StringUtils.cleanPath(file.getOriginalFilename());
+                Files.copy(file.getInputStream(), rootLocation.resolve(filename),
+                        StandardCopyOption.REPLACE_EXISTING);
+//                Files.copy(file.getInputStream(), Paths.get(ROOT, "files", "avatar", file.getOriginalFilename()));
                 redirectAttributes.addFlashAttribute("message",
                         "You successfully uploaded " + file.getOriginalFilename() + "!");
             } catch (IOException | RuntimeException e) {
