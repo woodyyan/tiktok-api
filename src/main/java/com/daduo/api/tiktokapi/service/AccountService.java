@@ -113,7 +113,7 @@ public class AccountService {
         clearOffline();
     }
 
-    String getAccountNickname(Long userId) {
+    public String getAccountNickname(Long userId) {
         Optional<Account> account = repository.findById(userId);
         if (account.isPresent()) {
             return account.get().getNickname();

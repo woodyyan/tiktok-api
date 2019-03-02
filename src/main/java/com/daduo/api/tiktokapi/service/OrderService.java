@@ -4,6 +4,7 @@ import com.daduo.api.tiktokapi.entity.Credit;
 import com.daduo.api.tiktokapi.entity.ExchangeOrder;
 import com.daduo.api.tiktokapi.entity.ProductOrder;
 import com.daduo.api.tiktokapi.enums.OrderStatus;
+import com.daduo.api.tiktokapi.enums.ProductOrderStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.Error;
@@ -13,6 +14,7 @@ import com.daduo.api.tiktokapi.repository.ProductOrderRepository;
 import com.daduo.api.tiktokapi.repository.ProductRepository;
 import com.daduo.api.tiktokapi.translator.ExchangeTranslator;
 import com.daduo.api.tiktokapi.translator.ProductOrderTranslator;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -127,6 +129,9 @@ public class OrderService {
             ProductOrder productOrder = optionalProductOrder.get();
             if (productOrderRequest.getStatus() != null) {
                 productOrder.setStatus(productOrderRequest.getStatus());
+                if (productOrderRequest.getStatus().equals(ProductOrderStatus.ACCEPTED)) {
+                    productOrder.setPayTime(LocalDateTime.now());
+                }
             }
             if (productOrderRequest.getCount() != null) {
                 productOrder.setCount(productOrderRequest.getCount());

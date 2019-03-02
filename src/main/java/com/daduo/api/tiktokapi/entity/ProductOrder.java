@@ -31,6 +31,12 @@ public class ProductOrder {
     @Column(name = "status")
     private ProductOrderStatus status;
 
+    @Column(name = "pay_time")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime", parameters = {
+            @org.hibernate.annotations.Parameter(name = "databaseZone", value = "Asia/Shanghai")
+    })
+    private LocalDateTime payTime;
+
     @Column(name = "created_time")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime", parameters = {
             @org.hibernate.annotations.Parameter(name = "databaseZone", value = "Asia/Shanghai")
