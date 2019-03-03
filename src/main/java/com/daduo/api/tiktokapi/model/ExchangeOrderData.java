@@ -14,7 +14,7 @@ public class ExchangeOrderData {
     private Integer money;
     @ApiModelProperty(value = "ID")
     private Long id;
-    @ApiModelProperty(value = "图片链接")
+    @ApiModelProperty(value = "第二张图片链接")
     private String imageUrl;
     @ApiModelProperty(value = "付款方式")
     private ExchangeMethod method;
@@ -24,6 +24,8 @@ public class ExchangeOrderData {
     private OrderStatus status;
     @ApiModelProperty(value = "用户ID")
     private Long userId;
+    @ApiModelProperty(value = "会员昵称")
+    private String accountNickname;
     @ApiModelProperty(value = "创建时间")
     private DateTime createdTime;
     @ApiModelProperty(value = "修改时间")

@@ -3,7 +3,9 @@ package com.daduo.api.tiktokapi.translator;
 import com.daduo.api.tiktokapi.entity.ExchangeOrder;
 import com.daduo.api.tiktokapi.enums.OrderStatus;
 import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.service.AccountService;
 import org.joda.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,9 @@ import java.util.List;
 
 @Component
 public class ExchangeTranslator {
+    @Autowired
+    private AccountService accountService;
+
     public ExchangeOrder translateToExchangeOrder(ExchangeRequest exchangeRequest, Integer points) {
         ExchangeOrder order = new ExchangeOrder();
         order.setMethod(exchangeRequest.getExchangeMethod());
@@ -66,6 +71,8 @@ public class ExchangeTranslator {
         exchangeOrderData.setStatus(order.getStatus());
         exchangeOrderData.setPoints(order.getPoints());
         exchangeOrderData.setUserId(order.getUserId());
+        String nickname = accountService.getAccountNickname(order.getUserId());
+        exchangeOrderData.setAccountNickname(nickname);
         exchangeOrderData.setCreatedTime(order.getCreatedTime().toDateTime());
         exchangeOrderData.setLastModifiedTime(order.getLastModifiedTime().toDateTime());
         return exchangeOrderData;
