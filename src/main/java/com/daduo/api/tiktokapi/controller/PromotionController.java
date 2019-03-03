@@ -1,13 +1,15 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.model.AllPromotions;
 import com.daduo.api.tiktokapi.model.PromotionRequest;
 import com.daduo.api.tiktokapi.model.Promotions;
 import com.daduo.api.tiktokapi.service.PromotionService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,23 @@ public class PromotionController {
         Promotions promotions = service.getPromotions(userId);
         log.info("[END] Get promotion details with response: {}.", promotions);
         return promotions;
+    }
+
+    @GetMapping
+    @ApiOperation("获取全部推广明细（后台）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "请求第几页",
+                    defaultValue = "0", dataType = "integer", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "一页的总数",
+                    defaultValue = "20", dataType = "integer", paramType = "query")
+    })
+    public AllPromotions getAllPromotions(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+                                          @ApiParam(value = "分页")
+                                                  Pageable page) {
+        log.info("[START] Get all promotion details with page: {}.", page);
+        AllPromotions allPromotions = service.getAllPromotions(page);
+        log.info("[END] Get all promotion details with response: {}.", allPromotions);
+        return allPromotions;
     }
 
     @PostMapping

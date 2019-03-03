@@ -2,6 +2,7 @@ package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.Promotion;
 import com.daduo.api.tiktokapi.exception.ErrorException;
+import com.daduo.api.tiktokapi.model.AllPromotions;
 import com.daduo.api.tiktokapi.model.PromotionRequest;
 import com.daduo.api.tiktokapi.model.Promotions;
 import com.daduo.api.tiktokapi.model.error.Error;
@@ -9,6 +10,8 @@ import com.daduo.api.tiktokapi.repository.PromotionRepository;
 import com.daduo.api.tiktokapi.translator.PromotionTranslator;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -46,5 +49,10 @@ public class PromotionService {
         promotion.setPromotionUserId(promotionRequest.getPromotionUserId());
         promotion.setCreatedTime(LocalDateTime.now());
         repository.save(promotion);
+    }
+
+    public AllPromotions getAllPromotions(Pageable page) {
+        Page<Promotion> promotions = repository.findAll(page);
+        return translator.toAllPromotions(promotions);
     }
 }
