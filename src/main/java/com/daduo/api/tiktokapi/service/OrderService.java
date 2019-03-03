@@ -101,6 +101,9 @@ public class OrderService {
         if (order.isPresent()) {
             ExchangeOrder exchangeOrder = order.get();
             exchangeOrder.setStatus(status);
+            if (status.equals(OrderStatus.COMPLETED)) {
+                exchangeOrder.setPayTime(LocalDateTime.now());
+            }
             repository.saveAndFlush(exchangeOrder);
         } else {
             throw buildNotFoundErrorException("ID找不到，请确认ID是否正确。");

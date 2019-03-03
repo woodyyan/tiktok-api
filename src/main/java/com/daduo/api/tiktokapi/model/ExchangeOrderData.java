@@ -33,4 +33,7 @@ public class ExchangeOrderData {
 
     @ApiModelProperty(value = "积分")
     private Integer points;
+
+    @ApiModelProperty(value = "支付时间")
+    private DateTime payTime;
 }

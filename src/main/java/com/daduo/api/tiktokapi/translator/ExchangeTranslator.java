@@ -67,6 +67,9 @@ public class ExchangeTranslator {
         exchangeOrderData.setId(order.getId());
         exchangeOrderData.setImageUrl(order.getImageUrl());
         exchangeOrderData.setMethod(order.getMethod());
+        if (order.getPayTime() != null) {
+            exchangeOrderData.setPayTime(order.getPayTime().toDateTime());
+        }
         exchangeOrderData.setPayQrCodeImageUrl(order.getPayQrCodeImageUrl());
         exchangeOrderData.setStatus(order.getStatus());
         exchangeOrderData.setPoints(order.getPoints());

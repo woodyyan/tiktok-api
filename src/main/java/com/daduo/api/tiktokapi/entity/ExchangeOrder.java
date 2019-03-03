@@ -38,6 +38,9 @@ public class ExchangeOrder {
     @Column(name = "points")
     private Integer points;
 
+    @Column(name = "pay_time")
+    private LocalDateTime payTime;
+
     @Column(name = "created_time")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime", parameters = {
             @org.hibernate.annotations.Parameter(name = "databaseZone", value = "Asia/Shanghai")
