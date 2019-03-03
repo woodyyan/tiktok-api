@@ -1,6 +1,5 @@
 package com.daduo.api.tiktokapi.controller;
 
-import com.daduo.api.tiktokapi.enums.OrderStatus;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.service.OrderService;
 import io.swagger.annotations.*;
@@ -59,10 +58,10 @@ public class OrderController {
     @PutMapping("/exchange/{id}")
     @ApiOperation(value = "审核通过兑换现金订单", notes = "已付COMPLETED, 未付IN_REVIEW, 拒付REJECTED")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public void updateExchangeOrderStatus(@PathVariable Long id, @RequestParam @ApiParam("状态") OrderStatus status) {
-        log.info("[START] Update exchange money order status with status: {}", status);
-        service.updateExchangeOrderStatus(id, status);
-        log.info("[END] Update exchange money order status with status: {}", status);
+    public void updateExchangeOrderStatus(@PathVariable Long id, @RequestBody @ApiParam("修改现金订单请求") ExchangeOrderRequest request) {
+        log.info("[START] Update exchange money order status with status: {}", request);
+        service.updateExchangeOrderStatus(id, request.getStatus());
+        log.info("[END] Update exchange money order status with status: {}", request);
     }
 
     @PostMapping("/product")
