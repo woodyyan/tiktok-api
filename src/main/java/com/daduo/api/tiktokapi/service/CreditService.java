@@ -1,17 +1,15 @@
 package com.daduo.api.tiktokapi.service;
 
-import com.daduo.api.tiktokapi.entity.Credit;
-import com.daduo.api.tiktokapi.entity.CreditOrder;
-import com.daduo.api.tiktokapi.model.AccountData;
-import com.daduo.api.tiktokapi.model.CreditData;
-import com.daduo.api.tiktokapi.model.CreditOrders;
-import com.daduo.api.tiktokapi.model.CreditRequest;
-import com.daduo.api.tiktokapi.repository.CreditOrderRepository;
-import com.daduo.api.tiktokapi.repository.CreditRepository;
+import com.daduo.api.tiktokapi.entity.*;
+import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.repository.*;
 import com.daduo.api.tiktokapi.translator.CreditOrderTranslator;
 import com.daduo.api.tiktokapi.translator.CreditTranslator;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +33,18 @@ public class CreditService {
 
     @Autowired
     private CreditOrderTranslator creditOrderTranslator;
+
+    @Autowired
+    private TaskRepository taskRepository;
+
+    @Autowired
+    private TaskOrderRepository taskOrderRepository;
+
+    @Autowired
+    private ProductOrderRepository exchangeProductOrderRepository;
+
+    @Autowired
+    private ExchangeOrderRepository exchangeOrderRepository;
 
     public CreditData getCreditById(Long userId) {
         Credit credit = repository.findByUserId(userId);
@@ -116,5 +126,21 @@ public class CreditService {
     public CreditOrders getCreditOrders(Long userId) {
         List<CreditOrder> creditOrders = creditOrderRepository.findAllByUserId(userId);
         return creditOrderTranslator.toCreditOrders(creditOrders);
+    }
+
+    public MemberPointsInfo getUserPointsInfo(Long userId) {
+        //刷粉积分总额，刷单积分总额，兑换商品积分总额，兑换现金积分总额
+        Pageable page = PageRequest.of(0, 1000);
+        Page<TaskEntity> taskEntities = taskRepository.findAllByOwnerId(userId, page);
+        Page<TaskOrder> taskOrders = taskOrderRepository.findAllByUserId(userId, page);
+        List<ProductOrder> productOrders = exchangeProductOrderRepository.findAllByUserId(userId);
+        List<ExchangeOrder> exchangeOrders = exchangeOrderRepository.findAllByUserId(userId);
+
+        MemberPointsInfo info = new MemberPointsInfo();
+        info.setTotalTaskPoints(taskEntities.getContent().stream().mapToInt(TaskEntity::getTotalPoints).sum());
+        info.setTotalTaskOrderPoints(taskOrders.getContent().stream().map(TaskOrder::getTask).mapToInt(TaskEntity::getTotalPoints).sum());
+        info.setTotalExchangeProductPoints(productOrders.stream().mapToInt(ProductOrder::getPrice).sum());
+        info.setTotalExchangeMoneyPoints(exchangeOrders.stream().mapToInt(ExchangeOrder::getPoints).sum());
+        return info;
     }
 }

@@ -1,9 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
-import com.daduo.api.tiktokapi.model.CreditData;
-import com.daduo.api.tiktokapi.model.CreditOrders;
-import com.daduo.api.tiktokapi.model.CreditRequest;
-import com.daduo.api.tiktokapi.model.CreditResponse;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.service.CreditService;
 import com.daduo.api.tiktokapi.validator.AccountValidator;
 import com.daduo.api.tiktokapi.validator.CreditValidator;
@@ -62,5 +59,14 @@ public class CreditController {
         CreditOrders orders = service.getCreditOrders(userId);
         log.info("[END] Get credit orders with: {}", orders);
         return orders;
+    }
+
+    @GetMapping("/info/{userId}")
+    @ApiOperation(value = "获取会员积分资料（后台）")
+    public MemberPointsInfo getUserPointsInfo(@PathVariable @ApiParam("用户ID") Long userId) {
+        log.info("[START] Get user points info by user id: {}", userId);
+        MemberPointsInfo memberPointsInfo = service.getUserPointsInfo(userId);
+        log.info("[END] Get user points info with info: {}", memberPointsInfo);
+        return memberPointsInfo;
     }
 }
