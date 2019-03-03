@@ -1,12 +1,13 @@
 package com.daduo.api.tiktokapi.service;
 
+import com.daduo.api.tiktokapi.entity.Account;
 import com.daduo.api.tiktokapi.entity.Promotion;
 import com.daduo.api.tiktokapi.exception.ErrorException;
-import com.daduo.api.tiktokapi.model.AllPromotions;
-import com.daduo.api.tiktokapi.model.PromotionRequest;
-import com.daduo.api.tiktokapi.model.Promotions;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.Error;
+import com.daduo.api.tiktokapi.repository.AccountRepository;
 import com.daduo.api.tiktokapi.repository.PromotionRepository;
+import com.daduo.api.tiktokapi.translator.AccountTranslator;
 import com.daduo.api.tiktokapi.translator.PromotionTranslator;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PromotionService {
@@ -27,6 +29,12 @@ public class PromotionService {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private AccountTranslator accountTranslator;
 
     public Promotions getPromotions(Long userId) {
         List<Promotion> promotions = repository.findAllByPromotionUserId(userId);
@@ -54,5 +62,17 @@ public class PromotionService {
     public AllPromotions getAllPromotions(Pageable page) {
         Page<Promotion> promotions = repository.findAll(page);
         return translator.toAllPromotions(promotions);
+    }
+
+    public Accounts getAllChildUsers(Long userId) {
+        List<Promotion> promotions = repository.findAllByPromotionUserId(userId);
+        List<Long> childUserIds = promotions.stream().map(Promotion::getChildUserId).collect(Collectors.toList());
+        List<Account> accounts = accountRepository.findAllById(childUserIds);
+        Accounts result = new Accounts();
+        for (Account account : accounts) {
+            AccountData data = accountTranslator.toAccountData(account);
+            result.getData().add(data);
+        }
+        return result;
     }
 }

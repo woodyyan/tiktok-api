@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.model.Accounts;
 import com.daduo.api.tiktokapi.model.AllPromotions;
 import com.daduo.api.tiktokapi.model.PromotionRequest;
 import com.daduo.api.tiktokapi.model.Promotions;
@@ -52,6 +53,17 @@ public class PromotionController {
     @ApiOperation("推广绑定")
     @ResponseStatus(HttpStatus.CREATED)
     public void createPromotion(@RequestBody @ApiParam("推广请求") PromotionRequest promotionRequest) {
+        log.info("[START] Create promotion with request: {}.", promotionRequest);
         service.createPromotion(promotionRequest);
+        log.info("[END] Create promotion with request: {}.", promotionRequest);
+    }
+
+    @GetMapping("/child/{userId}")
+    @ApiOperation("获取所有下家（后台）")
+    public Accounts getAllChildUsers(@PathVariable @ApiParam("用户ID") Long userId) {
+        log.info("[START] Get all child users with id: {}.", userId);
+        Accounts accounts = service.getAllChildUsers(userId);
+        log.info("[END] Get all child users with acounts: {}.", accounts);
+        return accounts;
     }
 }
