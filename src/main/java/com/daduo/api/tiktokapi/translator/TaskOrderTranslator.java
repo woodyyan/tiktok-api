@@ -43,10 +43,9 @@ public class TaskOrderTranslator {
         return taskOrders;
     }
 
-    public TaskOrder translateToTaskOrder(TaskOrderRequest taskOrderRequest, TaskOrderStatus status) {
+    public TaskOrder translateToTaskOrder(TaskOrderRequest taskOrderRequest) {
         TaskOrder order = new TaskOrder();
-        order.setStatus(status);
-        order.setImageUrl(taskOrderRequest.getImageUrl());
+        order.setStatus(taskOrderRequest.getStatus());
         order.setUserId(taskOrderRequest.getUserId());
         order.setCreatedTime(LocalDateTime.now());
         order.setLastModifiedTime(LocalDateTime.now());
@@ -62,7 +61,6 @@ public class TaskOrderTranslator {
     public TaskOrderData translateToTaskOrderData(TaskOrder order) {
         TaskOrderData data = new TaskOrderData();
         data.setId(order.getId());
-        data.setImageUrl(order.getImageUrl());
         data.setUserId(order.getUserId());
         data.setCreatedTime(order.getCreatedTime().toDateTime());
         data.setLastModifiedTime(order.getLastModifiedTime().toDateTime());

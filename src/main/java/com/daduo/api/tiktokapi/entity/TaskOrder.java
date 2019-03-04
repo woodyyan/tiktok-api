@@ -16,9 +16,6 @@ public class TaskOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
     @Column(name = "user_id")
     private Long userId;
 

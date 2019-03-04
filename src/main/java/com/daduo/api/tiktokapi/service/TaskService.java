@@ -220,8 +220,7 @@ public class TaskService {
     }
 
     public TaskOrderResponse createTaskOrder(TaskOrderRequest taskOrderRequest) {
-        //TODO 先验证任务成功与否，再保存
-        TaskOrder order = orderTranslator.translateToTaskOrder(taskOrderRequest, TaskOrderStatus.COMPLETED);
+        TaskOrder order = orderTranslator.translateToTaskOrder(taskOrderRequest);
         TaskOrder save = orderRepository.saveAndFlush(order);
         TaskOrderData data = orderTranslator.translateToTaskOrderData(save);
         TaskOrderResponse response = new TaskOrderResponse();

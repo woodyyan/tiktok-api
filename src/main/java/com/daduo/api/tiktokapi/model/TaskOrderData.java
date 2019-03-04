@@ -13,8 +13,6 @@ import lombok.EqualsAndHashCode;
 public class TaskOrderData extends BaseModel {
     @ApiModelProperty(value = "任务")
     private TaskData task;
-    @ApiModelProperty(value = "任务截图OSS链接")
-    private String imageUrl;
     @ApiModelProperty(value = "完成任务用户ID")
     private Long userId;
     @ApiModelProperty(value = "订单状态")
