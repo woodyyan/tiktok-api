@@ -91,7 +91,7 @@ public class TaskController {
     }
 
     @PostMapping("/order")
-    @ApiOperation(value = "创建验证任务订单", notes = "TaskOrderStatus: COMPLETED完成, FAILED未完成")
+    @ApiOperation(value = "创建任务成功订单", notes = "TaskOrderStatus: COMPLETED完成, FAILED未完成")
     @ResponseStatus(value = HttpStatus.CREATED)
     public TaskOrderResponse createTaskOrder(@RequestBody @ApiParam(value = "验证任务请求Json") TaskOrderRequest taskOrderRequest) {
         accountValidator.validateUserIdExists(taskOrderRequest.getUserId());
