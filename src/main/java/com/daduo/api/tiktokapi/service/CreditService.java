@@ -137,10 +137,12 @@ public class CreditService {
         List<ExchangeOrder> exchangeOrders = exchangeOrderRepository.findAllByUserId(userId);
 
         MemberPointsInfo info = new MemberPointsInfo();
-        info.setTotalTaskPoints(taskEntities.getContent().stream().mapToInt(TaskEntity::getTotalPoints).sum());
-        info.setTotalTaskOrderPoints(taskOrders.getContent().stream().map(TaskOrder::getTask).mapToInt(TaskEntity::getTotalPoints).sum());
-        info.setTotalExchangeProductPoints(productOrders.stream().mapToInt(ProductOrder::getPrice).sum());
-        info.setTotalExchangeMoneyPoints(exchangeOrders.stream().mapToInt(ExchangeOrder::getPoints).sum());
+        int unit = 10000;
+        info.setTotalTaskPoints(taskEntities.getContent().stream().mapToInt(TaskEntity::getTotalPoints).sum() / unit);
+        info.setTotalTaskOrderPoints(taskOrders.getContent().stream().map(TaskOrder::getTask).mapToInt(TaskEntity::getTotalPoints).sum() / unit);
+        info.setTotalExchangeProductPoints(productOrders.stream().mapToInt(ProductOrder::getPrice).sum() / unit);
+        info.setTotalExchangeMoneyPoints(exchangeOrders.stream().mapToInt(ExchangeOrder::getPoints).sum() / unit
+        );
         return info;
     }
 }
