@@ -2,6 +2,7 @@ package com.daduo.api.tiktokapi.controller;
 
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.service.AccountService;
+import com.daduo.api.tiktokapi.service.OperateLogService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RequestMapping("/account")
 @RestController
 @Slf4j
@@ -19,6 +22,12 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private HttpServletRequest servletRequest;
+
+    @Autowired
+    private OperateLogService operateLogService;
 
     @PutMapping("/{userId}")
     @ApiOperation(value = "更新账号信息")
@@ -35,6 +44,7 @@ public class AccountController {
     @ApiOperation(value = "激活账号")
     public ActivationResult activateAccount(@RequestParam @ApiParam(value = "账号ID") Long userId) {
         log.info("[START] Activate account with userId: {}", userId);
+        operateLogService.addOperateLog("激活账号", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
         boolean isSuccess = accountService.activateAccount(userId);
         ActivationResult result = new ActivationResult();
         result.setSuccess(isSuccess);

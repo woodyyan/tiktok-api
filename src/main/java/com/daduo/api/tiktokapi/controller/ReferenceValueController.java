@@ -3,6 +3,7 @@ package com.daduo.api.tiktokapi.controller;
 import com.daduo.api.tiktokapi.model.ValueData;
 import com.daduo.api.tiktokapi.model.ValueResponse;
 import com.daduo.api.tiktokapi.model.ValueResponseRequest;
+import com.daduo.api.tiktokapi.service.OperateLogService;
 import com.daduo.api.tiktokapi.service.ReferenceValueService;
 import com.google.gson.JsonObject;
 import io.swagger.annotations.Api;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RequestMapping("/member/reference/values")
 @RestController
 @Slf4j
@@ -21,6 +24,12 @@ public class ReferenceValueController {
 
     @Autowired
     private ReferenceValueService service;
+
+    @Autowired
+    private HttpServletRequest servletRequest;
+
+    @Autowired
+    private OperateLogService operateLogService;
 
     @GetMapping()
     @ApiOperation("获取基础数据设置")
@@ -38,6 +47,7 @@ public class ReferenceValueController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ValueResponse modifyReferenceValues(@RequestBody @ApiParam("基础数据修改请求体") ValueResponseRequest request) {
         log.info("[START] Modify reference values with request: {}", request);
+        operateLogService.addOperateLog("修改基础数据", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
         ValueData data = service.modifyReferenceValues(request);
         ValueResponse response = new ValueResponse();
         response.setData(data);
@@ -46,7 +56,7 @@ public class ReferenceValueController {
     }
 
     @GetMapping("/{name}")
-    @ApiOperation(value = "查询基础数据设置",notes = "查询多个参数用逗号分隔")
+    @ApiOperation(value = "查询基础数据设置", notes = "查询多个参数用逗号分隔")
     public String getReferenceValues(@PathVariable @ApiParam("参数名") String name) {
         log.info("[START] Search reference value with name: {}", name);
         JsonObject value = service.searchReferenceValue(name);

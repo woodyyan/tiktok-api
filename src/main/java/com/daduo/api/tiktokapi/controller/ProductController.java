@@ -1,6 +1,7 @@
 package com.daduo.api.tiktokapi.controller;
 
 import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.service.OperateLogService;
 import com.daduo.api.tiktokapi.service.ProductService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RequestMapping("/store/product")
 @RestController
 @Slf4j
@@ -19,6 +22,12 @@ public class ProductController {
 
     @Autowired
     private ProductService service;
+
+    @Autowired
+    private HttpServletRequest servletRequest;
+
+    @Autowired
+    private OperateLogService operateLogService;
 
     @GetMapping("/sale")
     @ApiOperation("获取所有在售商品")
@@ -59,6 +68,7 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public ProductResponse addProduct(@RequestBody ProductRequest request) {
         log.info("[START] Add product with request: {}", request);
+        operateLogService.addOperateLog("添加商品", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
         ProductResponse response = service.addProduct(request);
         log.info("[END] Add product with response: {}", response);
         return response;
@@ -69,6 +79,7 @@ public class ProductController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ProductResponse modifyProduct(@PathVariable Long productId, @RequestBody ProductRequest request) {
         log.info("[START] Modify product with id: {}, request: {}", productId, request);
+        operateLogService.addOperateLog("修改商品", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
         ProductResponse response = service.modifyProduct(productId, request);
         log.info("[END] Modify product with response: {}", response);
         return response;

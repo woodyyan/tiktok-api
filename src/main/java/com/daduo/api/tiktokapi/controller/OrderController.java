@@ -1,6 +1,7 @@
 package com.daduo.api.tiktokapi.controller;
 
 import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.service.OperateLogService;
 import com.daduo.api.tiktokapi.service.OrderService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RequestMapping("/order")
 @RestController
 @Slf4j
@@ -19,6 +22,12 @@ public class OrderController {
 
     @Autowired
     private OrderService service;
+
+    @Autowired
+    private HttpServletRequest servletRequest;
+
+    @Autowired
+    private OperateLogService operateLogService;
 
     @PostMapping("/exchange")
     @ApiOperation(value = "创建兑换现金订单", notes = "付款方式ExchangeMethod：WECHAT, ALIPAY")
@@ -47,8 +56,8 @@ public class OrderController {
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
     public AllExchangeOrders getAllExchangeMoneyOrders(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
-                                                    @ApiParam(value = "分页")
-                                                            Pageable page) {
+                                                       @ApiParam(value = "分页")
+                                                               Pageable page) {
         log.info("[START] Get all exchange money orders with page: {}", page);
         AllExchangeOrders response = service.getAllExchangeMoneyOrders(page);
         log.info("[END] Get all exchange money orders with response: {}", response);
@@ -60,6 +69,7 @@ public class OrderController {
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public void updateExchangeOrderStatus(@PathVariable Long id, @RequestBody @ApiParam("修改现金订单请求") ExchangeOrderRequest request) {
         log.info("[START] Update exchange money order status with status: {}", request);
+        operateLogService.addOperateLog("审核通过兑换现金订单", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
         service.updateExchangeOrderStatus(id, request.getStatus());
         log.info("[END] Update exchange money order status with status: {}", request);
     }
@@ -79,6 +89,7 @@ public class OrderController {
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public ProductOrderResponse updateProductOrder(@PathVariable @ApiParam("商品订单ID") Integer productOrderId, @RequestBody @ApiParam("订单请求") ProductOrderRequest productOrderRequest) {
         log.info("[START] Update product order with request: {}", productOrderRequest);
+        operateLogService.addOperateLog("更新兑换商品订单", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
         ProductOrderResponse response = service.updateProductOrder(productOrderId, productOrderRequest);
         log.info("[END] Update product order with response: {}", response);
         return response;

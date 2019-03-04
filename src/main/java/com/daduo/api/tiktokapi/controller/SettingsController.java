@@ -1,6 +1,7 @@
 package com.daduo.api.tiktokapi.controller;
 
 import com.daduo.api.tiktokapi.model.ServiceContact;
+import com.daduo.api.tiktokapi.service.OperateLogService;
 import com.daduo.api.tiktokapi.service.SettingsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,6 +9,8 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/settings")
@@ -17,6 +20,12 @@ public class SettingsController {
 
     @Autowired
     private SettingsService service;
+
+    @Autowired
+    private HttpServletRequest servletRequest;
+
+    @Autowired
+    private OperateLogService operateLogService;
 
     @GetMapping("/contact")
     @ApiOperation("获取客服联系方式")
@@ -31,6 +40,7 @@ public class SettingsController {
     @ApiOperation("更新客服联系方式")
     public ServiceContact updateServiceContact(@RequestBody @ApiParam("客服信息") ServiceContact serviceContact) {
         log.info("[START] Update service contact with {}.", serviceContact);
+        operateLogService.addOperateLog("更新客服联系方式", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
         ServiceContact newContact = service.updateServiceContact(serviceContact);
         log.info("[END] Update service contact with {}.", newContact);
         return newContact;
