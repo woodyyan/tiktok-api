@@ -1,18 +1,25 @@
 package com.daduo.api.tiktokapi.translator;
 
 import com.daduo.api.tiktokapi.entity.Account;
+import com.daduo.api.tiktokapi.entity.AccountOnline;
 import com.daduo.api.tiktokapi.enums.AccountStatus;
 import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.repository.OnlineRepository;
 import com.daduo.api.tiktokapi.service.CreditService;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class AccountTranslator {
     @Autowired
     private CreditService creditService;
+
+    @Autowired
+    private OnlineRepository onlineRepository;
 
     public LoginResponse translateToLoginResponse(Account account, String token) {
         LoginResponse response = new LoginResponse();
@@ -73,8 +80,10 @@ public class AccountTranslator {
         data.setWechat(account.getWechat());
         data.setCanTask(account.getCanTask());
         data.setStatus(account.getStatus());
-        data.setCredit(credit.getCredit());
-        data.setPoints(credit.getPoints());
+        data.setCredit(credit.getCredit() / 10000);
+        data.setPoints(credit.getPoints() / 10000);
+        List<AccountOnline> onlineList = onlineRepository.findAllByUserId(account.getId());
+        data.setOnline(onlineList.size() > 0);
         return data;
     }
 }

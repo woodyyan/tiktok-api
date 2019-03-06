@@ -47,4 +47,7 @@ public class AccountData extends BaseModel {
 
     @ApiModelProperty(value = "收货电话")
     private Long shippingPhone;
+
+    @ApiModelProperty(value = "是否在线")
+    private boolean isOnline;
 }
