@@ -220,15 +220,21 @@ public class TaskService {
     }
 
     public TaskOrderResponse createTaskOrder(TaskOrderRequest taskOrderRequest) {
-        TaskOrder order = orderTranslator.translateToTaskOrder(taskOrderRequest);
-        TaskOrder save = orderRepository.saveAndFlush(order);
-        TaskOrderData data = orderTranslator.translateToTaskOrderData(save);
+        List<TaskOrder> existingOrders = orderRepository.findAllByUserIdAndTaskId(taskOrderRequest.getUserId(), taskOrderRequest.getTaskId());
         TaskOrderResponse response = new TaskOrderResponse();
-        response.setData(data);
-        if (data.getStatus() == TaskOrderStatus.COMPLETED) {
-            response.setMessage("任务验证成功。");
+        if (existingOrders.size() == 0) {
+            TaskOrder order = orderTranslator.translateToTaskOrder(taskOrderRequest);
+            TaskOrder save = orderRepository.saveAndFlush(order);
+            TaskOrderData data = orderTranslator.translateToTaskOrderData(save);
+            response.setData(data);
+            if (data.getStatus() == TaskOrderStatus.COMPLETED) {
+//                addPoints();
+                response.setMessage("任务验证成功。");
+            } else {
+                response.setMessage("任务验证失败。");
+            }
         } else {
-            response.setMessage("任务验证失败。");
+            response.setMessage("同一任务只能完成一次。");
         }
         return response;
     }
