@@ -6,6 +6,7 @@ import com.daduo.api.tiktokapi.enums.PlatformType;
 import com.daduo.api.tiktokapi.enums.TaskItem;
 import com.daduo.api.tiktokapi.enums.TaskOrderStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
+import com.daduo.api.tiktokapi.image.OCRService;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
@@ -223,16 +224,19 @@ public class TaskService {
         List<TaskOrder> existingOrders = orderRepository.findAllByUserIdAndTaskId(taskOrderRequest.getUserId(), taskOrderRequest.getTaskId());
         TaskOrderResponse response = new TaskOrderResponse();
         if (existingOrders.size() == 0) {
+            boolean isSuccess = OCRService.verifyTask(taskOrderRequest.getLikeImage(), taskOrderRequest.getCommentImage(), taskOrderRequest.getFollowImage());
             TaskOrder order = orderTranslator.translateToTaskOrder(taskOrderRequest);
+            if (isSuccess) {
+                order.setStatus(TaskOrderStatus.COMPLETED);
+//TODO                addPoints();
+                response.setMessage("任务验证成功。");
+            } else {
+                order.setStatus(TaskOrderStatus.FAILED);
+                response.setMessage("任务验证失败。");
+            }
             TaskOrder save = orderRepository.saveAndFlush(order);
             TaskOrderData data = orderTranslator.translateToTaskOrderData(save);
             response.setData(data);
-            if (data.getStatus() == TaskOrderStatus.COMPLETED) {
-//                addPoints();
-                response.setMessage("任务验证成功。");
-            } else {
-                response.setMessage("任务验证失败。");
-            }
         } else {
             response.setMessage("同一任务只能完成一次。");
         }

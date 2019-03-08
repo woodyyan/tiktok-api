@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.image.OCRService;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.service.AccountService;
 import com.daduo.api.tiktokapi.service.OperateLogService;
