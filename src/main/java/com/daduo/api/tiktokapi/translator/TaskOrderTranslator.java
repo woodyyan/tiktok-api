@@ -2,7 +2,6 @@ package com.daduo.api.tiktokapi.translator;
 
 import com.daduo.api.tiktokapi.entity.TaskEntity;
 import com.daduo.api.tiktokapi.entity.TaskOrder;
-import com.daduo.api.tiktokapi.enums.TaskOrderStatus;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.repository.TaskRepository;
@@ -48,6 +47,9 @@ public class TaskOrderTranslator {
         order.setStatus(taskOrderRequest.getStatus());
         order.setUserId(taskOrderRequest.getUserId());
         order.setCreatedTime(LocalDateTime.now());
+        order.setCommentImage(taskOrderRequest.getCommentImage());
+        order.setFollowImage(taskOrderRequest.getFollowImage());
+        order.setLikeImage(taskOrderRequest.getLikeImage());
         order.setLastModifiedTime(LocalDateTime.now());
         Optional<TaskEntity> task = repository.findById(taskOrderRequest.getTaskId());
         if (task.isPresent()) {
@@ -62,6 +64,9 @@ public class TaskOrderTranslator {
         TaskOrderData data = new TaskOrderData();
         data.setId(order.getId());
         data.setUserId(order.getUserId());
+        data.setCommentImage(order.getCommentImage());
+        data.setLikeImage(order.getLikeImage());
+        data.setFollowImage(order.getFollowImage());
         data.setCreatedTime(order.getCreatedTime().toDateTime());
         data.setLastModifiedTime(order.getLastModifiedTime().toDateTime());
         data.setStatus(order.getStatus());

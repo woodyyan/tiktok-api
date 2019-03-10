@@ -17,4 +17,13 @@ public class TaskOrderData extends BaseModel {
     private Long userId;
     @ApiModelProperty(value = "订单状态")
     private TaskOrderStatus status;
+
+    @ApiModelProperty(value = "评论截图")
+    private String commentImage;
+
+    @ApiModelProperty(value = "点赞截图")
+    private String likeImage;
+
+    @ApiModelProperty(value = "关注截图")
+    private String followImage;
 }

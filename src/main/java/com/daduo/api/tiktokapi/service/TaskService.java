@@ -46,6 +46,9 @@ public class TaskService {
     @Autowired
     private CreditService creditService;
 
+    @Autowired
+    private TaskRepository taskRepository;
+
     public TaskData publishTask(TaskRequest taskRequest) {
         DeductResult result = deductPoints(taskRequest.getOwnerId(), taskRequest);
         TaskEntity task = translator.translateToTask(taskRequest);
@@ -228,7 +231,7 @@ public class TaskService {
             TaskOrder order = orderTranslator.translateToTaskOrder(taskOrderRequest);
             if (isSuccess) {
                 order.setStatus(TaskOrderStatus.COMPLETED);
-//TODO                addPoints();
+                addPoints(taskOrderRequest.getUserId(), taskOrderRequest.getTaskId());
                 response.setMessage("任务验证成功。");
             } else {
                 order.setStatus(TaskOrderStatus.FAILED);
@@ -241,6 +244,17 @@ public class TaskService {
             response.setMessage("同一任务只能完成一次。");
         }
         return response;
+    }
+
+    private void addPoints(Long userId, Long taskId) {
+        CreditRequest request = new CreditRequest();
+        request.setUserId(userId);
+        Optional<TaskEntity> task = taskRepository.findById(taskId);
+        if (task.isPresent()) {
+            Integer points = task.get().getTotalPoints();
+            request.setPoints(points);
+            creditService.modifyCredit(request);
+        }
     }
 
     public TaskOrders searchTaskOrders(Long userId, Pageable page) {

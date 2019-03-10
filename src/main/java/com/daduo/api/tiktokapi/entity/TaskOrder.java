@@ -26,6 +26,15 @@ public class TaskOrder {
     @Column(name = "status")
     private TaskOrderStatus status;
 
+    @Column(name = "comment_image")
+    private String commentImage;
+
+    @Column(name = "follow_image")
+    private String followImage;
+
+    @Column(name = "like_image")
+    private String likeImage;
+
     @Column(name = "created_time")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime", parameters = {
             @org.hibernate.annotations.Parameter(name = "databaseZone", value = "Asia/Shanghai")
