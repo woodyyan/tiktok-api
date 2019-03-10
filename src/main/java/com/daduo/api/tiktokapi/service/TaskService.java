@@ -6,6 +6,7 @@ import com.daduo.api.tiktokapi.enums.PlatformType;
 import com.daduo.api.tiktokapi.enums.TaskItem;
 import com.daduo.api.tiktokapi.enums.TaskOrderStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
+import com.daduo.api.tiktokapi.image.ImageMatchService;
 import com.daduo.api.tiktokapi.image.OCRService;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.Error;
@@ -227,34 +228,55 @@ public class TaskService {
         List<TaskOrder> existingOrders = orderRepository.findAllByUserIdAndTaskId(taskOrderRequest.getUserId(), taskOrderRequest.getTaskId());
         TaskOrderResponse response = new TaskOrderResponse();
         if (existingOrders.size() == 0) {
-            boolean isSuccess = OCRService.verifyTask(taskOrderRequest.getLikeImage(), taskOrderRequest.getCommentImage(), taskOrderRequest.getFollowImage());
-            TaskOrder order = orderTranslator.translateToTaskOrder(taskOrderRequest);
-            if (isSuccess) {
-                order.setStatus(TaskOrderStatus.COMPLETED);
-                addPoints(taskOrderRequest.getUserId(), taskOrderRequest.getTaskId());
-                response.setMessage("任务验证成功。");
-            } else {
-                order.setStatus(TaskOrderStatus.FAILED);
-                response.setMessage("任务验证失败。");
+            Optional<TaskEntity> task = taskRepository.findById(taskOrderRequest.getTaskId());
+            if (task.isPresent()) {
+                boolean isSuccess = verifyTask(taskOrderRequest, task.get());
+
+                TaskOrder order = orderTranslator.translateToTaskOrder(taskOrderRequest);
+                if (isSuccess) {
+                    order.setStatus(TaskOrderStatus.COMPLETED);
+                    addPoints(taskOrderRequest.getUserId(), task.get());
+                    response.setMessage("任务验证成功。");
+                } else {
+                    order.setStatus(TaskOrderStatus.FAILED);
+                    response.setMessage("任务验证失败。");
+                }
+                TaskOrder save = orderRepository.saveAndFlush(order);
+                TaskOrderData data = orderTranslator.translateToTaskOrderData(save);
+                response.setData(data);
             }
-            TaskOrder save = orderRepository.saveAndFlush(order);
-            TaskOrderData data = orderTranslator.translateToTaskOrderData(save);
-            response.setData(data);
         } else {
             response.setMessage("同一任务只能完成一次。");
         }
         return response;
     }
 
-    private void addPoints(Long userId, Long taskId) {
+    private boolean verifyTask(TaskOrderRequest taskOrderRequest, TaskEntity task) {
+        boolean playSuccess = false;
+        boolean commentSuccess = false;
+        boolean likeSuccess = false;
+        boolean followSuccess = false;
+        if (task.isNeedPlay()) {
+            playSuccess = true;
+        }
+        if (task.isNeedLike()) {
+            likeSuccess = ImageMatchService.verifyTask(taskOrderRequest.getLikeImage(), ImageMatchService.VerifyType.LIKE);
+        }
+        if (task.isNeedFollow()) {
+            followSuccess = ImageMatchService.verifyTask(taskOrderRequest.getFollowImage(), ImageMatchService.VerifyType.FOLLOW);
+        }
+        if (task.isNeedComment()) {
+            commentSuccess = OCRService.verifyTask(taskOrderRequest.getCommentImage());
+        }
+        return playSuccess | commentSuccess | likeSuccess | followSuccess;
+    }
+
+    private void addPoints(Long userId, TaskEntity task) {
         CreditRequest request = new CreditRequest();
         request.setUserId(userId);
-        Optional<TaskEntity> task = taskRepository.findById(taskId);
-        if (task.isPresent()) {
-            Integer points = task.get().getTotalPoints();
-            request.setPoints(points);
-            creditService.modifyCredit(request);
-        }
+        Integer points = task.getTotalPoints();
+        request.setPoints(points);
+        creditService.modifyCredit(request);
     }
 
     public TaskOrders searchTaskOrders(Long userId, Pageable page) {

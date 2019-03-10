@@ -57,7 +57,7 @@ public class OCRService {
         return false;
     }
 
-    public static boolean verifyTask(String likeImage, String commentImage, String followImage) {
+    public static boolean verifyTask(String commentImage) {
         if (commentImage != null) {
             try {
                 String localImagePath = OSSUtils.getLocalImagePath(commentImage);
