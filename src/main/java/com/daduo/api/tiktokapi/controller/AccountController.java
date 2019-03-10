@@ -1,6 +1,5 @@
 package com.daduo.api.tiktokapi.controller;
 
-import com.daduo.api.tiktokapi.image.OCRService;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.service.AccountService;
 import com.daduo.api.tiktokapi.service.OperateLogService;
@@ -49,6 +48,20 @@ public class AccountController {
         boolean isSuccess = accountService.activateAccount(userId);
         ActivationResult result = new ActivationResult();
         result.setSuccess(isSuccess);
+        log.info("[END] Activated account with END: {}", result);
+        return result;
+    }
+
+    @PostMapping("/batch")
+    @ApiOperation(value = "批量激活账号（后台）")
+    public ActivationResult batchActivateAccount(@RequestBody @ApiParam(value = "账号IDs") UserIds userIds) {
+        log.info("[START] Activate account with userId: {}", userIds);
+        operateLogService.addOperateLog("激活账号", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
+        for (Long userId : userIds.getIds()) {
+            accountService.activateAccount(userId);
+        }
+        ActivationResult result = new ActivationResult();
+        result.setSuccess(true);
         log.info("[END] Activated account with END: {}", result);
         return result;
     }

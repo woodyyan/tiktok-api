@@ -36,7 +36,7 @@ public class AdminController {
     @ApiOperation(value = "登陆接口")
     public AdminResponse login(@RequestBody @ApiParam(value = "登陆请求Json") AdminLoginRequest loginRequest) {
         log.info("[START] Admin login with request: {}", loginRequest);
-        operateLogService.addOperateLog("添加管登陆", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
+        operateLogService.addOperateLog("管理员登陆", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
         AdminResponse response = service.login(loginRequest);
         log.info("[END] Admin login with response: {}", response);
         return response;
