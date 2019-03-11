@@ -177,4 +177,44 @@ public class FinancialService {
         }
         return detail;
     }
+
+    public OtherDataDetail getOtherDataDetail() {
+        List<Account> accounts = accountRepository.findAll();
+        OtherDataDetail detail = new OtherDataDetail();
+        for (Account account : accounts) {
+            OtherDataDetailData data = new OtherDataDetailData();
+            data.setAccountId(account.getId());
+            data.setAccountNickname(account.getNickname());
+            //充值币余额/万个
+            data.setCreditBalance(10);
+            //充值币总额/万个
+            data.setCreditSum(10);
+            //积分余额/万个
+            data.setPointsBalance(10);
+            //积分总额/万个
+            data.setPointsSum(10);
+            //刷粉额/元
+            data.setTaskCash(100);
+            //刷纷积分/万个
+            data.setTaskPoints(10);
+            //刷单额/元
+            data.setTaskOrderCash(100);
+            //刷单积分/万个
+            data.setTaskOrderPoints(10);
+            //兑换现金积分额/万个
+            data.setExchangeCashPoints(10);
+            //兑换商品积分额/万个
+            data.setExchangeProductPoints(10);
+            //佣金积分额/万个
+            data.setCommissionPoints(10);
+            //自动刷积分额/万个
+            data.setAutoTaskPoints(10);
+            //扣除会员积分额/万个
+            data.setCostAccountPoints(10);
+            //充值赠送充值币额/万个
+            data.setPresentedCredit(10);
+            detail.getData().add(data);
+        }
+        return detail;
+    }
 }

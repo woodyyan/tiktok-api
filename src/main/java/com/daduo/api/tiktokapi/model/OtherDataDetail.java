@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@ApiModel(value = "主要数据明细")
-public class MainDataDetail {
-
+@ApiModel(value = "其他数据明细")
+public class OtherDataDetail {
     @ApiModelProperty(value = "数据")
-    private List<MainDataDetailData> data = new ArrayList<>();
+    private List<OtherDataDetailData> data = new ArrayList<>();
 }
