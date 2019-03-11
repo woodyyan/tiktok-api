@@ -42,7 +42,7 @@ public class AccountController {
 
     @PostMapping("/{userId}")
     @ApiOperation(value = "激活账号")
-    public ActivationResult activateAccount(@RequestParam @ApiParam(value = "账号ID") Long userId) {
+    public ActivationResult activateAccount(@PathVariable @ApiParam(value = "账号ID") Long userId) {
         log.info("[START] Activate account with userId: {}", userId);
         operateLogService.addOperateLog("激活账号", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
         boolean isSuccess = accountService.activateAccount(userId);
