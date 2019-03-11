@@ -1,6 +1,7 @@
 package com.daduo.api.tiktokapi.controller;
 
 import com.daduo.api.tiktokapi.model.FinancialInfo;
+import com.daduo.api.tiktokapi.model.MainDataDetail;
 import com.daduo.api.tiktokapi.model.UserFinancialInfoResponse;
 import com.daduo.api.tiktokapi.service.FinancialService;
 import io.swagger.annotations.Api;
@@ -21,7 +22,7 @@ public class FinancialController {
     private FinancialService service;
 
     @GetMapping
-    @ApiOperation(value = "获取整体营收情况")
+    @ApiOperation(value = "获取整体营收情况（后台）")
     public FinancialInfo getAllFinancialInfo() {
         log.info("[START] Get all financial info.");
         FinancialInfo info = service.getAllFinancialInfo();
@@ -30,11 +31,20 @@ public class FinancialController {
     }
 
     @GetMapping("/user")
-    @ApiOperation(value = "获取会员财务情况")
+    @ApiOperation(value = "获取会员财务情况（后台）")
     public UserFinancialInfoResponse getAllUserFinancialInfo() {
         log.info("[START] Get all financial info by user.");
         UserFinancialInfoResponse info = service.getAllUserFinancialInfo();
         log.info("[END] Get all user financial info with {}.", info);
         return info;
+    }
+
+    @GetMapping("/main")
+    @ApiOperation(value = "获取主要数据明细（后台）")
+    public MainDataDetail getMainDataDetail() {
+        log.info("[START] Get main data detail.");
+        MainDataDetail detail = service.getMainDataDetail();
+        log.info("[END] Get main data detail with {}.", detail);
+        return detail;
     }
 }

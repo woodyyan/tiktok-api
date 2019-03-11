@@ -1,9 +1,7 @@
 package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.*;
-import com.daduo.api.tiktokapi.model.FinancialInfo;
-import com.daduo.api.tiktokapi.model.UserFinancialInfo;
-import com.daduo.api.tiktokapi.model.UserFinancialInfoResponse;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -151,5 +149,32 @@ public class FinancialService {
 
     private Integer getTopUpMoney(Long id) {
         return 1;
+    }
+
+    public MainDataDetail getMainDataDetail() {
+        MainDataDetail detail = new MainDataDetail();
+        List<Account> accounts = accountRepository.findAll();
+        for (Account account : accounts) {
+            MainDataDetailData data = new MainDataDetailData();
+            data.setAccountId(account.getId());
+            data.setAccountNickname(account.getNickname());
+            //TODO
+            //充值现金额（元）
+            data.setCash(1000);
+            //佣金额（元）
+            data.setCommissionMoney(1000);
+            //扣除积分额
+            data.setCostPoints(1000);
+            //自动刷任务额（元）
+            data.setAutoTaskCash(1000);
+            // 兑换现金额（元）
+            data.setExchangeCash(1000);
+            // 兑换商品额（元）
+            data.setExchangeProductCash(1000);
+            // 充值赠送充值币额（元）
+            data.setPresentedCreditCash(1000);
+            detail.getData().add(data);
+        }
+        return detail;
     }
 }
