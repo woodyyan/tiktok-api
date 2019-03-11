@@ -4,6 +4,8 @@ import com.daduo.api.tiktokapi.entity.*;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -151,9 +153,9 @@ public class FinancialService {
         return 1;
     }
 
-    public MainDataDetail getMainDataDetail() {
+    public MainDataDetail getMainDataDetail(Pageable page) {
         MainDataDetail detail = new MainDataDetail();
-        List<Account> accounts = accountRepository.findAll();
+        Page<Account> accounts = accountRepository.findAll(page);
         for (Account account : accounts) {
             MainDataDetailData data = new MainDataDetailData();
             data.setAccountId(account.getId());
@@ -175,11 +177,17 @@ public class FinancialService {
             data.setPresentedCreditCash(1000);
             detail.getData().add(data);
         }
+        PagingMeta meta = new PagingMeta();
+        meta.setPageNumber(accounts.getNumber());
+        meta.setPageSize(accounts.getSize());
+        meta.setTotalElements(accounts.getTotalElements());
+        meta.setTotalPages(accounts.getTotalPages());
+        detail.setMeta(meta);
         return detail;
     }
 
-    public OtherDataDetail getOtherDataDetail() {
-        List<Account> accounts = accountRepository.findAll();
+    public OtherDataDetail getOtherDataDetail(Pageable page) {
+        Page<Account> accounts = accountRepository.findAll(page);
         OtherDataDetail detail = new OtherDataDetail();
         for (Account account : accounts) {
             OtherDataDetailData data = new OtherDataDetailData();
@@ -215,6 +223,12 @@ public class FinancialService {
             data.setPresentedCredit(10);
             detail.getData().add(data);
         }
+        PagingMeta meta = new PagingMeta();
+        meta.setPageNumber(accounts.getNumber());
+        meta.setPageSize(accounts.getSize());
+        meta.setTotalElements(accounts.getTotalElements());
+        meta.setTotalPages(accounts.getTotalPages());
+        detail.setMeta(meta);
         return detail;
     }
 }

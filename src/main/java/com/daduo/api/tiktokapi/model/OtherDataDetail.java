@@ -12,4 +12,7 @@ import java.util.List;
 public class OtherDataDetail {
     @ApiModelProperty(value = "数据")
     private List<OtherDataDetailData> data = new ArrayList<>();
+
+    @ApiModelProperty(value = "分页")
+    private PagingMeta meta = new PagingMeta();
 }

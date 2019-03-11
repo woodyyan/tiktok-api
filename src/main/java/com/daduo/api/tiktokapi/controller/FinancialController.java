@@ -5,10 +5,12 @@ import com.daduo.api.tiktokapi.model.MainDataDetail;
 import com.daduo.api.tiktokapi.model.OtherDataDetail;
 import com.daduo.api.tiktokapi.model.UserFinancialInfoResponse;
 import com.daduo.api.tiktokapi.service.FinancialService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,18 +44,34 @@ public class FinancialController {
 
     @GetMapping("/main")
     @ApiOperation(value = "获取主要数据明细（后台）")
-    public MainDataDetail getMainDataDetail() {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "请求第几页",
+                    defaultValue = "0", dataType = "integer", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "一页的总数",
+                    defaultValue = "20", dataType = "integer", paramType = "query")
+    })
+    public MainDataDetail getMainDataDetail(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+                                            @ApiParam(value = "分页")
+                                                    Pageable page) {
         log.info("[START] Get main data detail.");
-        MainDataDetail detail = service.getMainDataDetail();
+        MainDataDetail detail = service.getMainDataDetail(page);
         log.info("[END] Get main data detail with {}.", detail);
         return detail;
     }
 
     @GetMapping("/other")
     @ApiOperation(value = "获取其他数据明细（后台）")
-    public OtherDataDetail getOtherDataDetail() {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "请求第几页",
+                    defaultValue = "0", dataType = "integer", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "一页的总数",
+                    defaultValue = "20", dataType = "integer", paramType = "query")
+    })
+    public OtherDataDetail getOtherDataDetail(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+                                              @ApiParam(value = "分页")
+                                                      Pageable page) {
         log.info("[START] Get other data detail.");
-        OtherDataDetail detail = service.getOtherDataDetail();
+        OtherDataDetail detail = service.getOtherDataDetail(page);
         log.info("[END] Get other data detail with {}.", detail);
         return detail;
     }

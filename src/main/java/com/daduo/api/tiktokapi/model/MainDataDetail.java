@@ -13,4 +13,7 @@ public class MainDataDetail {
 
     @ApiModelProperty(value = "数据")
     private List<MainDataDetailData> data = new ArrayList<>();
+
+    @ApiModelProperty(value = "分页")
+    private PagingMeta meta = new PagingMeta();
 }
