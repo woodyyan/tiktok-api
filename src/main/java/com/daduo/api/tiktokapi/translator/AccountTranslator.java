@@ -82,6 +82,10 @@ public class AccountTranslator {
         data.setStatus(account.getStatus());
         data.setCredit(credit.getCredit() / 10000);
         data.setPoints(credit.getPoints() / 10000);
+        //TODO 扣充值币/万个
+        data.setCostCredit(2);
+        //TODO 扣积分/万个
+        data.setCostPoints(3);
         List<AccountOnline> onlineList = onlineRepository.findAllByUserId(account.getId());
         data.setOnline(onlineList.size() > 0);
         return data;

@@ -50,4 +50,10 @@ public class AccountData extends BaseModel {
 
     @ApiModelProperty(value = "是否在线")
     private boolean isOnline;
+
+    @ApiModelProperty(value = "扣除充值币/万个")
+    private int costCredit;
+
+    @ApiModelProperty(value = "扣除积分/万个")
+    private int costPoints;
 }

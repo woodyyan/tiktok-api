@@ -79,6 +79,7 @@ public class AccountService {
         if (account.isPresent()) {
             Account existingAccount = account.get();
             existingAccount.setStatus(AccountStatus.ACTIVE);
+            repository.saveAndFlush(existingAccount);
             return true;
         } else {
             throw buildNotFoundErrorException("账号找不到，请确认ID是否正确。");
