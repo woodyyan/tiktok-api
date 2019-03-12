@@ -41,6 +41,8 @@ public class ImageMatchService {
             }
         } catch (IOException e) {
             log.error(e.getMessage());
+        } catch (RuntimeException e) {
+            return true;
         }
         return false;
     }

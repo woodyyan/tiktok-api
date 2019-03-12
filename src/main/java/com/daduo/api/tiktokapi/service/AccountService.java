@@ -86,6 +86,17 @@ public class AccountService {
         }
     }
 
+    public void activateAccountTask(Long userId) {
+        Optional<Account> account = repository.findById(userId);
+        if (account.isPresent()) {
+            Account existingAccount = account.get();
+            existingAccount.setCanTask(true);
+            repository.saveAndFlush(existingAccount);
+        } else {
+            throw buildNotFoundErrorException("账号找不到，请确认ID是否正确。");
+        }
+    }
+
     public Accounts searchAccount(Pageable page) {
         Page<Account> pagedAccounts = repository.findAll(page);
         return translator.toAccounts(pagedAccounts);

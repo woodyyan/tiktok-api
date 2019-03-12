@@ -55,14 +55,28 @@ public class AccountController {
     @PostMapping("/batch")
     @ApiOperation(value = "批量激活账号（后台）")
     public ActivationResult batchActivateAccount(@RequestBody @ApiParam(value = "账号IDs") UserIds userIds) {
-        log.info("[START] Activate account with userId: {}", userIds);
-        operateLogService.addOperateLog("激活账号", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
+        log.info("[START] Activate account with userIds: {}", userIds);
+        operateLogService.addOperateLog("批量激活账号", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
         for (Long userId : userIds.getIds()) {
             accountService.activateAccount(userId);
         }
         ActivationResult result = new ActivationResult();
         result.setSuccess(true);
-        log.info("[END] Activated account with END: {}", result);
+        log.info("[END] Activated account with result: {}", result);
+        return result;
+    }
+
+    @PostMapping("/batch/task")
+    @ApiOperation(value = "批量激活刷单（后台）")
+    public ActivationResult batchActivateAccountTask(@RequestBody @ApiParam(value = "账号IDs") UserIds userIds) {
+        log.info("[START] Activate account task with userIds: {}", userIds);
+        operateLogService.addOperateLog("批量激活刷单", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
+        for (Long userId : userIds.getIds()) {
+            accountService.activateAccountTask(userId);
+        }
+        ActivationResult result = new ActivationResult();
+        result.setSuccess(true);
+        log.info("[END] Activated account task with result: {}", result);
         return result;
     }
 
