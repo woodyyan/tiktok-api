@@ -67,6 +67,9 @@ public class AccountService {
             if (!StringUtils.isEmpty(accountRequest.getCanTask())) {
                 existingAccount.setCanTask(accountRequest.getCanTask());
             }
+            if (accountRequest.getStatus() != null) {
+                existingAccount.setStatus(accountRequest.getStatus());
+            }
             Account savedAccount = repository.saveAndFlush(existingAccount);
             return translator.toAccountData(savedAccount);
         } else {

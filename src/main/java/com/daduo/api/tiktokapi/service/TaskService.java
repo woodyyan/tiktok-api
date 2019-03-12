@@ -144,6 +144,27 @@ public class TaskService {
         return 0;
     }
 
+    public TaskStatistics getTaskStatistics() {
+        TaskStatistics statistics = new TaskStatistics();
+        DouyinData douyin = new DouyinData();
+        douyin.setLikeCount(5.0);
+        douyin.setFollowCount(20.0);
+        douyin.setCommentCount(36.0);
+        douyin.setLikeFollowCount(10.0);
+        douyin.setLikeFollowCommentCount(10.0);
+        douyin.setPlayCount(20.0);
+        statistics.setDouyinData(douyin);
+        KuaishouData kuaishou = new KuaishouData();
+        kuaishou.setLikeCount(5.0);
+        kuaishou.setFollowCount(20.0);
+        kuaishou.setCommentCount(36.0);
+        kuaishou.setLikeFollowCount(10.0);
+        kuaishou.setLikeFollowCommentCount(10.0);
+        kuaishou.setPlayCount(20.0);
+        statistics.setKuaishouData(kuaishou);
+        return statistics;
+    }
+
     private class DeductResult {
 
         private int points;

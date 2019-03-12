@@ -117,4 +117,13 @@ public class TaskController {
         log.info("[END] search task orders with userId: {}", userId);
         return orders;
     }
+
+    @GetMapping("/statistics")
+    @ApiOperation("获取任务统计（后台）")
+    public TaskStatistics getTaskStatistics() {
+        log.info("[START] Get task statistics.");
+        TaskStatistics statistics = service.getTaskStatistics();
+        log.info("[START] Get task statistics: {}", statistics);
+        return statistics;
+    }
 }
