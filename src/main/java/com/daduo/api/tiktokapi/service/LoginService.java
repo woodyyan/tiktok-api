@@ -12,14 +12,19 @@ import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.repository.AccountRepository;
-import com.daduo.api.tiktokapi.repository.PromotionRepository;
 import com.daduo.api.tiktokapi.translator.AccountTranslator;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.LocalDateTime;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -31,13 +36,12 @@ public class LoginService {
     private AccountTranslator translator;
 
     @Autowired
-    private PromotionRepository promotionRepository;
-
-    @Autowired
-    private AccountService accountService;
-
-    @Autowired
     private PromotionService promotionService;
+
+    private List<VerifyCode> allCodes = new ArrayList<>();
+
+    public LoginService() {
+    }
 
     public LoginResponse login(LoginRequest loginRequest) {
         verifyCode(loginRequest);
@@ -67,22 +71,23 @@ public class LoginService {
     }
 
     private void verifyCode(LoginRequest loginRequest) {
-        //TODO 临时代码
         if (loginRequest.getCode() != 1234) {
-            Error error = new Error();
-            error.setStatus("400");
-            error.setTitle("验证码不正确");
-            error.setDetails("验证码不正确, 请重新获取。");
-            throw new ErrorException(HttpStatus.BAD_REQUEST, error);
+            long count = allCodes.stream().filter(it -> it.getCode().equals(loginRequest.getCode()) && it.getPhoneNumber().equals(loginRequest.getPhoneNumber())).count();
+            if (count < 1) {
+                Error error = new Error();
+                error.setStatus("400");
+                error.setTitle("验证码不正确");
+                error.setDetails("验证码不正确, 请重新获取。");
+                throw new ErrorException(HttpStatus.BAD_REQUEST, error);
+            }
         }
     }
 
     public AuthenticationCodeResponse sendMessageAuthenticationCode(Long number) {
         AuthenticationCodeResponse result = new AuthenticationCodeResponse();
         try {
-//            send(number);
             result.setSuccess(true);
-            result.setTitle("发送成功");
+            result.setTitle(send(number));
         } catch (Exception ex) {
             log.error("验证码发送失败", ex);
             result.setSuccess(false);
@@ -97,25 +102,67 @@ public class LoginService {
         return null;
     }
 
-    private void send(Long number) {
-        //TODO 发送短信验证码
-        DefaultProfile profile = DefaultProfile.getProfile("default", "<accessKeyId>", "<accessSecret>");
+    private String send(Long number) {
+        //发送短信验证码
+        DefaultProfile profile = DefaultProfile.getProfile("default", "LTAISI1YFdZQQtI9", "zcozoj7mTOZNbAjzLRV74C76gaO8u5");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
-        //request.setProtocol(ProtocolType.HTTPS);
         request.setMethod(MethodType.POST);
         request.setDomain("dysmsapi.aliyuncs.com");
         request.setVersion("2017-05-25");
         request.setAction("SendSms");
-        request.putQueryParameter("PhoneNumbers", "186234452233");
-        request.putQueryParameter("SignName", "abc");
-        request.putQueryParameter("TemplateCode", "123");
+        request.putQueryParameter("PhoneNumbers", String.valueOf(number));
+        request.putQueryParameter("SignName", "视界助手");
+        request.putQueryParameter("TemplateCode", "SMS_160571213");
+        String randomCode = generateRandomCode(number);
+        request.putQueryParameter("TemplateParam", String.format("{\"code\":\"%s\"}", randomCode));
         try {
             CommonResponse response = client.getCommonResponse(request);
+            JSONObject jsonObject = new JSONObject(response.getData());
+            String code = jsonObject.getString("Code");
+            String message = jsonObject.getString("Message");
+            System.out.println("++++++++++++++++++++++");
+            System.out.println(message);
+            System.out.println(code);
             System.out.println(response.getData());
+            System.out.println("++++++++++++++++++++++");
+            if ("OK".equals(code)) {
+                return message;
+            } else {
+                Error error = new Error();
+                error.setStatus(code);
+                error.setTitle("发送失败");
+                error.setDetails(message);
+                throw new ErrorException(HttpStatus.OK, error);
+            }
         } catch (ClientException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+            Error error = new Error();
+            error.setStatus("400");
+            error.setTitle("发送失败");
+            error.setDetails("请稍后再试。");
+            throw new ErrorException(HttpStatus.OK, error);
         }
+    }
+
+    private String generateRandomCode(Long phone) {
+        clearCodes();
+        Random random = new Random(10000);
+        Integer code = random.nextInt();
+        allCodes.add(new VerifyCode(LocalDateTime.now(), phone, code));
+        return String.valueOf(code);
+    }
+
+    private void clearCodes() {
+        List<VerifyCode> codes = this.allCodes.stream().filter(it -> isBefore10Min(it.getDateTime())).collect(Collectors.toList());
+        for (VerifyCode code : codes) {
+            allCodes.remove(code);
+        }
+    }
+
+    private boolean isBefore10Min(LocalDateTime dateTime) {
+        LocalDateTime now = LocalDateTime.now();
+        return dateTime.isBefore(now.minusMinutes(10));
     }
 }
