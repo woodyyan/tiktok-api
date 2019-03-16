@@ -159,68 +159,76 @@ public class FinancialService {
 
     public MainDataDetail getMainDataDetail(Date startDate, Date endDate, Pageable page) {
         MainDataDetail detail = new MainDataDetail();
+        Page<Account> accounts = getAccounts(startDate, endDate, page);
+        for (Account account : accounts) {
+            detail.getData().add(getMainDataDetailData(account));
+        }
+        detail.setMeta(getPagingMeta(accounts));
+        return detail;
+    }
+
+    public OtherDataDetail getOtherDataDetail(Date startDate, Date endDate, Pageable page) {
+        Page<Account> accounts = getAccounts(startDate, endDate, page);
+        OtherDataDetail detail = new OtherDataDetail();
+        for (Account account : accounts) {
+            detail.getData().add(getOtherDataDetailData(account));
+        }
+        detail.setMeta(getPagingMeta(accounts));
+        return detail;
+    }
+
+    private PagingMeta getPagingMeta(Page<Account> accounts) {
+        PagingMeta meta = new PagingMeta();
+        meta.setPageNumber(accounts.getNumber());
+        meta.setPageSize(accounts.getSize());
+        meta.setTotalElements(accounts.getTotalElements());
+        meta.setTotalPages(accounts.getTotalPages());
+        return meta;
+    }
+
+    private Page<Account> getAccounts(Date startDate, Date endDate, Pageable page) {
         Page<Account> accounts;
         if (startDate != null && endDate != null) {
             accounts = accountRepository.findByCreatedTimeBetween(new LocalDateTime(startDate.getTime()), new LocalDateTime(endDate.getTime()), page);
         } else {
             accounts = accountRepository.findAll(page);
         }
-        for (Account account : accounts) {
-            detail.getData().add(getMainDataDetailData(account));
-        }
-        PagingMeta meta = new PagingMeta();
-        meta.setPageNumber(accounts.getNumber());
-        meta.setPageSize(accounts.getSize());
-        meta.setTotalElements(accounts.getTotalElements());
-        meta.setTotalPages(accounts.getTotalPages());
-        detail.setMeta(meta);
-        return detail;
+        return accounts;
     }
 
-    public OtherDataDetail getOtherDataDetail(Pageable page) {
-        Page<Account> accounts = accountRepository.findAll(page);
-        OtherDataDetail detail = new OtherDataDetail();
-        for (Account account : accounts) {
-            OtherDataDetailData data = new OtherDataDetailData();
-            data.setAccountId(account.getId());
-            data.setAccountNickname(account.getNickname());
-            //充值币余额/万个
-            data.setCreditBalance(10);
-            //充值币总额/万个
-            data.setCreditSum(10);
-            //积分余额/万个
-            data.setPointsBalance(10);
-            //积分总额/万个
-            data.setPointsSum(10);
-            //刷粉额/元
-            data.setTaskCash(100);
-            //刷纷积分/万个
-            data.setTaskPoints(10);
-            //刷单额/元
-            data.setTaskOrderCash(100);
-            //刷单积分/万个
-            data.setTaskOrderPoints(10);
-            //兑换现金积分额/万个
-            data.setExchangeCashPoints(10);
-            //兑换商品积分额/万个
-            data.setExchangeProductPoints(10);
-            //佣金积分额/万个
-            data.setCommissionPoints(10);
-            //自动刷积分额/万个
-            data.setAutoTaskPoints(10);
-            //扣除会员积分额/万个
-            data.setCostAccountPoints(10);
-            //充值赠送充值币额/万个
-            data.setPresentedCredit(10);
-            detail.getData().add(data);
-        }
-        PagingMeta meta = new PagingMeta();
-        meta.setPageNumber(accounts.getNumber());
-        meta.setPageSize(accounts.getSize());
-        meta.setTotalElements(accounts.getTotalElements());
-        meta.setTotalPages(accounts.getTotalPages());
-        detail.setMeta(meta);
-        return detail;
+    private OtherDataDetailData getOtherDataDetailData(Account account) {
+        OtherDataDetailData data = new OtherDataDetailData();
+        data.setAccountId(account.getId());
+        data.setAccountNickname(account.getNickname());
+        //充值币余额/万个
+        data.setCreditBalance(10);
+        //充值币总额/万个
+        data.setCreditSum(10);
+        //积分余额/万个
+        data.setPointsBalance(10);
+        //积分总额/万个
+        data.setPointsSum(10);
+        //刷粉额/元
+        data.setTaskCash(100);
+        //刷纷积分/万个
+        data.setTaskPoints(10);
+        //刷单额/元
+        data.setTaskOrderCash(100);
+        //刷单积分/万个
+        data.setTaskOrderPoints(10);
+        //兑换现金积分额/万个
+        data.setExchangeCashPoints(10);
+        //兑换商品积分额/万个
+        data.setExchangeProductPoints(10);
+        //佣金积分额/万个
+        data.setCommissionPoints(10);
+        //自动刷积分额/万个
+        data.setAutoTaskPoints(10);
+        //扣除会员积分额/万个
+        data.setCostAccountPoints(10);
+        //充值赠送充值币额/万个
+        data.setPresentedCredit(10);
+        return data;
     }
 
     public MainDataDetailData getMainDataDetailByUserId(Long userId) {
@@ -252,5 +260,14 @@ public class FinancialService {
         // 充值赠送充值币额（元）
         data.setPresentedCreditCash(1000);
         return data;
+    }
+
+    public OtherDataDetailData getOtherDataDetailByUserId(Long userId) {
+        Optional<Account> optionalAccount = accountRepository.findById(userId);
+        if (optionalAccount.isPresent()) {
+            return getOtherDataDetailData(optionalAccount.get());
+        } else {
+            throw ErrorBuilder.buildNotFoundErrorException("会员ID未找到。");
+        }
     }
 }
