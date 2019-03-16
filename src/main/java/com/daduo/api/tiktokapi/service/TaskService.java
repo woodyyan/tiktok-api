@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -226,10 +227,12 @@ public class TaskService {
         }
     }
 
-    public Tasks searchTasks(Long userId, Pageable page) {
+    public Tasks searchTasks(Long userId, Date startDate, Date endDate, Pageable page) {
         Page<TaskEntity> entities;
         if (userId == null) {
             entities = repository.findAll(page);
+        } else if (startDate != null && endDate != null) {
+            entities = repository.findByCreatedTimeBetween(new LocalDateTime(startDate.getTime()), new LocalDateTime(endDate.getTime()), page);
         } else {
             entities = repository.findAllByOwnerId(userId, page);
         }
