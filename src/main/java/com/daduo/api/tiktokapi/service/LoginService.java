@@ -148,8 +148,10 @@ public class LoginService {
 
     private String generateRandomCode(Long phone) {
         clearCodes();
-        Random random = new Random(10000);
-        Integer code = random.nextInt();
+        Integer code = new Random().nextInt(10000);
+        if (code < 1000) {
+            code += 1000;
+        }
         allCodes.add(new VerifyCode(LocalDateTime.now(), phone, code));
         return String.valueOf(code);
     }
