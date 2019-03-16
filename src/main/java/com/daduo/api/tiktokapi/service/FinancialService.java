@@ -166,25 +166,7 @@ public class FinancialService {
             accounts = accountRepository.findAll(page);
         }
         for (Account account : accounts) {
-            MainDataDetailData data = new MainDataDetailData();
-            data.setAccountId(account.getId());
-            data.setAccountNickname(account.getNickname());
-            //TODO
-            //充值现金额（元）
-            data.setCash(1000);
-            //佣金额（元）
-            data.setCommissionMoney(1000);
-            //扣除积分额
-            data.setCostPoints(1000);
-            //自动刷任务额（元）
-            data.setAutoTaskCash(1000);
-            // 兑换现金额（元）
-            data.setExchangeCash(1000);
-            // 兑换商品额（元）
-            data.setExchangeProductCash(1000);
-            // 充值赠送充值币额（元）
-            data.setPresentedCreditCash(1000);
-            detail.getData().add(data);
+            detail.getData().add(getMainDataDetailData(account));
         }
         PagingMeta meta = new PagingMeta();
         meta.setPageNumber(accounts.getNumber());
@@ -244,27 +226,31 @@ public class FinancialService {
     public MainDataDetailData getMainDataDetailByUserId(Long userId) {
         Optional<Account> optionalAccount = accountRepository.findById(userId);
         if (optionalAccount.isPresent()) {
-            MainDataDetailData data = new MainDataDetailData();
-            data.setAccountId(optionalAccount.get().getId());
-            data.setAccountNickname(optionalAccount.get().getNickname());
-            //TODO
-            //充值现金额（元）
-            data.setCash(1000);
-            //佣金额（元）
-            data.setCommissionMoney(1000);
-            //扣除积分额
-            data.setCostPoints(1000);
-            //自动刷任务额（元）
-            data.setAutoTaskCash(1000);
-            // 兑换现金额（元）
-            data.setExchangeCash(1000);
-            // 兑换商品额（元）
-            data.setExchangeProductCash(1000);
-            // 充值赠送充值币额（元）
-            data.setPresentedCreditCash(1000);
-            return data;
+            return getMainDataDetailData(optionalAccount.get());
         } else {
             throw ErrorBuilder.buildNotFoundErrorException("会员ID未找到。");
         }
+    }
+
+    private MainDataDetailData getMainDataDetailData(Account account) {
+        MainDataDetailData data = new MainDataDetailData();
+        data.setAccountId(account.getId());
+        data.setAccountNickname(account.getNickname());
+        //TODO
+        //充值现金额（元）
+        data.setCash(1000);
+        //佣金额（元）
+        data.setCommissionMoney(1000);
+        //扣除积分额
+        data.setCostPoints(1000);
+        //自动刷任务额（元）
+        data.setAutoTaskCash(1000);
+        // 兑换现金额（元）
+        data.setExchangeCash(1000);
+        // 兑换商品额（元）
+        data.setExchangeProductCash(1000);
+        // 充值赠送充值币额（元）
+        data.setPresentedCreditCash(1000);
+        return data;
     }
 }
