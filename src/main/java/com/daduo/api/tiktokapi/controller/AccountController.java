@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 @RequestMapping("/account")
 @RestController
@@ -99,11 +101,13 @@ public class AccountController {
             @ApiImplicitParam(name = "size", value = "一页的总数",
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
-    public Accounts searchAccounts(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+    public Accounts searchAccounts(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                   @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+                                   @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
                                    @ApiParam(value = "分页")
                                            Pageable page) {
         log.info("[START] Search account");
-        Accounts accounts = accountService.searchAccount(page);
+        Accounts accounts = accountService.searchAccount(startDate, endDate, page);
         log.info("[END] Search account with accounts: {}", accounts);
         return accounts;
     }

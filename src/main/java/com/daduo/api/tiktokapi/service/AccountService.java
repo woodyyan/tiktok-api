@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -100,8 +101,13 @@ public class AccountService {
         }
     }
 
-    public Accounts searchAccount(Pageable page) {
-        Page<Account> pagedAccounts = repository.findAll(page);
+    public Accounts searchAccount(Date startDate, Date endDate, Pageable page) {
+        Page<Account> pagedAccounts;
+        if (startDate != null && endDate != null) {
+            pagedAccounts = repository.findByCreatedTimeBetween(new LocalDateTime(startDate.getTime()), new LocalDateTime(endDate.getTime()), page);
+        } else {
+            pagedAccounts = repository.findAll(page);
+        }
         return translator.toAccounts(pagedAccounts);
     }
 
