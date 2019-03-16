@@ -13,6 +13,7 @@ import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.Error;
 import com.daduo.api.tiktokapi.repository.AccountRepository;
 import com.daduo.api.tiktokapi.translator.AccountTranslator;
+import com.daduo.api.tiktokapi.validator.CodeValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.LocalDateTime;
 import org.json.JSONObject;
@@ -20,11 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -38,13 +36,14 @@ public class LoginService {
     @Autowired
     private PromotionService promotionService;
 
-    private List<VerifyCode> allCodes = new ArrayList<>();
+    @Autowired
+    private CodeValidator codeValidator;
 
     public LoginService() {
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
-        verifyCode(loginRequest);
+        codeValidator.verifyCode(loginRequest.getPhoneNumber(), loginRequest.getCode());
         Account account = repository.findOneByPhoneNumber(loginRequest.getPhoneNumber());
         if (account != null) {
             return translator.translateToLoginResponse(account, generateToken(account));
@@ -68,19 +67,6 @@ public class LoginService {
     private String generateToken(Account account) {
         String original = String.format("%s:%s", account.getId().toString(), account.getPhoneNumber());
         return Base64.getEncoder().encodeToString(original.getBytes());
-    }
-
-    private void verifyCode(LoginRequest loginRequest) {
-        if (loginRequest.getCode() != 1234) {
-            long count = allCodes.stream().filter(it -> it.getCode().equals(loginRequest.getCode()) && it.getPhoneNumber().equals(loginRequest.getPhoneNumber())).count();
-            if (count < 1) {
-                Error error = new Error();
-                error.setStatus("400");
-                error.setTitle("验证码不正确");
-                error.setDetails("验证码不正确, 请重新获取。");
-                throw new ErrorException(HttpStatus.BAD_REQUEST, error);
-            }
-        }
     }
 
     public AuthenticationCodeResponse sendMessageAuthenticationCode(Long number) {
@@ -147,24 +133,12 @@ public class LoginService {
     }
 
     private String generateRandomCode(Long phone) {
-        clearCodes();
+        codeValidator.cleanCodes();
         Integer code = new Random().nextInt(10000);
         if (code < 1000) {
             code += 1000;
         }
-        allCodes.add(new VerifyCode(LocalDateTime.now(), phone, code));
+        codeValidator.add(LocalDateTime.now(), phone, code);
         return String.valueOf(code);
-    }
-
-    private void clearCodes() {
-        List<VerifyCode> codes = this.allCodes.stream().filter(it -> isBefore10Min(it.getDateTime())).collect(Collectors.toList());
-        for (VerifyCode code : codes) {
-            allCodes.remove(code);
-        }
-    }
-
-    private boolean isBefore10Min(LocalDateTime dateTime) {
-        LocalDateTime now = LocalDateTime.now();
-        return dateTime.isBefore(now.minusMinutes(10));
     }
 }

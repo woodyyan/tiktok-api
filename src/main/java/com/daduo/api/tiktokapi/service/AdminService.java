@@ -9,6 +9,7 @@ import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.repository.AdminRepository;
 import com.daduo.api.tiktokapi.repository.PermissionRepository;
 import com.daduo.api.tiktokapi.translator.AdminTranslator;
+import com.daduo.api.tiktokapi.validator.CodeValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,9 @@ public class AdminService {
 
     @Autowired
     private PermissionRepository permissionRepository;
+
+    @Autowired
+    private CodeValidator codeValidator;
 
     public AdminResponse login(AdminLoginRequest loginRequest) {
         Admin admin = repository.findByPhoneNumber(loginRequest.getPhoneNumber());
@@ -61,8 +65,7 @@ public class AdminService {
     public void resetPassword(ResetAdminPasswordRequest request) {
         Admin admin = repository.findByPhoneNumber(request.getPhoneNumber());
         if (admin != null) {
-            //TODO 验证 code验证码
-            if (validateCode(request.getCode())) {
+            if (codeValidator.verifyCode(request.getPhoneNumber(), request.getCode())) {
                 admin.setPassword(request.getPassword());
                 repository.saveAndFlush(admin);
             } else {
@@ -78,10 +81,6 @@ public class AdminService {
         Page<Admin> admins = repository.findAll(page);
         List<Permission> permissions = permissionRepository.findAll();
         return translator.toAdmins(admins, permissions);
-    }
-
-    private boolean validateCode(Integer code) {
-        return false;
     }
 
     public void modifyPassword(ModifyAdminPasswordRequest request) {

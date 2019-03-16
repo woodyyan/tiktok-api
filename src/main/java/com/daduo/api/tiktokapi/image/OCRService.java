@@ -23,11 +23,7 @@ public class OCRService {
 
             tesseract.TessBaseAPI api = new tesseract.TessBaseAPI();
             // Initialize tesseract-ocr with English, without specifying tessdata path
-            //TODO tessdata无法找到
-            String data = "/Users/songbai.yan/Documents/Projects/tiktok-api/tessdata";
-            if (!new File(data).exists()) {
-                data = "/apps/boot/tessdata";
-            }
+            String data = "/apps/boot/tessdata";
 
             if (api.Init(data, "eng") != 0) {
                 System.err.println("Could not initialize tesseract.");
