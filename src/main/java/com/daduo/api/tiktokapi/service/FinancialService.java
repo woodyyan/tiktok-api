@@ -2,14 +2,18 @@ package com.daduo.api.tiktokapi.service;
 
 import com.daduo.api.tiktokapi.entity.*;
 import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.repository.*;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -153,9 +157,14 @@ public class FinancialService {
         return 1;
     }
 
-    public MainDataDetail getMainDataDetail(Pageable page) {
+    public MainDataDetail getMainDataDetail(Date startDate, Date endDate, Pageable page) {
         MainDataDetail detail = new MainDataDetail();
-        Page<Account> accounts = accountRepository.findAll(page);
+        Page<Account> accounts;
+        if (startDate != null && endDate != null) {
+            accounts = accountRepository.findByCreatedTimeBetween(new LocalDateTime(startDate.getTime()), new LocalDateTime(endDate.getTime()), page);
+        } else {
+            accounts = accountRepository.findAll(page);
+        }
         for (Account account : accounts) {
             MainDataDetailData data = new MainDataDetailData();
             data.setAccountId(account.getId());
@@ -230,5 +239,32 @@ public class FinancialService {
         meta.setTotalPages(accounts.getTotalPages());
         detail.setMeta(meta);
         return detail;
+    }
+
+    public MainDataDetailData getMainDataDetailByUserId(Long userId) {
+        Optional<Account> optionalAccount = accountRepository.findById(userId);
+        if (optionalAccount.isPresent()) {
+            MainDataDetailData data = new MainDataDetailData();
+            data.setAccountId(optionalAccount.get().getId());
+            data.setAccountNickname(optionalAccount.get().getNickname());
+            //TODO
+            //充值现金额（元）
+            data.setCash(1000);
+            //佣金额（元）
+            data.setCommissionMoney(1000);
+            //扣除积分额
+            data.setCostPoints(1000);
+            //自动刷任务额（元）
+            data.setAutoTaskCash(1000);
+            // 兑换现金额（元）
+            data.setExchangeCash(1000);
+            // 兑换商品额（元）
+            data.setExchangeProductCash(1000);
+            // 充值赠送充值币额（元）
+            data.setPresentedCreditCash(1000);
+            return data;
+        } else {
+            throw ErrorBuilder.buildNotFoundErrorException("会员ID未找到。");
+        }
     }
 }

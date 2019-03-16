@@ -1,9 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
-import com.daduo.api.tiktokapi.model.FinancialInfo;
-import com.daduo.api.tiktokapi.model.MainDataDetail;
-import com.daduo.api.tiktokapi.model.OtherDataDetail;
-import com.daduo.api.tiktokapi.model.UserFinancialInfoResponse;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.service.FinancialService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @RequestMapping("/financial")
 @RestController
@@ -50,11 +48,20 @@ public class FinancialController {
             @ApiImplicitParam(name = "size", value = "一页的总数",
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
-    public MainDataDetail getMainDataDetail(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
-                                            @ApiParam(value = "分页")
-                                                    Pageable page) {
+    public MainDataDetail getMainDataDetail(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+    @ApiParam(value = "分页")
+            Pageable page) {
         log.info("[START] Get main data detail.");
-        MainDataDetail detail = service.getMainDataDetail(page);
+        MainDataDetail detail = service.getMainDataDetail(startDate, endDate, page);
+        log.info("[END] Get main data detail with {}.", detail);
+        return detail;
+    }
+
+    @GetMapping("/main/{userId}")
+    @ApiOperation(value = "根据会员ID获取主要数据明细（后台）")
+    public MainDataDetailData searchMainDataDetail(@PathVariable @ApiParam("会员ID") Long userId) {
+        log.info("[START] Get main data detail.");
+        MainDataDetailData detail = service.getMainDataDetailByUserId(userId);
         log.info("[END] Get main data detail with {}.", detail);
         return detail;
     }
