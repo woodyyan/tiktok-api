@@ -7,7 +7,6 @@ package com.daduo.api.tiktokapi;
 
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 
 //@RunWith(SpringRunner.class)
@@ -16,12 +15,8 @@ public class TiktokApiApplicationTests {
 
     @Test
     public void contextLoads() throws IOException {
-        File targetFile = new File("tmp/task/2.png");
-        if (!targetFile.exists()) {
-//                targetFile.mkdir();
-            targetFile.getParentFile().mkdirs();
-            targetFile.createNewFile();
-        }
+        Long id = Long.parseLong("1550732917442", 10);
+        System.out.println(id);
     }
 
 }

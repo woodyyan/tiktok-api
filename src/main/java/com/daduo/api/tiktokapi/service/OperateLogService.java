@@ -34,8 +34,13 @@ public class OperateLogService {
     public void addOperateLog(String operation, String admin, String ip) {
         OperateLog log = new OperateLog();
         if (admin != null) {
-            Optional<Admin> adminEntity = adminRepository.findById(Long.valueOf(admin));
-            adminEntity.ifPresent(admin1 -> log.setAdminName(admin1.getNickname()));
+            try {
+                Long id = Long.parseLong(admin, 10);
+                Optional<Admin> adminEntity = adminRepository.findById(id);
+                adminEntity.ifPresent(admin1 -> log.setAdminName(admin1.getNickname()));
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
         }
         log.setCreatedTime(LocalDateTime.now());
         log.setIP(ip);
