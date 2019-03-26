@@ -206,10 +206,10 @@ public class TaskService {
 
         CreditRequest creditRequest = new CreditRequest();
         creditRequest.setUserId(ownerId);
-        if (creditData.getPoints() >= totalPointPrice) {
-            creditRequest.setPoints(-totalPointPrice);
-        } else {
+        if (creditData.getCredit() >= totalCreditPrice) {
             creditRequest.setCredit(-totalCreditPrice);
+        } else {
+            creditRequest.setPoints(-totalPointPrice);
         }
         creditService.modifyCredit(creditRequest);
         DeductResult result = new DeductResult();
