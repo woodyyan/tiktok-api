@@ -5,6 +5,7 @@ import com.daduo.api.tiktokapi.entity.TaskOrder;
 import com.daduo.api.tiktokapi.enums.PlatformType;
 import com.daduo.api.tiktokapi.enums.TaskItem;
 import com.daduo.api.tiktokapi.enums.TaskOrderStatus;
+import com.daduo.api.tiktokapi.enums.TaskStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.image.ImageMatchService;
 import com.daduo.api.tiktokapi.image.OCRService;
@@ -88,6 +89,9 @@ public class TaskService {
                 task.setOwnerId(taskRequest.getOwnerId());
             }
             if (taskRequest.getStatus() != null) {
+                if (taskRequest.getStatus().equals(TaskStatus.TERMINATED)) {
+                    returnCredit(taskId);
+                }
                 task.setStatus(taskRequest.getStatus());
             }
             if (taskRequest.getIsSticky() != null) {
@@ -109,6 +113,21 @@ public class TaskService {
             return translator.translateToTaskResponse(savedTask);
         } else {
             throw ErrorBuilder.buildNotFoundErrorException("Task找不到，请确认ID是否正确。");
+        }
+    }
+
+    private void returnCredit(Long taskId) {
+        Optional<TaskEntity> entity = repository.findById(taskId);
+        if (entity.isPresent()) {
+            TaskEntity task = entity.get();
+            CreditRequest request = new CreditRequest();
+            request.setUserId(task.getOwnerId());
+            if (task.getTotalCredit() > 0) {
+                request.setCredit(task.getTotalCredit());
+            } else if (task.getTotalPoints() > 0) {
+                request.setPoints(task.getTotalPoints());
+            }
+            creditService.modifyCredit(request);
         }
     }
 
