@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.model;
 
+import com.daduo.api.tiktokapi.enums.AccountStatus;
 import com.daduo.api.tiktokapi.model.base.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -18,4 +19,6 @@ public class LoginResponse extends BaseModel {
     private String sessionToken;
     @ApiModelProperty(value = "微信登陆信息")
     private AuthData authData;
+    @ApiModelProperty(value = "激活状态")
+    private AccountStatus status;
 }

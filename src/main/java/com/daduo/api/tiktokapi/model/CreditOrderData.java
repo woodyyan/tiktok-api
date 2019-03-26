@@ -9,7 +9,7 @@ import org.joda.time.DateTime;
 @ApiModel("充值订单数据Data")
 public class CreditOrderData {
     @ApiModelProperty(value = "充值币")
-    private Integer credit;
+    private int credit;
 
     @ApiModelProperty(value = "赠送的充值币")
     private int presentedCredit;
@@ -24,11 +24,11 @@ public class CreditOrderData {
     private Long id;
 
     @ApiModelProperty(value = "积分")
-    private Integer points;
+    private int points;
 
     @ApiModelProperty(value = "用户ID")
     private Long userId;
 
     @ApiModelProperty(value = "金额")
-    private Integer money;
+    private int money;
 }

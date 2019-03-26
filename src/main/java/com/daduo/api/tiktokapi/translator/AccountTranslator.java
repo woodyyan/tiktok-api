@@ -29,6 +29,7 @@ public class AccountTranslator {
         response.setPhoneNumber(account.getPhoneNumber());
         response.setSessionToken(token);
         response.setNickname(account.getNickname());
+        response.setStatus(account.getStatus());
         AuthData authData = new AuthData();
         authData.setAccessToken(account.getAccessToken());
         authData.setExpiresIn(account.getExpiresIn());
