@@ -8,6 +8,7 @@ import com.daduo.api.tiktokapi.service.TaskService;
 import com.daduo.api.tiktokapi.validator.AccountValidator;
 import com.daduo.api.tiktokapi.validator.TaskValidator;
 import io.swagger.annotations.*;
+import jdk.internal.joptsimple.internal.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -94,12 +95,14 @@ public class TaskController {
                              @ApiParam(value = "分页")
                                      Pageable page) {
         log.info("[START] search tasks with userId: {}, and page: {}", userId, page);
-        Long value;
-        try {
-            value = Long.valueOf(userId);
-        } catch (Exception ex) {
-            Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
-            throw new ErrorException(HttpStatus.OK, error);
+        Long value = null;
+        if (!Strings.isNullOrEmpty(userId)) {
+            try {
+                value = Long.valueOf(userId);
+            } catch (Exception ex) {
+                Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
+                throw new ErrorException(HttpStatus.OK, error);
+            }
         }
         Tasks tasks = service.searchTasks(value, startDate, endDate, page);
         log.info("[END] search tasks with response: {}", tasks);
@@ -129,12 +132,14 @@ public class TaskController {
     @ApiParam(value = "分页")
             Pageable page) {
         log.info("[START] search task orders with userId: {}, page: {}", userId, page);
-        Long value;
-        try {
-            value = Long.valueOf(userId);
-        } catch (Exception ex) {
-            Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
-            throw new ErrorException(HttpStatus.OK, error);
+        Long value = null;
+        if (!Strings.isNullOrEmpty(userId)) {
+            try {
+                value = Long.valueOf(userId);
+            } catch (Exception ex) {
+                Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
+                throw new ErrorException(HttpStatus.OK, error);
+            }
         }
         TaskOrders orders = service.searchTaskOrders(value, page);
         log.info("[END] search task orders with userId: {}", userId);
