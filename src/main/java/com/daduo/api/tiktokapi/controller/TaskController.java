@@ -8,7 +8,6 @@ import com.daduo.api.tiktokapi.service.TaskService;
 import com.daduo.api.tiktokapi.validator.AccountValidator;
 import com.daduo.api.tiktokapi.validator.TaskValidator;
 import io.swagger.annotations.*;
-import jdk.internal.joptsimple.internal.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -96,7 +96,7 @@ public class TaskController {
                                      Pageable page) {
         log.info("[START] search tasks with userId: {}, and page: {}", userId, page);
         Long value = null;
-        if (!Strings.isNullOrEmpty(userId)) {
+        if (!StringUtils.isEmpty(userId)) {
             try {
                 value = Long.valueOf(userId);
             } catch (Exception ex) {
@@ -133,7 +133,7 @@ public class TaskController {
             Pageable page) {
         log.info("[START] search task orders with userId: {}, page: {}", userId, page);
         Long value = null;
-        if (!Strings.isNullOrEmpty(userId)) {
+        if (!StringUtils.isEmpty(userId)) {
             try {
                 value = Long.valueOf(userId);
             } catch (Exception ex) {
