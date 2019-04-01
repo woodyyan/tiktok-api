@@ -1,6 +1,9 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.model.error.Error;
+import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.service.FinancialService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -61,9 +65,16 @@ public class FinancialController {
 
     @GetMapping("/main/{userId}")
     @ApiOperation(value = "根据会员ID获取主要数据明细（后台）")
-    public MainDataDetailData searchMainDataDetail(@PathVariable @ApiParam("会员ID") Long userId) {
+    public MainDataDetailData searchMainDataDetail(@PathVariable @ApiParam("会员ID") String userId) {
         log.info("[START] Get main data detail.");
-        MainDataDetailData detail = service.getMainDataDetailByUserId(userId);
+        Long value;
+        try {
+            value = Long.valueOf(userId);
+        } catch (Exception ex) {
+            Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
+            throw new ErrorException(HttpStatus.OK, error);
+        }
+        MainDataDetailData detail = service.getMainDataDetailByUserId(value);
         log.info("[END] Get main data detail with {}.", detail);
         return detail;
     }
@@ -89,9 +100,16 @@ public class FinancialController {
 
     @GetMapping("/other/{userId}")
     @ApiOperation(value = "根据会员ID获取其他数据明细（后台）")
-    public OtherDataDetailData getOtherDataDetailByUserId(@PathVariable @ApiParam("会员ID") Long userId) {
+    public OtherDataDetailData getOtherDataDetailByUserId(@PathVariable @ApiParam("会员ID") String userId) {
         log.info("[START] Get other data detail by userId {}.", userId);
-        OtherDataDetailData detail = service.getOtherDataDetailByUserId(userId);
+        Long value;
+        try {
+            value = Long.valueOf(userId);
+        } catch (Exception ex) {
+            Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
+            throw new ErrorException(HttpStatus.OK, error);
+        }
+        OtherDataDetailData detail = service.getOtherDataDetailByUserId(value);
         log.info("[END] Get other data detail by userId with {}.", detail);
         return detail;
     }
