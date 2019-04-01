@@ -1,9 +1,12 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.Accounts;
 import com.daduo.api.tiktokapi.model.AllPromotions;
 import com.daduo.api.tiktokapi.model.PromotionRequest;
 import com.daduo.api.tiktokapi.model.Promotions;
+import com.daduo.api.tiktokapi.model.error.Error;
+import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.service.PromotionService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +28,16 @@ public class PromotionController {
 
     @GetMapping("/{userId}")
     @ApiOperation("获取推广明细")
-    public Promotions getPromotions(@PathVariable @ApiParam("用户ID") Long userId) {
+    public Promotions getPromotions(@PathVariable @ApiParam("用户ID") String userId) {
         log.info("[START] Get promotion details with user id: {}.", userId);
-        Promotions promotions = service.getPromotions(userId);
+        Long value;
+        try {
+            value = Long.valueOf(userId);
+        } catch (Exception ex) {
+            Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
+            throw new ErrorException(HttpStatus.OK, error);
+        }
+        Promotions promotions = service.getPromotions(value);
         log.info("[END] Get promotion details with response: {}.", promotions);
         return promotions;
     }
@@ -60,9 +70,16 @@ public class PromotionController {
 
     @GetMapping("/child/{userId}")
     @ApiOperation("获取所有下家（后台）")
-    public Accounts getAllChildUsers(@PathVariable @ApiParam("用户ID") Long userId) {
+    public Accounts getAllChildUsers(@PathVariable @ApiParam("用户ID") String userId) {
         log.info("[START] Get all child users with id: {}.", userId);
-        Accounts accounts = service.getAllChildUsers(userId);
+        Long value;
+        try {
+            value = Long.valueOf(userId);
+        } catch (Exception ex) {
+            Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
+            throw new ErrorException(HttpStatus.OK, error);
+        }
+        Accounts accounts = service.getAllChildUsers(value);
         log.info("[END] Get all child users with acounts: {}.", accounts);
         return accounts;
     }

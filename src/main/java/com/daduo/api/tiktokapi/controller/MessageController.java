@@ -1,9 +1,12 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.MessageData;
 import com.daduo.api.tiktokapi.model.MessageRequest;
 import com.daduo.api.tiktokapi.model.MessageResponse;
 import com.daduo.api.tiktokapi.model.Messages;
+import com.daduo.api.tiktokapi.model.error.Error;
+import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.service.MessageService;
 import com.daduo.api.tiktokapi.validator.AccountValidator;
 import io.swagger.annotations.*;
@@ -48,11 +51,18 @@ public class MessageController {
             @ApiImplicitParam(name = "size", value = "一页的总数",
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
-    public Messages searchMessage(@RequestParam @ApiParam("用户ID") Long userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+    public Messages searchMessage(@RequestParam @ApiParam("用户ID") String userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
     @ApiParam(value = "分页")
             Pageable page) {
         log.info("[START] search message with user id: {}", userId);
-        Messages messages = service.searchMessage(userId, page);
+        Long value;
+        try {
+            value = Long.valueOf(userId);
+        } catch (Exception ex) {
+            Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
+            throw new ErrorException(HttpStatus.OK, error);
+        }
+        Messages messages = service.searchMessage(value, page);
         log.info("[END] search message with messages: {}", messages);
         return messages;
     }

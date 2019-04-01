@@ -1,6 +1,9 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.model.error.Error;
+import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.service.TaskService;
 import com.daduo.api.tiktokapi.validator.AccountValidator;
 import com.daduo.api.tiktokapi.validator.TaskValidator;
@@ -84,14 +87,21 @@ public class TaskController {
             @ApiImplicitParam(name = "size", value = "一页的总数",
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
-    public Tasks searchTasks(@RequestParam(required = false) @ApiParam(value = "用户ID") Long userId,
+    public Tasks searchTasks(@RequestParam(required = false) @ApiParam(value = "用户ID") String userId,
                              @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
                              @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
                              @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
                              @ApiParam(value = "分页")
                                      Pageable page) {
         log.info("[START] search tasks with userId: {}, and page: {}", userId, page);
-        Tasks tasks = service.searchTasks(userId, startDate, endDate, page);
+        Long value;
+        try {
+            value = Long.valueOf(userId);
+        } catch (Exception ex) {
+            Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
+            throw new ErrorException(HttpStatus.OK, error);
+        }
+        Tasks tasks = service.searchTasks(value, startDate, endDate, page);
         log.info("[END] search tasks with response: {}", tasks);
         return tasks;
     }
@@ -115,11 +125,18 @@ public class TaskController {
             @ApiImplicitParam(name = "size", value = "一页的总数",
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
-    public TaskOrders searchTaskOrders(@RequestParam @ApiParam(value = "用户ID") Long userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+    public TaskOrders searchTaskOrders(@RequestParam @ApiParam(value = "用户ID") String userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
     @ApiParam(value = "分页")
             Pageable page) {
         log.info("[START] search task orders with userId: {}, page: {}", userId, page);
-        TaskOrders orders = service.searchTaskOrders(userId, page);
+        Long value;
+        try {
+            value = Long.valueOf(userId);
+        } catch (Exception ex) {
+            Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
+            throw new ErrorException(HttpStatus.OK, error);
+        }
+        TaskOrders orders = service.searchTaskOrders(value, page);
         log.info("[END] search task orders with userId: {}", userId);
         return orders;
     }

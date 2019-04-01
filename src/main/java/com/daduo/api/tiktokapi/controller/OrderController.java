@@ -1,6 +1,9 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.model.error.Error;
+import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.service.OperateLogService;
 import com.daduo.api.tiktokapi.service.OrderService;
 import io.swagger.annotations.*;
@@ -40,9 +43,16 @@ public class OrderController {
 
     @GetMapping("/exchange/{userId}")
     @ApiOperation(value = "获取兑换现金订单")
-    public ExchangeOrders getExchangeMoneyOrders(@PathVariable @ApiParam("用户ID") Long userId) {
+    public ExchangeOrders getExchangeMoneyOrders(@PathVariable @ApiParam("用户ID") String userId) {
         log.info("[START] Get exchange money orders with user id: {}", userId);
-        ExchangeOrders response = service.getExchangeMoneyOrders(userId);
+        Long value;
+        try {
+            value = Long.valueOf(userId);
+        } catch (Exception ex) {
+            Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
+            throw new ErrorException(HttpStatus.OK, error);
+        }
+        ExchangeOrders response = service.getExchangeMoneyOrders(value);
         log.info("[END] Get exchange money orders with response: {}", response);
         return response;
     }
@@ -120,11 +130,18 @@ public class OrderController {
             @ApiImplicitParam(name = "size", value = "一页的总数",
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
-    public ProductOrders getUserProductOrders(@PathVariable @ApiParam("用户ID") Long userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+    public ProductOrders getUserProductOrders(@PathVariable @ApiParam("用户ID") String userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
     @ApiParam(value = "分页")
             Pageable page) {
         log.info("[START] Get user product orders with id: {}, page: {}", userId, page);
-        ProductOrders response = service.getUserProductOrders(userId, page);
+        Long value;
+        try {
+            value = Long.valueOf(userId);
+        } catch (Exception ex) {
+            Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
+            throw new ErrorException(HttpStatus.OK, error);
+        }
+        ProductOrders response = service.getUserProductOrders(value, page);
         log.info("[END] Get user product orders with response: {}", response);
         return response;
     }

@@ -1,6 +1,9 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.*;
+import com.daduo.api.tiktokapi.model.error.Error;
+import com.daduo.api.tiktokapi.model.error.ErrorBuilder;
 import com.daduo.api.tiktokapi.service.AccountService;
 import com.daduo.api.tiktokapi.service.OperateLogService;
 import io.swagger.annotations.*;
@@ -84,9 +87,16 @@ public class AccountController {
 
     @GetMapping("/{userId}")
     @ApiOperation(value = "获取账号信息")
-    public AccountResponse getAccount(@PathVariable Long userId) {
+    public AccountResponse getAccount(@PathVariable String userId) {
         log.info("[START] Update account with user id: {}.", userId);
-        AccountData data = accountService.getAccount(userId);
+        Long value;
+        try {
+            value = Long.valueOf(userId);
+        } catch (Exception ex) {
+            Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
+            throw new ErrorException(HttpStatus.OK, error);
+        }
+        AccountData data = accountService.getAccount(value);
         log.info("[END] Update account with response: {}", data);
         AccountResponse response = new AccountResponse();
         response.setData(data);
