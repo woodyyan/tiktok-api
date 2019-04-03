@@ -77,7 +77,7 @@ public class ProductController {
     @PutMapping("/{productId}")
     @ApiOperation(value = "修改商品", notes = "商品状态：ON_SALE是在售, SOLD_OUT是售完, OFF_SALE是下架")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ProductResponse modifyProduct(@PathVariable Long productId, @RequestBody ProductRequest request) {
+    public ProductResponse modifyProduct(@PathVariable Integer productId, @RequestBody ProductRequest request) {
         log.info("[START] Modify product with id: {}, request: {}", productId, request);
         operateLogService.addOperateLog("修改商品", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
         ProductResponse response = service.modifyProduct(productId, request);
@@ -88,7 +88,7 @@ public class ProductController {
     @GetMapping("/{productId}")
     @ApiOperation(value = "获取单个商品", notes = "商品状态：ON_SALE是在售, SOLD_OUT是售完, OFF_SALE是下架")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ProductInfoResponse getProduct(@PathVariable Long productId) {
+    public ProductInfoResponse getProduct(@PathVariable Integer productId) {
         log.info("[START] Modify product with request: {}", productId);
         ProductInfoResponse response = service.getProduct(productId);
         log.info("[END] Modify product with response: {}", response);

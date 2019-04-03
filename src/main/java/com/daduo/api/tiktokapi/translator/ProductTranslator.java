@@ -4,12 +4,14 @@ import com.daduo.api.tiktokapi.entity.Product;
 import com.daduo.api.tiktokapi.entity.ProductOrder;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.repository.ProductOrderRepository;
+import com.daduo.api.tiktokapi.repository.ProductRepository;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Component
@@ -18,6 +20,9 @@ public class ProductTranslator {
 
     @Autowired
     private ProductOrderRepository productOrderRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public Products translateToProducts(Page<Product> products) {
         Products result = new Products();
@@ -38,6 +43,7 @@ public class ProductTranslator {
 
     public Product toProduct(ProductRequest request) {
         Product product = new Product();
+        product.setId(getNewId());
         product.setLastModifiedTime(LocalDateTime.now());
         product.setCreatedTime(LocalDateTime.now());
         product.setImageUrl(request.getImageUrl());
@@ -47,6 +53,17 @@ public class ProductTranslator {
         product.setDescription(request.getDescription());
         product.setCount(request.getCount());
         return product;
+    }
+
+    private int getNewId() {
+        Product lastProduct = productRepository.findTop1ByOrderByLastModifiedTimeDesc();
+        int lastId = 0;
+        if (lastProduct != null) {
+            lastId = lastProduct.getId();
+        }
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        return (year - 2000) * 10000 + lastId % 10000 + 1;
     }
 
     public ProductResponse toProductResponse(Product savedProduct) {
@@ -59,7 +76,7 @@ public class ProductTranslator {
     private ProductData toProductData(Product product) {
         ProductData productData = new ProductData();
         productData.setDescription(product.getDescription());
-        productData.setId(product.getId());
+        productData.setId(Long.valueOf(product.getId()));
         productData.setImageUrl(product.getImageUrl());
         productData.setName(product.getName());
         productData.setStatus(product.getStatus());
@@ -90,7 +107,7 @@ public class ProductTranslator {
     public ProductInfoData getProductInfoData(Product product) {
         ProductInfoData infoData = new ProductInfoData();
         infoData.setDescription(product.getDescription());
-        infoData.setId(product.getId());
+        infoData.setId(Long.valueOf(product.getId()));
         infoData.setImageUrl(product.getImageUrl());
         infoData.setName(product.getName());
         infoData.setStatus(product.getStatus());

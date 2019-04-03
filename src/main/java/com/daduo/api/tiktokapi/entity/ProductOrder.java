@@ -17,7 +17,7 @@ public class ProductOrder {
     private Long id;
 
     @Column(name = "product_id", nullable = false)
-    private Long productId;
+    private Integer productId;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;

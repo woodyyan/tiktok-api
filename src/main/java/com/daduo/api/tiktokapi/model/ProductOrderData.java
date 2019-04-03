@@ -13,7 +13,7 @@ import org.joda.time.DateTime;
 @EqualsAndHashCode(callSuper = true)
 public class ProductOrderData extends BaseModel {
     @ApiModelProperty(value = "商品ID")
-    private Long productId;
+    private Integer productId;
     @ApiModelProperty(value = "用户ID")
     private Long userId;
 

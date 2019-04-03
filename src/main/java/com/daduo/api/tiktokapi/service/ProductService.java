@@ -35,7 +35,7 @@ public class ProductService {
         return translator.toProductResponse(savedProduct);
     }
 
-    public ProductResponse modifyProduct(Long productId, ProductRequest request) {
+    public ProductResponse modifyProduct(Integer productId, ProductRequest request) {
         Optional<Product> tempProduct = repository.findById(productId);
         if (tempProduct.isPresent()) {
             Product product = tempProduct.get();
@@ -71,7 +71,7 @@ public class ProductService {
         return translator.translateToProducts(productPage);
     }
 
-    public ProductInfoResponse getProduct(Long productId) {
+    public ProductInfoResponse getProduct(Integer productId) {
         Optional<Product> product = repository.findById(productId);
         if (product.isPresent()) {
             ProductInfoData productInfoData = translator.getProductInfoData(product.get());
