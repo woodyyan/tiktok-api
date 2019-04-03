@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @RequestMapping("/operate/log")
 @RestController
@@ -29,12 +30,25 @@ public class OperateLogController {
             @ApiImplicitParam(name = "size", value = "一页的总数",
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
-    public OperateLogs getAllOperateLogs(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+    public OperateLogs getAllOperateLogs(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+                                         @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
                                          @ApiParam(value = "分页")
                                                  Pageable page) {
         log.info("[START] Get all operate logs with page: {}", page);
-        OperateLogs logs = service.getAllOperateLogs(page);
+        OperateLogs logs = service.getAllOperateLogs(startDate, endDate, page);
         log.info("[END] Get all operate logs with logs: {}", logs);
+        return logs;
+    }
+
+    @GetMapping("/{adminName}")
+    @ApiOperation(value = "根据管理员名字获取操作日志（后台）")
+    public OperateLogs getOperateLogByAdminName(@PathVariable @ApiParam("管理员名字") String adminName,
+                                                @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+                                                @ApiParam(value = "分页") Pageable page) {
+        log.info("[START] Get operate log by admin name {}.", adminName);
+        OperateLogs logs = service.getOperateLogsByAdminName(adminName, page);
+        log.info("[END] Get operate log by admin name with {}.", logs);
         return logs;
     }
 }

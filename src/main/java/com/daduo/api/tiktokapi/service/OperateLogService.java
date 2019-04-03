@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -26,8 +27,13 @@ public class OperateLogService {
     @Autowired
     private AdminRepository adminRepository;
 
-    public OperateLogs getAllOperateLogs(Pageable page) {
-        Page<OperateLog> logs = repository.findAll(page);
+    public OperateLogs getAllOperateLogs(Date startDate, Date endDate, Pageable page) {
+        Page<OperateLog> logs;
+        if (startDate != null && endDate != null) {
+            logs = repository.findByCreatedTimeBetween(new LocalDateTime(startDate.getTime()), new LocalDateTime(endDate.getTime()), page);
+        } else {
+            logs = repository.findAll(page);
+        }
         return translator.toOperateLogs(logs);
     }
 
@@ -46,5 +52,10 @@ public class OperateLogService {
         log.setIP(ip);
         log.setOperation(operation);
         repository.save(log);
+    }
+
+    public OperateLogs getOperateLogsByAdminName(String adminName, Pageable page) {
+        Page<OperateLog> logs = repository.findAllByAdminName(adminName, page);
+        return translator.toOperateLogs(logs);
     }
 }
