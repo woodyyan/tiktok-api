@@ -27,7 +27,7 @@ public class CreditController {
     private CreditValidator validator;
 
     @Autowired
-    private AccountValidator accountValidate;
+    private AccountValidator accountValidator;
 
     @GetMapping("/{userId}")
     @ApiOperation(value = "获取当前ID的充值币积分", notes = "money是可兑换金额")
@@ -40,7 +40,7 @@ public class CreditController {
             Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
             throw new ErrorException(HttpStatus.OK, error);
         }
-        accountValidate.validateUserIdExists(value);
+        accountValidator.validateUserIdExists(value);
         CreditData data = service.getCreditById(value);
         CreditResponse response = new CreditResponse();
         response.setData(data);
@@ -53,7 +53,8 @@ public class CreditController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public CreditResponse modifyCredit(@RequestBody @ApiParam(value = "充值币Json") CreditRequest creditRequest) {
         log.info("[START] Add credit with request: {}", creditRequest);
-        accountValidate.validateUserIdExists(creditRequest.getUserId());
+        accountValidator.validateUserIdExists(creditRequest.getUserId());
+        accountValidator.validateForbiddenUser(creditRequest.getUserId());
         validator.validate(creditRequest);
         CreditData creditData = service.modifyCredit(creditRequest);
         CreditResponse response = new CreditResponse();

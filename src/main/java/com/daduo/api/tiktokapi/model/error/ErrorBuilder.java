@@ -27,4 +27,12 @@ public final class ErrorBuilder {
         Error error = buildNotFoundError(message);
         return new ErrorException(OK, error);
     }
+
+    public static ErrorException buildForbiddenErrorException(String message) {
+        Error error = new Error();
+        error.setStatus(String.valueOf(HttpStatus.FORBIDDEN.value()));
+        error.setTitle("FORBIDDEN");
+        error.setDetails(message);
+        return new ErrorException(OK, error);
+    }
 }
