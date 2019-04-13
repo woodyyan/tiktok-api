@@ -19,10 +19,12 @@ import com.daduo.api.tiktokapi.translator.TaskTranslator;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -253,7 +255,13 @@ public class TaskService {
         } else if (startDate != null && endDate != null) {
             entities = repository.findByCreatedTimeBetween(new LocalDateTime(startDate.getTime()), new LocalDateTime(endDate.getTime()), page);
         } else {
-            entities = repository.findAllByOwnerId(userId, page);
+            //大于这个数字就表示是userID，否则是taskID
+            if (userId > 1000000000000L) {
+                entities = repository.findAllByOwnerId(userId, page);
+            } else {
+                Optional<TaskEntity> task = repository.findById(userId);
+                entities = task.<Page<TaskEntity>>map(taskEntity -> new PageImpl<>(Collections.singletonList(taskEntity))).orElseGet(() -> new PageImpl<>(Collections.emptyList()));
+            }
         }
         return translator.translateToTasks(entities);
     }

@@ -12,6 +12,7 @@ import com.daduo.api.tiktokapi.translator.PromotionTranslator;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -59,9 +60,14 @@ public class PromotionService {
         repository.save(promotion);
     }
 
-    public AllPromotions getAllPromotions(Pageable page) {
-        Page<Promotion> promotions = repository.findAll(page);
-        return translator.toAllPromotions(promotions);
+    public AllPromotions getAllPromotions(Long userId, Pageable page) {
+        if (userId != null) {
+            List<Promotion> promotionList = repository.findAllByPromotionUserId(userId);
+            return translator.toAllPromotions(new PageImpl<>(promotionList));
+        } else {
+            Page<Promotion> promotions = repository.findAll(page);
+            return translator.toAllPromotions(promotions);
+        }
     }
 
     public Accounts getAllChildUsers(Long userId) {
@@ -74,5 +80,10 @@ public class PromotionService {
             result.getData().add(data);
         }
         return result;
+    }
+
+    public AllPromotions getAllPromotionsByUserId(Long value) {
+        List<Promotion> promotions = repository.findAllByPromotionUserId(value);
+        return translator.toAllPromotions(new PageImpl<>(promotions));
     }
 }

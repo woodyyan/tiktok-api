@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -50,11 +51,21 @@ public class PromotionController {
             @ApiImplicitParam(name = "size", value = "一页的总数",
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
-    public AllPromotions getAllPromotions(@PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+    public AllPromotions getAllPromotions(@RequestParam(required = false) @ApiParam(value = "用户ID") String userId,
+                                          @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
                                           @ApiParam(value = "分页")
                                                   Pageable page) {
         log.info("[START] Get all promotion details with page: {}.", page);
-        AllPromotions allPromotions = service.getAllPromotions(page);
+        Long value = null;
+        if (!StringUtils.isEmpty(userId)) {
+            try {
+                value = Long.valueOf(userId);
+            } catch (Exception ex) {
+                Error error = ErrorBuilder.buildInvalidParameterError("会员ID必须是数字。");
+                throw new ErrorException(HttpStatus.OK, error);
+            }
+        }
+        AllPromotions allPromotions = service.getAllPromotions(value, page);
         log.info("[END] Get all promotion details with response: {}.", allPromotions);
         return allPromotions;
     }

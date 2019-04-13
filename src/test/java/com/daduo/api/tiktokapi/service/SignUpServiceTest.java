@@ -2,20 +2,16 @@ package com.daduo.api.tiktokapi.service;
 
 import org.junit.Test;
 
-import java.util.Calendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class SignUpServiceTest {
     @Test
-    public void test() {
-        int id = 191234;
+    public void test() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = sdf.parse("2019-12-01");
 
-        int newid = id % 10000;
-        System.out.println(newid);
-
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        id = (year - 2000) * 10000 + newid + 1;
-
-        System.out.println(id);
+        System.out.println(date);
     }
 }
