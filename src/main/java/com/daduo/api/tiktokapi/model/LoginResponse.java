@@ -22,5 +22,5 @@ public class LoginResponse extends BaseModel {
     @ApiModelProperty(value = "激活状态")
     private AccountStatus status;
     @ApiModelProperty(value = "是否封号")
-    private boolean isForbidden;
+    private boolean isIsForbidden;
 }
