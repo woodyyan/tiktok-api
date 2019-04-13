@@ -40,7 +40,6 @@ public class OrderController {
     @ApiOperation(value = "创建兑换现金订单", notes = "付款方式ExchangeMethod：WECHAT, ALIPAY")
     public ExchangeResponse createExchangeMoneyOrder(@RequestBody @ApiParam("兑换现金请求") ExchangeRequest exchangeRequest) {
         log.info("[START] Create exchange money order with request: {}", exchangeRequest);
-        accountValidator.validateForbiddenUser(exchangeRequest.getUserId());
         ExchangeResponse response = service.createExchangeMoneyOrder(exchangeRequest);
         log.info("[END] Create exchange money order with response: {}", response);
         return response;
@@ -94,7 +93,6 @@ public class OrderController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public ProductOrderResponse createProductOrder(@RequestBody @ApiParam("订单请求") ProductOrderRequest productOrderRequest) {
         log.info("[START] Create order with request: {}", productOrderRequest);
-        accountValidator.validateForbiddenUser(productOrderRequest.getUserId());
         ProductOrderResponse response = service.createProductOrder(productOrderRequest);
         log.info("[END] Create order with response: {}", response);
         return response;

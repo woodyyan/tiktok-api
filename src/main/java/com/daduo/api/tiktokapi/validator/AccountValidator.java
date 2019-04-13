@@ -21,14 +21,4 @@ public class AccountValidator {
             throw ErrorBuilder.buildNotFoundErrorException("用户ID找不到。");
         }
     }
-
-    public void validateForbiddenUser(Long ownerId) {
-        Optional<Account> account = accountRepository.findById(ownerId);
-        if (account.isPresent()) {
-            AccountStatus status = account.get().getStatus();
-            if (status == AccountStatus.FORBIDDEN) {
-                throw ErrorBuilder.buildNotFoundErrorException("你好，已封号，请联系客服激活封号！");
-            }
-        }
-    }
 }

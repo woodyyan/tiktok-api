@@ -54,7 +54,6 @@ public class CreditController {
     public CreditResponse modifyCredit(@RequestBody @ApiParam(value = "充值币Json") CreditRequest creditRequest) {
         log.info("[START] Add credit with request: {}", creditRequest);
         accountValidator.validateUserIdExists(creditRequest.getUserId());
-        accountValidator.validateForbiddenUser(creditRequest.getUserId());
         validator.validate(creditRequest);
         CreditData creditData = service.modifyCredit(creditRequest);
         CreditResponse response = new CreditResponse();

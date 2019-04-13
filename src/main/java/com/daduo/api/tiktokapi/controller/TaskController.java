@@ -42,7 +42,6 @@ public class TaskController {
         log.info("[START] Publish task with request: {}", taskRequest);
         validator.validate(taskRequest);
         accountValidator.validateUserIdExists(taskRequest.getOwnerId());
-        accountValidator.validateForbiddenUser(taskRequest.getOwnerId());
         TaskData taskData = service.publishTask(taskRequest);
         log.info("[END] Publish task with response: {}", taskData);
         TaskResponse response = new TaskResponse();
@@ -115,7 +114,6 @@ public class TaskController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public TaskOrderResponse createTaskOrder(@RequestBody @ApiParam(value = "验证任务请求Json") TaskOrderRequest taskOrderRequest) {
         accountValidator.validateUserIdExists(taskOrderRequest.getUserId());
-        accountValidator.validateForbiddenUser(taskOrderRequest.getUserId());
         log.info("[START] Create task order with request: {}", taskOrderRequest);
         TaskOrderResponse taskOrder = service.createTaskOrder(taskOrderRequest);
         log.info("[END] Create task order with response: {}", taskOrder);
