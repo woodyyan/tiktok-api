@@ -31,11 +31,9 @@ public class AccountTranslator {
         response.setNickname(account.getNickname());
         response.setStatus(account.getStatus());
         response.setIsForbidden(account.getStatus() == AccountStatus.INACTIVE);
-        AuthData authData = new AuthData();
-        authData.setAccessToken(account.getAccessToken());
-        authData.setExpiresIn(account.getExpiresIn());
-        authData.setOpenId(account.getOpenId());
-        response.setAuthData(authData);
+        response.setAccessToken(account.getAccessToken());
+        response.setExpiresIn(account.getExpiresIn());
+        response.setOpenId(account.getOpenId());
 
         return response;
     }

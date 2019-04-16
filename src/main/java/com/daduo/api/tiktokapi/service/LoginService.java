@@ -85,19 +85,19 @@ public class LoginService {
     }
 
     public LoginResponse platformLogin(PlatformLoginRequest platformLoginRequest) {
-        Account account = repository.findOneByOpenId(platformLoginRequest.getAuthData().getOpenId());
+        Account account = repository.findOneByOpenId(platformLoginRequest.getOpenId());
         if (account != null) {
             return translator.translateToLoginResponse(account, generateToken(account));
         } else {
             account = new Account();
-            account.setNickname(platformLoginRequest.getAuthData().getNickname());
-            account.setAvatar(platformLoginRequest.getAuthData().getAvatarUrl());
+            account.setNickname(platformLoginRequest.getNickname());
+            account.setAvatar(platformLoginRequest.getAvatarUrl());
             LocalDateTime now = LocalDateTime.now();
             account.setCreatedTime(now);
-            account.setExpiresIn(platformLoginRequest.getAuthData().getExpiresIn());
-            account.setOpenId(platformLoginRequest.getAuthData().getOpenId());
-            account.setAccessToken(platformLoginRequest.getAuthData().getAccessToken());
-            account.setScope(platformLoginRequest.getAuthData().getScope());
+            account.setExpiresIn(platformLoginRequest.getExpiresIn());
+            account.setOpenId(platformLoginRequest.getOpenId());
+            account.setAccessToken(platformLoginRequest.getAccessToken());
+            account.setScope(platformLoginRequest.getScope());
             account.setLastModifiedTime(now);
             account.setId(System.currentTimeMillis());
             account.setStatus(AccountStatus.INACTIVE);

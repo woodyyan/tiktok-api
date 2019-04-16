@@ -23,4 +23,10 @@ public class LoginResponse extends BaseModel {
     private AccountStatus status;
     @ApiModelProperty(value = "是否封号")
     private boolean isIsForbidden;
+    @ApiModelProperty(value = "token")
+    private String accessToken;
+    @ApiModelProperty(value = "过期时间")
+    private Long expiresIn;
+    @ApiModelProperty(value = "openID")
+    private String openId;
 }
