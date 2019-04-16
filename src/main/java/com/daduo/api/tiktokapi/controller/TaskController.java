@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.enums.TaskOrderStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.Error;
@@ -128,9 +129,11 @@ public class TaskController {
             @ApiImplicitParam(name = "size", value = "一页的总数",
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
-    public TaskOrders searchTaskOrders(@RequestParam @ApiParam(value = "用户ID") String userId, @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
-    @ApiParam(value = "分页")
-            Pageable page) {
+    public TaskOrders searchTaskOrders(@RequestParam @ApiParam(value = "用户ID") String userId,
+                                       @RequestParam(required = false) @ApiParam(value = "用户ID") TaskOrderStatus status,
+                                       @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
+                                       @ApiParam(value = "分页")
+                                               Pageable page) {
         log.info("[START] search task orders with userId: {}, page: {}", userId, page);
         Long value = null;
         if (!StringUtils.isEmpty(userId)) {
@@ -141,7 +144,7 @@ public class TaskController {
                 throw new ErrorException(HttpStatus.OK, error);
             }
         }
-        TaskOrders orders = service.searchTaskOrders(value, page);
+        TaskOrders orders = service.searchTaskOrders(value, status, page);
         log.info("[END] search task orders with userId: {}", userId);
         return orders;
     }

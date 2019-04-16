@@ -330,8 +330,13 @@ public class TaskService {
         creditService.modifyCredit(request);
     }
 
-    public TaskOrders searchTaskOrders(Long userId, Pageable page) {
-        Page<TaskOrder> orders = orderRepository.findAllByUserId(userId, page);
+    public TaskOrders searchTaskOrders(Long userId, TaskOrderStatus status, Pageable page) {
+        Page<TaskOrder> orders;
+        if (status != null) {
+            orders = orderRepository.findAllByUserIdAndStatus(userId, status, page);
+        } else {
+            orders = orderRepository.findAllByUserId(userId, page);
+        }
         return orderTranslator.translateToTaskOrders(orders);
     }
 }

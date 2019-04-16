@@ -1,6 +1,7 @@
 package com.daduo.api.tiktokapi.repository;
 
 import com.daduo.api.tiktokapi.entity.TaskOrder;
+import com.daduo.api.tiktokapi.enums.TaskOrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,6 @@ public interface TaskOrderRepository extends JpaRepository<TaskOrder, Long> {
     List<TaskOrder> findAllByTaskId(Long taskId);
 
     List<TaskOrder> findAllByUserIdAndTaskId(Long userId, Long taskId);
+
+    Page<TaskOrder> findAllByUserIdAndStatus(Long userId, TaskOrderStatus status, Pageable page);
 }
