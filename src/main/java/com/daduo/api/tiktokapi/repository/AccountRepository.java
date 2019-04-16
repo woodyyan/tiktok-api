@@ -12,4 +12,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Account findOneByPhoneNumber(Long phoneNumber);
 
     Page<Account> findByCreatedTimeBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable page);
+
+    Account findOneByOpenId(String openId);
 }

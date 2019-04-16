@@ -8,6 +8,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.daduo.api.tiktokapi.entity.Account;
+import com.daduo.api.tiktokapi.enums.AccountStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.Error;
@@ -84,8 +85,26 @@ public class LoginService {
     }
 
     public LoginResponse platformLogin(PlatformLoginRequest platformLoginRequest) {
-//        savePromotion(platformLoginRequest.getPromotionUserId(), platformLoginRequest.getId());
-        return null;
+        Account account = repository.findOneByOpenId(platformLoginRequest.getAuthData().getOpenId());
+        if (account != null) {
+            return translator.translateToLoginResponse(account, generateToken(account));
+        } else {
+            account = new Account();
+            account.setNickname(platformLoginRequest.getAuthData().getNickname());
+            account.setAvatar(platformLoginRequest.getAuthData().getAvatarUrl());
+            LocalDateTime now = LocalDateTime.now();
+            account.setCreatedTime(now);
+            account.setExpiresIn(platformLoginRequest.getAuthData().getExpiresIn());
+            account.setOpenId(platformLoginRequest.getAuthData().getOpenId());
+            account.setAccessToken(platformLoginRequest.getAuthData().getAccessToken());
+            account.setScope(platformLoginRequest.getAuthData().getScope());
+            account.setLastModifiedTime(now);
+            account.setId(System.currentTimeMillis());
+            account.setStatus(AccountStatus.INACTIVE);
+            Account savedAccount = repository.save(account);
+            savePromotion(platformLoginRequest.getPromotionUserId(), savedAccount.getId());
+            return translator.translateToLoginResponse(savedAccount, generateToken(savedAccount));
+        }
     }
 
     private String send(Long number) {

@@ -13,4 +13,10 @@ public class AuthData {
     private String accessToken;
     @ApiModelProperty(value = "微信的token的过期时间")
     private Long expiresIn;
+    @ApiModelProperty(value = "Scope")
+    private String scope;
+    @ApiModelProperty(value = "昵称")
+    private String nickname;
+    @ApiModelProperty(value = "头像链接")
+    private String avatarUrl;
 }

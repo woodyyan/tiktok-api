@@ -69,4 +69,7 @@ public class Account {
 
     @Column(name = "can_task")
     private Boolean canTask;
+
+    @Column(name = "scope")
+    private String scope;
 }
