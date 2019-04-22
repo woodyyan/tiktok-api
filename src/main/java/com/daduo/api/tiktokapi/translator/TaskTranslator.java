@@ -1,16 +1,16 @@
 package com.daduo.api.tiktokapi.translator;
 
+import com.daduo.api.tiktokapi.entity.Admin;
 import com.daduo.api.tiktokapi.entity.TaskEntity;
 import com.daduo.api.tiktokapi.entity.TaskOrder;
 import com.daduo.api.tiktokapi.enums.TaskItem;
 import com.daduo.api.tiktokapi.enums.TaskOrderStatus;
 import com.daduo.api.tiktokapi.enums.TaskStatus;
-import com.daduo.api.tiktokapi.model.PagingMeta;
-import com.daduo.api.tiktokapi.model.TaskData;
-import com.daduo.api.tiktokapi.model.TaskRequest;
-import com.daduo.api.tiktokapi.model.Tasks;
+import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.base.BaseModel;
+import com.daduo.api.tiktokapi.repository.AdminRepository;
 import com.daduo.api.tiktokapi.repository.TaskOrderRepository;
+import com.daduo.api.tiktokapi.service.AccountService;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -25,6 +26,12 @@ import static java.util.stream.Collectors.toList;
 public class TaskTranslator {
     @Autowired
     private TaskOrderRepository taskOrderRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
+
+    @Autowired
+    private AccountService accountService;
 
     public TaskData translateToTaskResponse(TaskEntity savedTask) {
         return translateTaskData(savedTask);
@@ -61,7 +68,13 @@ public class TaskTranslator {
     public Tasks translateToTasks(Page<TaskEntity> entities) {
         Tasks tasks = new Tasks();
         List<TaskData> data = new ArrayList<>();
+        List<Admin> admins = adminRepository.findAll();
+        List<Long> adminPhones = admins.stream().map(Admin::getPhoneNumber).collect(Collectors.toList());
         for (TaskEntity entity : entities.getContent()) {
+            AccountData account = accountService.getAccount(entity.getOwnerId());
+            if (adminPhones.contains(account.getPhoneNumber())) {
+                entity.setSticky(true);
+            }
             if (entity.isSticky()) {
                 data.add(0, translateTaskData(entity));
             } else {
