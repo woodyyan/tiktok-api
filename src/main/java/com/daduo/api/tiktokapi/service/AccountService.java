@@ -112,11 +112,17 @@ public class AccountService {
     }
 
     public AccountData getAccount(Long userId) {
+        //userID可以是ID也可以是电话号
         Optional<Account> account = repository.findById(userId);
         if (account.isPresent()) {
             return translator.toAccountData(account.get());
         } else {
-            throw buildNotFoundErrorException("账号找不到，请确认ID是否正确。");
+            Account accountByPhone = repository.findOneByPhoneNumber(userId);
+            if (accountByPhone != null) {
+                return translator.toAccountData(accountByPhone);
+            } else {
+                throw buildNotFoundErrorException("用户找不到，请确认参数是否正确。");
+            }
         }
     }
 

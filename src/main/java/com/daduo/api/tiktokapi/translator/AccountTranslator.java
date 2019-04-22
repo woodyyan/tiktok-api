@@ -30,7 +30,7 @@ public class AccountTranslator {
         response.setSessionToken(token);
         response.setNickname(account.getNickname());
         response.setStatus(account.getStatus());
-        response.setIsForbidden(account.getStatus() == AccountStatus.INACTIVE);
+        response.setIsForbidden(account.getStatus() == AccountStatus.FORBIDDEN);
         response.setAccessToken(account.getAccessToken());
         response.setExpiresIn(account.getExpiresIn());
         response.setOpenId(account.getOpenId());

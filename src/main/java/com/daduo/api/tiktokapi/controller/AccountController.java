@@ -86,9 +86,9 @@ public class AccountController {
     }
 
     @GetMapping("/{userId}")
-    @ApiOperation(value = "获取账号信息")
-    public AccountResponse getAccount(@PathVariable String userId) {
-        log.info("[START] Update account with user id: {}.", userId);
+    @ApiOperation(value = "根据userID或者手机号获取账号信息")
+    public AccountResponse getAccount(@PathVariable @ApiParam("userId或手机号") String userId) {
+        log.info("[START] Get account with user id: {}.", userId);
         Long value;
         try {
             value = Long.valueOf(userId);
@@ -97,7 +97,7 @@ public class AccountController {
             throw new ErrorException(HttpStatus.OK, error);
         }
         AccountData data = accountService.getAccount(value);
-        log.info("[END] Update account with response: {}", data);
+        log.info("[END] Get account with response: {}", data);
         AccountResponse response = new AccountResponse();
         response.setData(data);
         return response;
