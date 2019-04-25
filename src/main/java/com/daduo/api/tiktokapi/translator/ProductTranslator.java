@@ -10,13 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 @Component
 public class ProductTranslator {
-    private static final int TEN_THOUSAND = 10000;
+    private static final double TEN_THOUSAND = 10000.0;
 
     @Autowired
     private ProductOrderRepository productOrderRepository;
@@ -80,7 +81,7 @@ public class ProductTranslator {
         productData.setImageUrl(product.getImageUrl());
         productData.setName(product.getName());
         productData.setStatus(product.getStatus());
-        productData.setPrice(product.getPrice());
+        productData.setPrice(new BigDecimal(product.getPrice() / 10000.0));
         productData.setCount(product.getCount());
         productData.setCreatedTime(product.getCreatedTime().toDateTime());
         productData.setLastModifiedTime(product.getLastModifiedTime().toDateTime());
@@ -111,14 +112,14 @@ public class ProductTranslator {
         infoData.setImageUrl(product.getImageUrl());
         infoData.setName(product.getName());
         infoData.setStatus(product.getStatus());
-        infoData.setPrice(product.getPrice());
+        infoData.setPrice(new BigDecimal(product.getPrice() / TEN_THOUSAND));
         infoData.setCount(product.getCount());
         infoData.setCreatedTime(product.getCreatedTime().toDateTime());
         infoData.setLastModifiedTime(product.getLastModifiedTime().toDateTime());
         List<ProductOrder> orders = productOrderRepository.findAllByProductId(product.getId());
-        infoData.setTotalPrice((product.getPrice() * product.getCount()) / TEN_THOUSAND);
+        infoData.setTotalPrice(new BigDecimal((product.getPrice() * product.getCount()) / TEN_THOUSAND));
         infoData.setSaleCount(orders.size());
-        infoData.setSaleAmount((orders.size() * product.getPrice()) / TEN_THOUSAND);
+        infoData.setSaleAmount((orders.size() * product.getPrice()) / 10000);
         infoData.setUnSaleCount(product.getCount() - orders.size());
         return infoData;
     }

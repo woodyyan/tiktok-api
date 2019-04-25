@@ -1,6 +1,5 @@
 package com.daduo.api.tiktokapi.controller;
 
-import com.daduo.api.tiktokapi.enums.ProductStatus;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.service.OperateLogService;
 import com.daduo.api.tiktokapi.service.ProductService;
@@ -66,7 +65,6 @@ public class ProductController {
 
     @GetMapping("/search")
     @ApiOperation(value = "搜索商品", notes = "搜索商品")
-    @ResponseStatus(HttpStatus.ACCEPTED)
     public ProductInfos searchProduct(@RequestParam @ApiParam("关键词") String  keyword) {
         log.info("[START] Search product with keyword: {}", keyword);
         ProductInfos response = service.searchProduct(keyword);

@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
+
 @Data
 @ApiModel("商品数据")
 @EqualsAndHashCode(callSuper = true)
@@ -18,7 +20,7 @@ public class ProductData extends BaseModel {
     @ApiModelProperty(value = "商品名字")
     private String name;
     @ApiModelProperty(value = "单价")
-    private Integer price;
+    private BigDecimal price;
     @ApiModelProperty(value = "总数")
     private int count;
     @ApiModelProperty(value = "状态")
