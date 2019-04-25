@@ -43,6 +43,12 @@ public class OperateLogController {
 
     @GetMapping("/{adminName}")
     @ApiOperation(value = "根据管理员名字获取操作日志（后台）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "请求第几页",
+                    defaultValue = "0", dataType = "integer", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "一页的总数",
+                    defaultValue = "20", dataType = "integer", paramType = "query")
+    })
     public OperateLogs getOperateLogByAdminName(@PathVariable @ApiParam("管理员名字") String adminName,
                                                 @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
                                                 @ApiParam(value = "分页") Pageable page) {
