@@ -32,7 +32,7 @@ public class ProductService {
     }
 
     public ProductInfos searchProduct(String keyword) {
-        List<Product> products = repository.findAllByNameLike(keyword);
+        List<Product> products = repository.findByNameLike(keyword);
         return translator.toProductInfos(new PageImpl<>(products));
     }
 

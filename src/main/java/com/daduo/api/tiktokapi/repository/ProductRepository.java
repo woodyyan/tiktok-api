@@ -5,6 +5,8 @@ import com.daduo.api.tiktokapi.enums.ProductStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +17,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Product findTop1ByOrderByLastModifiedTimeDesc();
 
-//    @Query("SELECT * FROM tiktok.product where name like '测试%' or id = '190001'")
-    List<Product> findAllByNameLike(String keyword);
+    @Query("SELECT p FROM Product p where name like CONCAT('%',:keyword,'%')")
+    List<Product> findByNameLike(@Param("keyword") String keyword);
 }
