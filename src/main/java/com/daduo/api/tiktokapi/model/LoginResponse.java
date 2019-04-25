@@ -29,4 +29,6 @@ public class LoginResponse extends BaseModel {
     private Long expiresIn;
     @ApiModelProperty(value = "openID")
     private String openId;
+    @ApiModelProperty(value = "是否首次登陆")
+    private boolean isFirst;
 }

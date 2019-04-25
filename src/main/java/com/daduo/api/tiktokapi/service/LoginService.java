@@ -52,7 +52,9 @@ public class LoginService {
             Account newAccount = translator.translateToAccount(loginRequest.getPhoneNumber());
             Account savedAccount = repository.save(newAccount);
             savePromotion(loginRequest.getPromotionUserId(), savedAccount.getId());
-            return translator.translateToLoginResponse(savedAccount, generateToken(savedAccount));
+            LoginResponse response = translator.translateToLoginResponse(savedAccount, generateToken(savedAccount));
+            response.setFirst(true);
+            return response;
         }
     }
 
@@ -103,7 +105,9 @@ public class LoginService {
             account.setStatus(AccountStatus.INACTIVE);
             Account savedAccount = repository.save(account);
             savePromotion(platformLoginRequest.getPromotionUserId(), savedAccount.getId());
-            return translator.translateToLoginResponse(savedAccount, generateToken(savedAccount));
+            LoginResponse response = translator.translateToLoginResponse(savedAccount, generateToken(savedAccount));
+            response.setFirst(true);
+            return response;
         }
     }
 
