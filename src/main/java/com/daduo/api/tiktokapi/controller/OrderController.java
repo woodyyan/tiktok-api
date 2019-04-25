@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.enums.OrderStatus;
 import com.daduo.api.tiktokapi.enums.ProductOrderStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.*;
@@ -84,6 +85,11 @@ public class OrderController {
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public void updateExchangeOrderStatus(@PathVariable Long id, @RequestBody @ApiParam("修改现金订单请求") ExchangeOrderRequest request) {
         log.info("[START] Update exchange money order status with status: {}", request);
+        if (request.getStatus() != null && request.getStatus().equals(OrderStatus.COMPLETED)) {
+            operateLogService.addOperateLog("通过兑换现金", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
+        } else if (request.getStatus() != null && request.getStatus().equals(OrderStatus.REJECTED)) {
+            operateLogService.addOperateLog("拒付兑换现金", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
+        }
         operateLogService.addOperateLog("审核通过兑换现金订单", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
         service.updateExchangeOrderStatus(id, request.getStatus());
         log.info("[END] Update exchange money order status with status: {}", request);
