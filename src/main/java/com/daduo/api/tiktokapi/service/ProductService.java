@@ -9,9 +9,11 @@ import com.daduo.api.tiktokapi.translator.ProductTranslator;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +29,11 @@ public class ProductService {
         Page<Product> productPage;
         productPage = repository.findAll(page);
         return translator.toProductInfos(productPage);
+    }
+
+    public ProductInfos searchProduct(String keyword) {
+        List<Product> products = repository.findAllByNameLike(keyword);
+        return translator.toProductInfos(new PageImpl<>(products));
     }
 
     public ProductResponse addProduct(ProductRequest request) {

@@ -1,5 +1,6 @@
 package com.daduo.api.tiktokapi.controller;
 
+import com.daduo.api.tiktokapi.enums.ProductOrderStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.Error;
@@ -103,6 +104,11 @@ public class OrderController {
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public ProductOrderResponse updateProductOrder(@PathVariable @ApiParam("商品订单ID") Integer productOrderId, @RequestBody @ApiParam("订单请求") ProductOrderRequest productOrderRequest) {
         log.info("[START] Update product order with request: {}", productOrderRequest);
+        if (productOrderRequest.getStatus() != null && productOrderRequest.getStatus().equals(ProductOrderStatus.ACCEPTED)) {
+            operateLogService.addOperateLog("通过兑换商品", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
+        } else if (productOrderRequest.getStatus() != null && productOrderRequest.getStatus().equals(ProductOrderStatus.REJECTED)) {
+            operateLogService.addOperateLog("不通过兑换商品", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
+        }
         operateLogService.addOperateLog("更新兑换商品订单", servletRequest.getHeader("admin"), servletRequest.getRemoteAddr());
         ProductOrderResponse response = service.updateProductOrder(productOrderId, productOrderRequest);
         log.info("[END] Update product order with response: {}", response);
