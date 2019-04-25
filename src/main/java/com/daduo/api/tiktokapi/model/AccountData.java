@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
+
 @Data
 @ApiModel("账号Json")
 @EqualsAndHashCode(callSuper = true)
@@ -37,10 +39,10 @@ public class AccountData extends BaseModel {
     private Boolean canTask;
 
     @ApiModelProperty(value = "充值币")
-    private Integer credit;
+    private BigDecimal credit;
 
     @ApiModelProperty(value = "积分")
-    private Integer points;
+    private BigDecimal points;
 
     @ApiModelProperty(value = "姓名")
     private String name;

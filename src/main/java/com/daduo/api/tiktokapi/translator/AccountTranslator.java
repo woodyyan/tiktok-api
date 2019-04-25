@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -80,8 +81,8 @@ public class AccountTranslator {
         data.setWechat(account.getWechat());
         data.setCanTask(account.getCanTask());
         data.setStatus(account.getStatus());
-        data.setCredit(credit.getCredit() / 10000);
-        data.setPoints(credit.getPoints() / 10000);
+        data.setCredit(BigDecimal.valueOf(credit.getCredit() / 10000.0));
+        data.setPoints(BigDecimal.valueOf(credit.getPoints() / 10000.0));
         //TODO 扣充值币/万个
         data.setCostCredit(2);
         //TODO 扣积分/万个
