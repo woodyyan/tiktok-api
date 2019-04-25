@@ -32,6 +32,9 @@ public class ProductService {
     }
 
     public ProductInfos searchProduct(String keyword) {
+        if (keyword != null) {
+            keyword = keyword.trim();
+        }
         List<Product> products = repository.findByNameLike(keyword);
         return translator.toProductInfos(new PageImpl<>(products));
     }
