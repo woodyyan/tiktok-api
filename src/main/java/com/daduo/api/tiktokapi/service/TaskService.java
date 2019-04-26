@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -217,7 +218,7 @@ public class TaskService {
         CreditData creditData = creditService.getCreditById(ownerId);
         Integer totalCreditPrice = (referenceValueService.searchByName("creditOfPerRmb") / referenceValueService.searchByName("pointsOfPerRmb")) * totalPointPrice;
         totalCreditPrice = (int) (totalCreditPrice * ((100.0 + commissionPercent) / 100.0));
-        if (creditData.getPoints() < totalPointPrice && creditData.getCredit() < totalCreditPrice) {
+        if (creditData.getPoints().compareTo(new BigDecimal(totalPointPrice / 10000.0)) < 0 && creditData.getCredit().compareTo(new BigDecimal(totalCreditPrice / 10000.0)) < 0) {
             Error error = new Error();
             error.setTitle("余额不足");
             error.setDetails("余额不足，请充值。");
@@ -227,7 +228,7 @@ public class TaskService {
 
         CreditRequest creditRequest = new CreditRequest();
         creditRequest.setUserId(ownerId);
-        if (creditData.getCredit() >= totalCreditPrice) {
+        if (creditData.getCredit().compareTo(new BigDecimal(totalCreditPrice / 10000.0)) > -1) {
             creditRequest.setCredit(-totalCreditPrice);
         } else {
             creditRequest.setPoints(-totalPointPrice);

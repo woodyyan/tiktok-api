@@ -6,16 +6,18 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
+
 @Data
 @ApiModel(value = "充值币积分数据")
 @EqualsAndHashCode(callSuper = true)
 public class CreditData extends BaseModel {
     @ApiModelProperty(value = "充值币")
-    private Integer credit;
+    private BigDecimal credit;
     @ApiModelProperty(value = "用户ID")
     private Long userId;
     @ApiModelProperty(value = "积分数")
-    private Integer points;
+    private BigDecimal points;
     @ApiModelProperty(value = "可兑换金额")
     private int money;
     @ApiModelProperty(value = "昵称")

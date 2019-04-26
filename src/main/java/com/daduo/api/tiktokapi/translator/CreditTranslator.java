@@ -6,6 +6,8 @@ import com.daduo.api.tiktokapi.service.ReferenceValueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class CreditTranslator {
 
@@ -17,8 +19,8 @@ public class CreditTranslator {
 
         CreditData data = new CreditData();
         data.setId(credit.getId());
-        data.setCredit(credit.getCredit());
-        data.setPoints(credit.getPoints());
+        data.setCredit(new BigDecimal(credit.getCredit() / 10000.0));
+        data.setPoints(new BigDecimal(credit.getPoints() / 10000.0));
         data.setMoney(credit.getPoints() / pointsOfPerRmb);
         data.setUserId(credit.getUserId());
         data.setAvatar(avatar);

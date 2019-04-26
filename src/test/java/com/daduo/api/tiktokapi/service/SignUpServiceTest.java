@@ -13,7 +13,9 @@ public class SignUpServiceTest {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = sdf.parse("2019-12-01");
 
-        BigDecimal ss = BigDecimal.valueOf(113340 / 10000.0);
-        System.out.println(ss);
+        BigDecimal a = new BigDecimal(10);
+        BigDecimal b = new BigDecimal(10);
+
+        System.out.println(b.compareTo(a));
     }
 }
