@@ -62,6 +62,7 @@ public class OrderService {
             throw new ErrorException(HttpStatus.OK, error);
         }
         ExchangeOrder order = translator.translateToExchangeOrder(exchangeRequest, points);
+        deductPoints(order.getUserId(), points);
         repository.save(order);
         ExchangeResponse response = new ExchangeResponse();
         response.setMessage("提交成功，请等客服审核之后付款。");
