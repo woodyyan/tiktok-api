@@ -17,6 +17,7 @@ public class ImageMatchService {
 
     public static boolean verifyTask(String image, VerifyType type) {
         try {
+            log.info("[START] Verify Task for iamge {} and type {}", image, type);
             String localImagePath;
             localImagePath = OSSUtils.getLocalImagePath(image);
             System.out.println("START...");
@@ -32,6 +33,7 @@ public class ImageMatchService {
             tm.load(templateImage);//加载带比对图片，注此图片必须小于源图
 
             boolean result = tm.matchTemplate(cvLoadImage(localImagePath));//校验585.png是否包含于原图58home.png
+            log.info("[END] Verify Task for iamge {} and type {} with result {}", image, type, result);
             if (result) {//打印匹配结果，boolean
                 System.out.println("match");
                 return true;
@@ -40,8 +42,9 @@ public class ImageMatchService {
                 return false;
             }
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         } catch (RuntimeException e) {
+            log.error(e.getMessage(), e);
             return true;
         }
         return false;
