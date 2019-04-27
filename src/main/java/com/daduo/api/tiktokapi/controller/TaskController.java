@@ -1,6 +1,7 @@
 package com.daduo.api.tiktokapi.controller;
 
 import com.daduo.api.tiktokapi.enums.TaskOrderStatus;
+import com.daduo.api.tiktokapi.enums.TaskStatus;
 import com.daduo.api.tiktokapi.exception.ErrorException;
 import com.daduo.api.tiktokapi.model.*;
 import com.daduo.api.tiktokapi.model.error.Error;
@@ -90,6 +91,7 @@ public class TaskController {
                     defaultValue = "20", dataType = "integer", paramType = "query")
     })
     public Tasks searchTasks(@RequestParam(required = false) @ApiParam(value = "用户ID") String userId,
+                             @RequestParam(required = false) @ApiParam(value = "用户ID") TaskStatus status,
                              @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
                              @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
                              @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
@@ -105,7 +107,7 @@ public class TaskController {
                 throw new ErrorException(HttpStatus.OK, error);
             }
         }
-        Tasks tasks = service.searchTasks(value, startDate, endDate, page);
+        Tasks tasks = service.searchTasks(value, status, startDate, endDate, page);
         log.info("[END] search tasks with response: {}", tasks);
         return tasks;
     }

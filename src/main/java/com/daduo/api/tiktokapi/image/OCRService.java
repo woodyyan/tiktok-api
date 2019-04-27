@@ -35,19 +35,21 @@ public class OCRService {
             api.SetImage(image);
             // Get OCR result
             outText = api.GetUTF8Text();
-            String result = outText.getString();
-            System.out.println("OCR output:\n" + result);
+            if (outText != null) {
+                String result = outText.getString();
+                System.out.println("OCR output:\n" + result);
 
-            // Destroy used object and release memory
-            api.End();
-            outText.deallocate();
-            pixDestroy(image);
-
-            if (result.contains(VERIFY_WORD)) {
-                return true;
+                // Destroy used object and release memory
+                api.End();
+                outText.deallocate();
+                pixDestroy(image);
+                if (result.contains(VERIFY_WORD)) {
+                    return true;
+                }
             }
+
         } catch (Exception ex) {
-            log.error(ex.getMessage());
+            log.error(ex.getMessage(), ex);
             return false;
         }
         return false;
@@ -57,14 +59,12 @@ public class OCRService {
         if (commentImage != null) {
             try {
                 String localImagePath = OSSUtils.getLocalImagePath(commentImage);
-                if (localImagePath != null) {
-                    boolean result = doOCR(localImagePath);
-                    File file = new File(localImagePath);
-                    if (file.exists()) {
-                        file.delete();
-                    }
-                    return result;
+                boolean result = doOCR(localImagePath);
+                File file = new File(localImagePath);
+                if (file.exists()) {
+                    file.delete();
                 }
+                return result;
             } catch (IOException e) {
                 log.error(e.getMessage());
                 return false;

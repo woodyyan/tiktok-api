@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.Optional;
@@ -27,10 +28,15 @@ public class OperateLogService {
     @Autowired
     private AdminRepository adminRepository;
 
-    public OperateLogs getAllOperateLogs(Date startDate, Date endDate, Pageable page) {
+    public OperateLogs getAllOperateLogs(Date startDate, Date endDate, String adminName, Pageable page) {
         Page<OperateLog> logs;
-        if (startDate != null && endDate != null) {
+
+        if (startDate != null && endDate != null && !StringUtils.isEmpty(adminName)) {
+            logs = repository.findByAdminNameAndCreatedTimeBetween(adminName, new LocalDateTime(startDate.getTime()), new LocalDateTime(endDate.getTime()), page);
+        } else if (startDate != null && endDate != null) {
             logs = repository.findByCreatedTimeBetween(new LocalDateTime(startDate.getTime()), new LocalDateTime(endDate.getTime()), page);
+        } else if (!StringUtils.isEmpty(adminName)) {
+            logs = repository.findAllByAdminName(adminName, page);
         } else {
             logs = repository.findAll(page);
         }

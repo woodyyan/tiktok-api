@@ -13,4 +13,6 @@ public interface OperateLogRepository extends JpaRepository<OperateLog, Long> {
     Page<OperateLog> findAllByAdminName(String adminName, Pageable page);
 
     Page<OperateLog> findByCreatedTimeBetween(LocalDateTime startTime, LocalDateTime endTime, Pageable page);
+
+    Page<OperateLog> findByAdminNameAndCreatedTimeBetween(String adminName, LocalDateTime localDateTime, LocalDateTime localDateTime1, Pageable page);
 }

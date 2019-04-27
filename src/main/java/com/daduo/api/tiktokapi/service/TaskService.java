@@ -249,10 +249,14 @@ public class TaskService {
         }
     }
 
-    public Tasks searchTasks(Long userId, Date startDate, Date endDate, Pageable page) {
+    public Tasks searchTasks(Long userId, TaskStatus status, Date startDate, Date endDate, Pageable page) {
         Page<TaskEntity> entities;
         if (userId == null) {
-            entities = repository.findAll(page);
+            if (status != null) {
+                entities = repository.findAllByStatus(status, page);
+            } else {
+                entities = repository.findAll(page);
+            }
         } else if (startDate != null && endDate != null) {
             entities = repository.findByCreatedTimeBetween(new LocalDateTime(startDate.getTime()), new LocalDateTime(endDate.getTime()), page);
         } else {

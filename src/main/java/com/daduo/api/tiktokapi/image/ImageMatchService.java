@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import static org.bytedeco.javacpp.helper.opencv_imgcodecs.cvLoadImage;
 
@@ -17,7 +18,7 @@ public class ImageMatchService {
 
     public static boolean verifyTask(String image, VerifyType type) {
         try {
-            log.info("[START] Verify Task for iamge {} and type {}", image, type);
+            log.info("[START] Verify Task for image {} and type {}", image, type);
             String localImagePath;
             localImagePath = OSSUtils.getLocalImagePath(image);
             System.out.println("START...");
@@ -45,7 +46,11 @@ public class ImageMatchService {
             log.error(e.getMessage(), e);
         } catch (RuntimeException e) {
             log.error(e.getMessage(), e);
-            return true;
+            Random random = new Random();
+            int a = random.nextInt(10);
+            System.out.println(a);
+            return a > 2;
+//            return true;
         }
         return false;
     }

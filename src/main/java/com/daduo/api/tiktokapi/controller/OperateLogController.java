@@ -32,11 +32,12 @@ public class OperateLogController {
     })
     public OperateLogs getAllOperateLogs(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
                                          @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+                                         @RequestParam(required = false) String adminName,
                                          @PageableDefault(value = 0, size = 20, sort = "createdTime", direction = Sort.Direction.DESC)
                                          @ApiParam(value = "分页")
                                                  Pageable page) {
         log.info("[START] Get all operate logs with page: {}", page);
-        OperateLogs logs = service.getAllOperateLogs(startDate, endDate, page);
+        OperateLogs logs = service.getAllOperateLogs(startDate, endDate, adminName, page);
         log.info("[END] Get all operate logs with logs: {}", logs);
         return logs;
     }
