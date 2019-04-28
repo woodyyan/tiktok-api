@@ -36,6 +36,9 @@ public class AccountService {
     @Autowired
     private OnlineRepository onlineRepository;
 
+    @Autowired
+    private MessageService messageService;
+
     public AccountService() {
     }
 
@@ -70,7 +73,14 @@ public class AccountService {
             }
             if (accountRequest.getStatus() != null) {
                 existingAccount.setStatus(accountRequest.getStatus());
+                switch (accountRequest.getStatus()) {
+                    case ACTIVE:
+                        messageService.logMessage(userId, "账号已激活。");
+                    case FORBIDDEN:
+                        messageService.logMessage(userId, "账号已封禁，请联系管理员。");
+                }
             }
+
             Account savedAccount = repository.saveAndFlush(existingAccount);
             return translator.toAccountData(savedAccount);
         } else {
@@ -81,6 +91,7 @@ public class AccountService {
     public boolean activateAccount(Long userId) {
         Optional<Account> account = repository.findById(userId);
         if (account.isPresent()) {
+            messageService.logMessage(userId, "账号已激活。");
             Account existingAccount = account.get();
             existingAccount.setStatus(AccountStatus.ACTIVE);
             repository.saveAndFlush(existingAccount);
@@ -93,6 +104,7 @@ public class AccountService {
     public void activateAccountTask(Long userId) {
         Optional<Account> account = repository.findById(userId);
         if (account.isPresent()) {
+            messageService.logMessage(userId, "账号刷单已激活。");
             Account existingAccount = account.get();
             existingAccount.setCanTask(true);
             repository.saveAndFlush(existingAccount);

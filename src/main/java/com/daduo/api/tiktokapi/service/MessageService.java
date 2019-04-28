@@ -29,4 +29,12 @@ public class MessageService {
         Page<Message> messagePage = repository.findAllByUserId(userId, page);
         return translator.toMessages(messagePage);
     }
+
+
+    public void logMessage(Long userId, String message) {
+        MessageRequest request = new MessageRequest();
+        request.setContent(message);
+        request.setUserId(userId);
+        createMessage(request);
+    }
 }

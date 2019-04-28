@@ -53,23 +53,24 @@ public class AdminTranslator {
         data.setPassword(admin.getPassword());
         data.setRole(permission.getRole());
         data.setRole(permission.getRole());
-        if (permission.isCanAutoTaskManage()) {
-            data.permissions.add(PermissionType.AUTO_TASK_MANAGE);
-        }
-        if (permission.isCanCreditStoreManage()) {
-            data.permissions.add(PermissionType.CREDIT_STORE_MANAGE);
-        }
         if (permission.isCanMemberManage()) {
             data.permissions.add(PermissionType.MEMBER_MANAGE);
-        }
-        if (permission.isCanPromotionManage()) {
-            data.permissions.add(PermissionType.PROMOTION_MANAGE);
         }
         if (permission.isCanTaskManage()) {
             data.permissions.add(PermissionType.TASK_MANAGE);
         }
         if (permission.isCanTaskOrderManage()) {
             data.permissions.add(PermissionType.TASK_ORDER_MANAGE);
+        }
+        if (permission.isCanCreditStoreManage()) {
+            data.permissions.add(PermissionType.CREDIT_STORE_MANAGE);
+        }
+        if (permission.isCanPromotionManage()) {
+            data.permissions.add(PermissionType.PROMOTION_MANAGE);
+        }
+
+        if (permission.isCanAutoTaskManage()) {
+            data.permissions.add(PermissionType.AUTO_TASK_MANAGE);
         }
         data.setId(admin.getId());
         data.setCreatedTime(admin.getCreatedTime().toDateTime());

@@ -50,6 +50,9 @@ public class OrderService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private MessageService messageService;
+
     public ExchangeResponse createExchangeMoneyOrder(ExchangeRequest exchangeRequest) {
         Integer pointsOfPerRmb = referenceValueService.searchByName("pointsOfPerRmb");
         Integer points = pointsOfPerRmb * exchangeRequest.getMoney();
@@ -65,6 +68,7 @@ public class OrderService {
         deductPoints(order.getUserId(), points);
         repository.save(order);
         ExchangeResponse response = new ExchangeResponse();
+        messageService.logMessage(exchangeRequest.getUserId(), "兑换现金提交成功，请等客服审核之后付款。");
         response.setMessage("提交成功，请等客服审核之后付款。");
         response.setStatus("SUCCESS");
         return response;
@@ -84,6 +88,7 @@ public class OrderService {
         ProductOrder productOrder = productTranslator.translate(productOrderRequest);
         deductPoints(productOrder.getUserId(), productOrder.getPrice());
         ProductOrder savedOrder = productOrderRepository.save(productOrder);
+        messageService.logMessage(productOrderRequest.getUserId(), "兑换商品提交成功，请等客服审核之后付款。");
         return productTranslator.translateToResponse(savedOrder);
     }
 
@@ -103,7 +108,10 @@ public class OrderService {
             ExchangeOrder exchangeOrder = order.get();
             exchangeOrder.setStatus(status);
             if (status.equals(OrderStatus.COMPLETED)) {
+                messageService.logMessage(id, "现金兑换审核通过，请查收。");
                 exchangeOrder.setPayTime(LocalDateTime.now());
+            } else if (status.equals(OrderStatus.REJECTED)) {
+                messageService.logMessage(id, "现金兑换审核不通过，请联系管理员。");
             }
             repository.saveAndFlush(exchangeOrder);
         } else {
@@ -134,7 +142,10 @@ public class OrderService {
             if (productOrderRequest.getStatus() != null) {
                 productOrder.setStatus(productOrderRequest.getStatus());
                 if (productOrderRequest.getStatus().equals(ProductOrderStatus.ACCEPTED)) {
+                    messageService.logMessage(productOrderRequest.getUserId(), "商品兑换审核通过，请等待发货。");
                     productOrder.setPayTime(LocalDateTime.now());
+                } else if (productOrderRequest.getStatus().equals(ProductOrderStatus.REJECTED)) {
+                    messageService.logMessage(productOrderRequest.getUserId(), "商品兑换审核不通过，请联系管理员。");
                 }
             }
             if (productOrderRequest.getCount() != null) {
