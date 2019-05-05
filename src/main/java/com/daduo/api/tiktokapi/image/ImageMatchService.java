@@ -24,7 +24,7 @@ public class ImageMatchService {
             System.out.println("START...");
             TemplateMatch tm = new TemplateMatch();//实例化TemplateMatch对象
 
-            String templateImage = "/Users/songbai.yan/Desktop/red.png";
+            String templateImage = "like.png";
             if (!new File(templateImage).exists()) {
                 templateImage = "/apps/boot/image/like.png";
             }

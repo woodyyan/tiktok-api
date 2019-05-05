@@ -66,7 +66,7 @@ public class OCRService {
                 }
                 return result;
             } catch (IOException e) {
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
                 return false;
             }
 
